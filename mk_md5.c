@@ -133,85 +133,85 @@ static void mk_md5_detail_process_block(struct mk_md5_state_s* self, void const*
 	uint32_t c = cc;
 	uint32_t d = dd;
 
-	a = mk_md5_detail_round_1(a, b, c, d, 0, 7, 1, x);
-	d = mk_md5_detail_round_1(d, a, b, c, 1, 12, 2, x);
-	c = mk_md5_detail_round_1(c, d, a, b, 2, 17, 3, x);
-	b = mk_md5_detail_round_1(b, c, d, a, 3, 22, 4, x);
+	a = mk_md5_detail_round_1(a, b, c, d,  0,  7,  1, x);
+	d = mk_md5_detail_round_1(d, a, b, c,  1, 12,  2, x);
+	c = mk_md5_detail_round_1(c, d, a, b,  2, 17,  3, x);
+	b = mk_md5_detail_round_1(b, c, d, a,  3, 22,  4, x);
 
-	a = mk_md5_detail_round_1(a, b, c, d, 4, 7, 5, x);
-	d = mk_md5_detail_round_1(d, a, b, c, 5, 12, 6, x);
-	c = mk_md5_detail_round_1(c, d, a, b, 6, 17, 7, x);
-	b = mk_md5_detail_round_1(b, c, d, a, 7, 22, 8, x);
+	a = mk_md5_detail_round_1(a, b, c, d,  4,  7,  5, x);
+	d = mk_md5_detail_round_1(d, a, b, c,  5, 12,  6, x);
+	c = mk_md5_detail_round_1(c, d, a, b,  6, 17,  7, x);
+	b = mk_md5_detail_round_1(b, c, d, a,  7, 22,  8, x);
 
-	a = mk_md5_detail_round_1(a, b, c, d, 8, 7, 9, x);
-	d = mk_md5_detail_round_1(d, a, b, c, 9, 12, 10, x);
+	a = mk_md5_detail_round_1(a, b, c, d,  8,  7,  9, x);
+	d = mk_md5_detail_round_1(d, a, b, c,  9, 12, 10, x);
 	c = mk_md5_detail_round_1(c, d, a, b, 10, 17, 11, x);
 	b = mk_md5_detail_round_1(b, c, d, a, 11, 22, 12, x);
 
-	a = mk_md5_detail_round_1(a, b, c, d, 12, 7, 13, x);
+	a = mk_md5_detail_round_1(a, b, c, d, 12,  7, 13, x);
 	d = mk_md5_detail_round_1(d, a, b, c, 13, 12, 14, x);
 	c = mk_md5_detail_round_1(c, d, a, b, 14, 17, 15, x);
 	b = mk_md5_detail_round_1(b, c, d, a, 15, 22, 16, x);
 
-	a = mk_md5_detail_round_2(a, b, c, d, 1, 5, 17, x);
-	d = mk_md5_detail_round_2(d, a, b, c, 6, 9, 18, x);
+	a = mk_md5_detail_round_2(a, b, c, d,  1,  5, 17, x);
+	d = mk_md5_detail_round_2(d, a, b, c,  6,  9, 18, x);
 	c = mk_md5_detail_round_2(c, d, a, b, 11, 14, 19, x);
-	b = mk_md5_detail_round_2(b, c, d, a, 0, 20, 20, x);
+	b = mk_md5_detail_round_2(b, c, d, a,  0, 20, 20, x);
 
-	a = mk_md5_detail_round_2(a, b, c, d, 5, 5, 21, x);
-	d = mk_md5_detail_round_2(d, a, b, c, 10, 9, 22, x);
+	a = mk_md5_detail_round_2(a, b, c, d,  5,  5, 21, x);
+	d = mk_md5_detail_round_2(d, a, b, c, 10,  9, 22, x);
 	c = mk_md5_detail_round_2(c, d, a, b, 15, 14, 23, x);
-	b = mk_md5_detail_round_2(b, c, d, a, 4, 20, 24, x);
+	b = mk_md5_detail_round_2(b, c, d, a,  4, 20, 24, x);
 
-	a = mk_md5_detail_round_2(a, b, c, d, 9, 5, 25, x);
-	d = mk_md5_detail_round_2(d, a, b, c, 14, 9, 26, x);
-	c = mk_md5_detail_round_2(c, d, a, b, 3, 14, 27, x);
-	b = mk_md5_detail_round_2(b, c, d, a, 8, 20, 28, x);
+	a = mk_md5_detail_round_2(a, b, c, d,  9,  5, 25, x);
+	d = mk_md5_detail_round_2(d, a, b, c, 14,  9, 26, x);
+	c = mk_md5_detail_round_2(c, d, a, b,  3, 14, 27, x);
+	b = mk_md5_detail_round_2(b, c, d, a,  8, 20, 28, x);
 
-	a = mk_md5_detail_round_2(a, b, c, d, 13, 5, 29, x);
-	d = mk_md5_detail_round_2(d, a, b, c, 2, 9, 30, x);
-	c = mk_md5_detail_round_2(c, d, a, b, 7, 14, 31, x);
+	a = mk_md5_detail_round_2(a, b, c, d, 13,  5, 29, x);
+	d = mk_md5_detail_round_2(d, a, b, c,  2,  9, 30, x);
+	c = mk_md5_detail_round_2(c, d, a, b,  7, 14, 31, x);
 	b = mk_md5_detail_round_2(b, c, d, a, 12, 20, 32, x);
 
-	a = mk_md5_detail_round_3(a, b, c, d, 5, 4, 33, x);
-	d = mk_md5_detail_round_3(d, a, b, c, 8, 11, 34, x);
+	a = mk_md5_detail_round_3(a, b, c, d,  5,  4, 33, x);
+	d = mk_md5_detail_round_3(d, a, b, c,  8, 11, 34, x);
 	c = mk_md5_detail_round_3(c, d, a, b, 11, 16, 35, x);
 	b = mk_md5_detail_round_3(b, c, d, a, 14, 23, 36, x);
 
-	a = mk_md5_detail_round_3(a, b, c, d, 1, 4, 37, x);
-	d = mk_md5_detail_round_3(d, a, b, c, 4, 11, 38, x);
-	c = mk_md5_detail_round_3(c, d, a, b, 7, 16, 39, x);
+	a = mk_md5_detail_round_3(a, b, c, d,  1,  4, 37, x);
+	d = mk_md5_detail_round_3(d, a, b, c,  4, 11, 38, x);
+	c = mk_md5_detail_round_3(c, d, a, b,  7, 16, 39, x);
 	b = mk_md5_detail_round_3(b, c, d, a, 10, 23, 40, x);
 
-	a = mk_md5_detail_round_3(a, b, c, d, 13, 4, 41, x);
-	d = mk_md5_detail_round_3(d, a, b, c, 0, 11, 42, x);
-	c = mk_md5_detail_round_3(c, d, a, b, 3, 16, 43, x);
-	b = mk_md5_detail_round_3(b, c, d, a, 6, 23, 44, x);
+	a = mk_md5_detail_round_3(a, b, c, d, 13,  4, 41, x);
+	d = mk_md5_detail_round_3(d, a, b, c,  0, 11, 42, x);
+	c = mk_md5_detail_round_3(c, d, a, b,  3, 16, 43, x);
+	b = mk_md5_detail_round_3(b, c, d, a,  6, 23, 44, x);
 
-	a = mk_md5_detail_round_3(a, b, c, d, 9, 4, 45, x);
+	a = mk_md5_detail_round_3(a, b, c, d,  9,  4, 45, x);
 	d = mk_md5_detail_round_3(d, a, b, c, 12, 11, 46, x);
 	c = mk_md5_detail_round_3(c, d, a, b, 15, 16, 47, x);
-	b = mk_md5_detail_round_3(b, c, d, a, 2, 23, 48, x);
+	b = mk_md5_detail_round_3(b, c, d, a,  2, 23, 48, x);
 
-	a = mk_md5_detail_round_4(a, b, c, d, 0, 6, 49, x);
-	d = mk_md5_detail_round_4(d, a, b, c, 7, 10, 50, x);
+	a = mk_md5_detail_round_4(a, b, c, d,  0,  6, 49, x);
+	d = mk_md5_detail_round_4(d, a, b, c,  7, 10, 50, x);
 	c = mk_md5_detail_round_4(c, d, a, b, 14, 15, 51, x);
-	b = mk_md5_detail_round_4(b, c, d, a, 5, 21, 52, x);
+	b = mk_md5_detail_round_4(b, c, d, a,  5, 21, 52, x);
 
-	a = mk_md5_detail_round_4(a, b, c, d, 12, 6, 53, x);
-	d = mk_md5_detail_round_4(d, a, b, c, 3, 10, 54, x);
+	a = mk_md5_detail_round_4(a, b, c, d, 12,  6, 53, x);
+	d = mk_md5_detail_round_4(d, a, b, c,  3, 10, 54, x);
 	c = mk_md5_detail_round_4(c, d, a, b, 10, 15, 55, x);
-	b = mk_md5_detail_round_4(b, c, d, a, 1, 21, 56, x);
+	b = mk_md5_detail_round_4(b, c, d, a,  1, 21, 56, x);
 
-	a = mk_md5_detail_round_4(a, b, c, d, 8, 6, 57, x);
+	a = mk_md5_detail_round_4(a, b, c, d,  8,  6, 57, x);
 	d = mk_md5_detail_round_4(d, a, b, c, 15, 10, 58, x);
-	c = mk_md5_detail_round_4(c, d, a, b, 6, 15, 59, x);
+	c = mk_md5_detail_round_4(c, d, a, b,  6, 15, 59, x);
 	b = mk_md5_detail_round_4(b, c, d, a, 13, 21, 60, x);
 
-	a = mk_md5_detail_round_4(a, b, c, d, 4, 6, 61, x);
+	a = mk_md5_detail_round_4(a, b, c, d,  4,  6, 61, x);
 	d = mk_md5_detail_round_4(d, a, b, c, 11, 10, 62, x);
-	c = mk_md5_detail_round_4(c, d, a, b, 2, 15, 63, x);
-	b = mk_md5_detail_round_4(b, c, d, a, 9, 21, 64, x);
+	c = mk_md5_detail_round_4(c, d, a, b,  2, 15, 63, x);
+	b = mk_md5_detail_round_4(b, c, d, a,  9, 21, 64, x);
 
 	a += aa;
 	b += bb;
