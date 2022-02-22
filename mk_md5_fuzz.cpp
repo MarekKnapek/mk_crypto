@@ -17,13 +17,14 @@ extern "C" int LLVMFuzzerTestOneInput(uint8_t const* data, size_t size)
 	unsigned char md5_digest[16];
 
 	MD5Init(&md5_state);
-	MD5Update(&md5_state, (unsigned char*)data, size);
+	MD5Update(&md5_state, (unsigned char*)data, (unsigned int)size);
 	MD5Final(md5_digest, &md5_state);
 
-	if(memcmp(mk_md5_digest.m_bytes, md5_digest, 16) != 0)
+	if(memcmp(mk_md5_digest.m_data.m_bytes, md5_digest, 16) != 0)
 	{
-		int volatile* volatile ptr = NULL;
-		*ptr = 0;
+		//int volatile* volatile ptr = NULL;
+		//*ptr = 0;
+		__debugbreak();
 	}
 
 	return 0;

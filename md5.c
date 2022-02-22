@@ -25,6 +25,9 @@ documentation and/or software.
 
 #include "md5.h"
 
+#pragma warning(push)
+#pragma warning(disable:4131) /* warning C4131: 'xxx': uses old-style declarator */
+
 /* Constants for MD5Transform routine.
  */
 
@@ -274,7 +277,7 @@ unsigned char block[64];
   /* Zeroize sensitive information.
 
 */
-,  MD5_memset ((POINTER)x, 0, sizeof (x));
+  MD5_memset ((POINTER)x, 0, sizeof (x));
 }
 
 /* Encodes input (UINT4) into output (unsigned char). Assumes len is
@@ -339,3 +342,6 @@ unsigned int len;
   for (i = 0; i < len; i++)
  ((char *)output)[i] = (char)value;
 }
+
+
+#pragma warning(pop)
