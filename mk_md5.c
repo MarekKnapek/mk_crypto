@@ -252,7 +252,7 @@ void mk_md5_append(struct mk_md5_state_s* self, void const* data, size_t len)
 	if(idx != 0)
 	{
 		unsigned capacity = mk_md5_detail_block_size - idx;
-		unsigned to_copy = remaining < capacity ? (uint32_t)remaining : capacity;
+		unsigned to_copy = remaining < capacity ? (unsigned)remaining : capacity;
 		memcpy(self->m_block.m_bytes + idx, input, to_copy);
 		input += to_copy;
 		remaining -= to_copy;
