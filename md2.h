@@ -39,3 +39,6 @@ typedef struct {
 MK_EXTERN_C void MD2Init PROTO_LIST ((MD2_CTX *));
 MK_EXTERN_C void MD2Update PROTO_LIST((MD2_CTX *, unsigned char *, unsigned int));
 MK_EXTERN_C void MD2Final PROTO_LIST ((unsigned char [16], MD2_CTX *));
+
+
+#undef MK_EXTERN_C
