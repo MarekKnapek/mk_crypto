@@ -29,36 +29,37 @@ static unsigned char const mk_md2_detail_table[256] =
 };
 
 
-static void mk_md2_detail_process_block(struct mk_md2_state_s* self)
+static inline void mk_md2_detail_process_block(struct mk_md2_state_s* self, unsigned char const* input)
 {
 	assert(self);
+	assert(input);
 
-	unsigned char* c = self->m_checksum.m_bytes;
-	unsigned char* m = self->m_data.m_pieces.m_block.m_bytes;
-	unsigned l = c[15];
+	unsigned char x[48];
+	
+	memcpy(x + 0 * 16, self->m_state, 16);
+	memcpy(x + 1 * 16, input, 16);
 	for(int j = 0; j != 16; ++j)
 	{
-		l = c[j] = c[j] ^ mk_md2_detail_table[m[j] ^ l];
+		x[2 * 16 + j] = self->m_state[j] ^ input[j];
 	}
 
-	uint32_t* src1 = self->m_data.m_pieces.m_state.m_words;
-	uint32_t* src2 = self->m_data.m_pieces.m_block.m_words;
-	uint32_t* dst = self->m_data.m_pieces.m_extra.m_words;
-	for(int j = 0; j != 4; ++j)
-	{
-		dst[j] = src1[j] ^ src2[j];
-	}
-
-	unsigned char* x = self->m_data.m_whole.m_bytes;
 	unsigned t = 0;
 	for(int j = 0; j != 18; ++j)
 	{
 		for(int k = 0; k != 48; ++k)
 		{
-			t = x[k] = x[k] ^ mk_md2_detail_table[t];
+			t = x[k] ^= mk_md2_detail_table[t];
 		}
 		t = (t + j) & 0xff;
 	}
+
+	unsigned l = self->m_checksum[15];
+	for(int j = 0; j != 16; ++j)
+	{
+		l = self->m_checksum[j] ^= mk_md2_detail_table[input[j] ^ l];
+	}
+
+	memcpy(self->m_state, x, 16);
 }
 
 
@@ -66,8 +67,8 @@ void mk_md2_init(struct mk_md2_state_s* self)
 {
 	assert(self);
 
-	memset(self->m_data.m_pieces.m_state.m_bytes, 0, 16);
-	memset(self->m_checksum.m_bytes, 0, 16);
+	memset(self->m_state, 0, 16);
+	memset(self->m_checksum, 0, 16);
 	self->m_len = 0;
 }
 
@@ -75,46 +76,31 @@ void mk_md2_append(struct mk_md2_state_s* self, void const* data, size_t len)
 {
 	assert(self);
 
-	if(len == 0)
-	{
-		return;
-	}
-
 	unsigned char const* input = (unsigned char const*)data;
 	size_t remaining = len;
 
-	assert(self->m_len < 16);
 	unsigned idx = self->m_len;
-	if(idx != 0)
+	unsigned capacity = 16 - idx;
+	self->m_len = (self->m_len + len) & 0xf;
+
+	if(remaining >= capacity)
 	{
-		unsigned capacity = 16 - idx;
-		unsigned to_copy = remaining < capacity ? (unsigned)remaining : capacity;
-		memcpy(self->m_data.m_pieces.m_block.m_bytes + idx, input, to_copy);
-		input += to_copy;
-		remaining -= to_copy;
-		int buffer_full = to_copy == capacity;
-		if(buffer_full)
+		memcpy(self->m_block + idx, input, capacity);
+		mk_md2_detail_process_block(self, self->m_block);
+		input += capacity;
+		remaining -= capacity;
+
+		size_t blocks = remaining / 16;
+		for(size_t i = 0; i != blocks; ++i)
 		{
-			mk_md2_detail_process_block(self);
+			mk_md2_detail_process_block(self, input);
+			input += 16;
 		}
+		remaining -= blocks * 16;
+		idx = 0;
 	}
 
-	size_t blocks = remaining / 16;
-	for(size_t i = 0; i != blocks; ++i)
-	{
-		memcpy(self->m_data.m_pieces.m_block.m_bytes, input, 16);
-		mk_md2_detail_process_block(self);
-		input += 16;
-	}
-	remaining -= blocks * 16;
-
-	assert(remaining < 16);
-	if(remaining != 0)
-	{
-		memcpy(self->m_data.m_pieces.m_block.m_bytes, input, remaining);
-	}
-
-	self->m_len = (unsigned)remaining;
+	memcpy(self->m_block + idx, input, remaining);
 }
 
 void mk_md2_finish(struct mk_md2_state_s* self, struct mk_md2_digest_s* digest)
@@ -122,21 +108,18 @@ void mk_md2_finish(struct mk_md2_state_s* self, struct mk_md2_digest_s* digest)
 	assert(self);
 	assert(digest);
 
-	union
-	{
-		unsigned char m_bytes[16];
-		uint32_t m_words[4];
-	} padding_buff;
+	unsigned char buff[16];
 
 	unsigned len = self->m_len;
 	unsigned capacity = 16 - len;
 	assert(capacity >= 1 && capacity <= 16);
+
 	unsigned padding_len = capacity;
-	memset(padding_buff.m_bytes, padding_len, padding_len);
+	memset(buff, padding_len, padding_len);
 
-	mk_md2_append(self, padding_buff.m_bytes, padding_len);
+	mk_md2_append(self, buff, padding_len);
 
-	mk_md2_append(self, self->m_checksum.m_bytes, 16);
+	mk_md2_append(self, self->m_checksum, 16);
 
-	memcpy(digest->m_data.m_bytes, self->m_data.m_pieces.m_state.m_bytes, 16);
+	memcpy(digest->m_data, self->m_state, 16);
 }

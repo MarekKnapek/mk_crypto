@@ -3,7 +3,6 @@
 
 
 #include <stddef.h> /* size_t */
-#include <stdint.h> /* uint32_t */ /* C99 */
 
 
 #ifdef __cplusplus
@@ -15,47 +14,15 @@
 
 struct mk_md2_state_s
 {
-	union
-	{
-		struct
-		{
-			union
-			{
-				unsigned char m_bytes[16];
-				uint32_t m_words[4];
-			} m_state;
-			union
-			{
-				unsigned char m_bytes[16];
-				uint32_t m_words[4];
-			} m_block;
-			union
-			{
-				unsigned char m_bytes[16];
-				uint32_t m_words[4];
-			} m_extra;
-		} m_pieces;
-		union
-		{
-			unsigned char m_bytes[48];
-			uint32_t m_words[12];
-		} m_whole;
-	} m_data;
-	union
-	{
-		unsigned char m_bytes[16];
-		uint32_t m_words[4];
-	} m_checksum;
+	unsigned char m_state[16];
+	unsigned char m_block[16];
+	unsigned char m_checksum[16];
 	unsigned m_len;
 };
 
 struct mk_md2_digest_s
 {
-	union
-	{
-		unsigned char m_bytes[16];
-		uint32_t m_words[4];
-	} m_data;
+	unsigned char m_data[16];
 };
 
 
