@@ -69,3 +69,129 @@ void mk_win_sha2_256_finish(struct mk_win_sha2_256_state_s* self, void* digest)
 		exit(EXIT_FAILURE);
 	}
 }
+
+
+void mk_win_sha2_512_384_init(struct mk_win_sha2_512_384_state_s* self)
+{
+	assert(self);
+
+	HCRYPTPROV csp;
+	BOOL csp_created = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_SILENT);
+	if(csp_created == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+	
+	HCRYPTHASH hash;
+	BOOL hash_alg_created = CryptCreateHash(csp, CALG_SHA_384, 0, 0, &hash);
+	if(hash_alg_created == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	self->m_csp = csp;
+	self->m_hash = hash;
+}
+
+void mk_win_sha2_512_384_append(struct mk_win_sha2_512_384_state_s* self, void const* data, size_t len)
+{
+	assert(self);
+	
+	BOOL hashed = CryptHashData(self->m_hash, data, (DWORD)len, 0);
+	if(hashed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+}
+
+void mk_win_sha2_512_384_finish(struct mk_win_sha2_512_384_state_s* self, void* digest)
+{
+	assert(self);
+	assert(digest);
+
+	DWORD digest_len = 48;
+	BOOL got_hash = CryptGetHashParam(self->m_hash, HP_HASHVAL, (BYTE*)digest, &digest_len, 0);
+	if(got_hash == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+	if(digest_len != 48)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	BOOL hash_freed = CryptDestroyHash(self->m_hash);
+	if(hash_freed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	BOOL csp_freed = CryptReleaseContext(self->m_csp, 0);
+	if(csp_freed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+}
+
+
+void mk_win_sha2_512_init(struct mk_win_sha2_512_state_s* self)
+{
+	assert(self);
+
+	HCRYPTPROV csp;
+	BOOL csp_created = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_SILENT);
+	if(csp_created == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+	
+	HCRYPTHASH hash;
+	BOOL hash_alg_created = CryptCreateHash(csp, CALG_SHA_512, 0, 0, &hash);
+	if(hash_alg_created == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	self->m_csp = csp;
+	self->m_hash = hash;
+}
+
+void mk_win_sha2_512_append(struct mk_win_sha2_512_state_s* self, void const* data, size_t len)
+{
+	assert(self);
+	
+	BOOL hashed = CryptHashData(self->m_hash, data, (DWORD)len, 0);
+	if(hashed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+}
+
+void mk_win_sha2_512_finish(struct mk_win_sha2_512_state_s* self, void* digest)
+{
+	assert(self);
+	assert(digest);
+
+	DWORD digest_len = 64;
+	BOOL got_hash = CryptGetHashParam(self->m_hash, HP_HASHVAL, (BYTE*)digest, &digest_len, 0);
+	if(got_hash == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+	if(digest_len != 64)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	BOOL hash_freed = CryptDestroyHash(self->m_hash);
+	if(hash_freed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	BOOL csp_freed = CryptReleaseContext(self->m_csp, 0);
+	if(csp_freed == FALSE)
+	{
+		exit(EXIT_FAILURE);
+	}
+}
