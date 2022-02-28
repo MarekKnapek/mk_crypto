@@ -45,20 +45,34 @@ static uint64_t const mk_sha2_512_detail_table[80] =
 };
 
 
-static inline void mk_sha2_256_detail_ints2be(uint32_t const* ints, int n, void* buff)
+static inline void mk_sha2_detail_ints2be32(uint32_t const* input, int n, void* buff)
 {
 	unsigned char* output = (unsigned char*)buff;
 
 	for(int i = 0; i != n; ++i)
 	{
-		for(int j = 0; j != sizeof(uint32_t); ++i)
+		for(int j = 0; j != sizeof(uint32_t); ++j)
 		{
-			output[i * sizeof(uint32_t) + j] = (unsigned char)((ints[i] >> (CHAR_BIT * (sizeof(uint32_t) - 1 - j))) & 0xff);
+			output[i * sizeof(uint32_t) + j] = (unsigned char)((input[i] >> (CHAR_BIT * (sizeof(uint32_t) - 1 - j))) & 0xff);
 		}
 	}
 }
 
-static inline void mk_sha2_512_detail_ints2be(uint64_t const* input, int n, void* buff)
+static inline void mk_sha2_detail_be2ints32(void const* buff, uint32_t* output, int n)
+{
+	unsigned char const* input = (unsigned char const*)buff;
+
+	for(int i = 0; i != n; ++i)
+	{
+		output[i] = 0;
+		for(int j = 0; j != sizeof(uint32_t); ++j)
+		{
+			output[i] |= ((uint32_t)(input[i * sizeof(uint32_t) + j])) << (CHAR_BIT * (sizeof(uint32_t) - 1 - j));
+		}
+	}
+}
+
+static inline void mk_sha2_detail_ints2be64(uint64_t const* input, int n, void* buff)
 {
 	unsigned char* output = (unsigned char*)buff;
 
@@ -67,6 +81,20 @@ static inline void mk_sha2_512_detail_ints2be(uint64_t const* input, int n, void
 		for(int j = 0; j != sizeof(uint64_t); ++j)
 		{
 			output[i * sizeof(uint64_t) + j] = (unsigned char)((input[i] >> (CHAR_BIT * (sizeof(uint64_t) - 1 - j))) & 0xff);
+		}
+	}
+}
+
+static inline void mk_sha2_detail_be2ints64(void const* buff, uint64_t* output, int n)
+{
+	unsigned char const* input = (unsigned char const*)buff;
+
+	for(int i = 0; i != n; ++i)
+	{
+		output[i] = 0;
+		for(int j = 0; j != sizeof(uint64_t); ++j)
+		{
+			output[i] |= ((uint64_t)(input[i * sizeof(uint64_t) + j])) << (CHAR_BIT * (sizeof(uint64_t) - 1 - j));
 		}
 	}
 }
@@ -204,14 +232,7 @@ static inline void mk_sha2_256_detail_process_block(struct mk_sha2_256_state_s* 
 	uint32_t* g = hh + 6;
 	uint32_t* h = hh + 7;
 
-	for(int i = 0; i != 16; ++i)
-	{
-		w[i] =
-			(((uint32_t)(input[i * 4 + 0])) << (3 * 8)) |
-			(((uint32_t)(input[i * 4 + 1])) << (2 * 8)) |
-			(((uint32_t)(input[i * 4 + 2])) << (1 * 8)) |
-			(((uint32_t)(input[i * 4 + 3])) << (0 * 8));
-	}
+	mk_sha2_detail_be2ints32(input, w, 16);
 	for(int i = 16; i != 64; ++i)
 	{
 		w[i] = mk_sha2_256_detail_sig1(w[i - 2]) + w[i - 7] + mk_sha2_256_detail_sig0(w[i - 15]) + w[i - 16];
@@ -271,18 +292,7 @@ static inline void mk_sha2_512_detail_process_block(struct mk_sha2_512_state_s* 
 	uint64_t* g = hh + 6;
 	uint64_t* h = hh + 7;
 
-	for(int i = 0; i != 16; ++i)
-	{
-		w[i] =
-			(((uint64_t)(input[i * sizeof(uint64_t) + 0])) << (7 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 1])) << (6 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 2])) << (5 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 3])) << (4 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 4])) << (3 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 5])) << (2 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 6])) << (1 * CHAR_BIT)) |
-			(((uint64_t)(input[i * sizeof(uint64_t) + 7])) << (0 * CHAR_BIT));
-	}
+	mk_sha2_detail_be2ints64(input, w, 16);
 	for(int i = 16; i != 80; ++i)
 	{
 		w[i] = mk_sha2_512_detail_sig1(w[i - 2]) + w[i - 7] + mk_sha2_512_detail_sig0(w[i - 15]) + w[i - 16];
@@ -423,50 +433,11 @@ void mk_sha2_256_finish(struct mk_sha2_256_state_s* self, void* digest)
 	memset(padding + 1, 0, zeros);
 
 	uint64_t len = self->m_len * 8;
-	padding[1 + zeros + 0] = (unsigned char)((len >> (8 * 7)) & 0xff);
-	padding[1 + zeros + 1] = (unsigned char)((len >> (8 * 6)) & 0xff);
-	padding[1 + zeros + 2] = (unsigned char)((len >> (8 * 5)) & 0xff);
-	padding[1 + zeros + 3] = (unsigned char)((len >> (8 * 4)) & 0xff);
-	padding[1 + zeros + 4] = (unsigned char)((len >> (8 * 3)) & 0xff);
-	padding[1 + zeros + 5] = (unsigned char)((len >> (8 * 2)) & 0xff);
-	padding[1 + zeros + 6] = (unsigned char)((len >> (8 * 1)) & 0xff);
-	padding[1 + zeros + 7] = (unsigned char)((len >> (8 * 0)) & 0xff);
+	mk_sha2_detail_ints2be64(&len, 1, padding + 1 + zeros);
 
 	mk_sha2_256_append(self, padding, 1 + zeros + sizeof(uint64_t));
 
-	unsigned char* output = (unsigned char*)digest;
-	output[ 0] = (unsigned char)((self->m_hash[0] >> (8 * 3)) & 0xff);
-	output[ 1] = (unsigned char)((self->m_hash[0] >> (8 * 2)) & 0xff);
-	output[ 2] = (unsigned char)((self->m_hash[0] >> (8 * 1)) & 0xff);
-	output[ 3] = (unsigned char)((self->m_hash[0] >> (8 * 0)) & 0xff);
-	output[ 4] = (unsigned char)((self->m_hash[1] >> (8 * 3)) & 0xff);
-	output[ 5] = (unsigned char)((self->m_hash[1] >> (8 * 2)) & 0xff);
-	output[ 6] = (unsigned char)((self->m_hash[1] >> (8 * 1)) & 0xff);
-	output[ 7] = (unsigned char)((self->m_hash[1] >> (8 * 0)) & 0xff);
-	output[ 8] = (unsigned char)((self->m_hash[2] >> (8 * 3)) & 0xff);
-	output[ 9] = (unsigned char)((self->m_hash[2] >> (8 * 2)) & 0xff);
-	output[10] = (unsigned char)((self->m_hash[2] >> (8 * 1)) & 0xff);
-	output[11] = (unsigned char)((self->m_hash[2] >> (8 * 0)) & 0xff);
-	output[12] = (unsigned char)((self->m_hash[3] >> (8 * 3)) & 0xff);
-	output[13] = (unsigned char)((self->m_hash[3] >> (8 * 2)) & 0xff);
-	output[14] = (unsigned char)((self->m_hash[3] >> (8 * 1)) & 0xff);
-	output[15] = (unsigned char)((self->m_hash[3] >> (8 * 0)) & 0xff);
-	output[16] = (unsigned char)((self->m_hash[4] >> (8 * 3)) & 0xff);
-	output[17] = (unsigned char)((self->m_hash[4] >> (8 * 2)) & 0xff);
-	output[18] = (unsigned char)((self->m_hash[4] >> (8 * 1)) & 0xff);
-	output[19] = (unsigned char)((self->m_hash[4] >> (8 * 0)) & 0xff);
-	output[20] = (unsigned char)((self->m_hash[5] >> (8 * 3)) & 0xff);
-	output[21] = (unsigned char)((self->m_hash[5] >> (8 * 2)) & 0xff);
-	output[22] = (unsigned char)((self->m_hash[5] >> (8 * 1)) & 0xff);
-	output[23] = (unsigned char)((self->m_hash[5] >> (8 * 0)) & 0xff);
-	output[24] = (unsigned char)((self->m_hash[6] >> (8 * 3)) & 0xff);
-	output[25] = (unsigned char)((self->m_hash[6] >> (8 * 2)) & 0xff);
-	output[26] = (unsigned char)((self->m_hash[6] >> (8 * 1)) & 0xff);
-	output[27] = (unsigned char)((self->m_hash[6] >> (8 * 0)) & 0xff);
-	output[28] = (unsigned char)((self->m_hash[7] >> (8 * 3)) & 0xff);
-	output[29] = (unsigned char)((self->m_hash[7] >> (8 * 2)) & 0xff);
-	output[30] = (unsigned char)((self->m_hash[7] >> (8 * 1)) & 0xff);
-	output[31] = (unsigned char)((self->m_hash[7] >> (8 * 0)) & 0xff);
+	mk_sha2_detail_ints2be32(self->m_hash, 8, digest);
 }
 
 
@@ -638,10 +609,10 @@ void mk_sha2_512_finish(struct mk_sha2_512_state_s* self, void* digest)
 
 	struct mk_uint128_s len;
 	mk_uint128_shl(&len, &self->m_len, 3);
-	mk_sha2_512_detail_ints2be(&len.m_hi, 1, padding + 1 + zeros + 0 * sizeof(uint64_t));
-	mk_sha2_512_detail_ints2be(&len.m_lo, 1, padding + 1 + zeros + 1 * sizeof(uint64_t));
+	mk_sha2_detail_ints2be64(&len.m_hi, 1, padding + 1 + zeros + 0 * sizeof(uint64_t));
+	mk_sha2_detail_ints2be64(&len.m_lo, 1, padding + 1 + zeros + 1 * sizeof(uint64_t));
 
 	mk_sha2_512_append(self, padding, 1 + zeros + 2 * sizeof(uint64_t));
 
-	mk_sha2_512_detail_ints2be(self->m_hash, 8, digest);
+	mk_sha2_detail_ints2be64(self->m_hash, 8, digest);
 }
