@@ -53,15 +53,7 @@ static inline void mk_sha3_detail_string_set_bit(void* s, int n, bool val)
 
 	int byte = n / CHAR_BIT;
 	int bit = n % CHAR_BIT;
-
-	if(val)
-	{
-		output[byte] |= (unsigned char)(1u << bit);
-	}
-	else
-	{
-		output[byte] &= (unsigned char)(~(1u << bit));
-	}
+	output[byte] = (output[byte] & ~(1u << bit)) | (val ? (1u << bit) : 0u);
 }
 
 static inline int mk_sha3_detail_b2l(int b)
