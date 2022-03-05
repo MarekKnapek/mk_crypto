@@ -2,21 +2,41 @@
 
 #include <assert.h> /* assert static_assert */ /* C11 */
 #include <limits.h> /* CHAR_BIT */
+#include <stdbool.h> /* bool true false */ /* C99 */
 #include <string.h> /* memset memcmp NULL */
 
 
-static char const s_msg_0[] = "";
 static char const s_sha3_224_0[] = "6B4E03423667DBB73B6E15454F0EB1ABD4597F9A1B078E3F5B5A6BC7";
-static char const s_sha3_256_0[] = "A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A";
-
-static char const s_msg_1[] = "11001";
 static char const s_sha3_224_1[] = "FFBAD5DA96BAD71789330206DC6768ECAEB1B32DCA6B3301489674AB";
-static char const s_sha3_256_1[] = "7B0047CF5A456882363CBF0FB05322CF65F4B7059A46365E830132E3B5D957AF";
-
-static char const s_msg_2[] = "110010100001101011011110100110";
 static char const s_sha3_224_2[] = "D666A514CC9DBA25AC1BA69ED3930460DEAAC9851B5F0BAAB007DF3B";
-static char const s_sha3_256_2[] = "C8242FEF409E5AE9D1F1C857AE4DC624B92B19809F62AA8C07411C54A078B1D0";
+static char const s_sha3_224_3[] = "9376816ABA503F72F96CE7EB65AC095DEEE3BE4BF9BBC2A1CB7E11E0";
+static char const s_sha3_224_4[] = "22D2F7BB0B173FD8C19686F9173166E3EE62738047D7EADD69EFB228";
+static char const s_sha3_224_5[] = "4E907BB1057861F200A599E9D4F85B02D88453BF5B8ACE9AC589134C";
 
+static char const s_sha3_256_0[] = "A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A";
+static char const s_sha3_256_1[] = "7B0047CF5A456882363CBF0FB05322CF65F4B7059A46365E830132E3B5D957AF";
+static char const s_sha3_256_2[] = "C8242FEF409E5AE9D1F1C857AE4DC624B92B19809F62AA8C07411C54A078B1D0";
+static char const s_sha3_256_3[] = "79F38ADEC5C20307A98EF76E8324AFBFD46CFD81B22E3973C65FA1BD9DE31787";
+static char const s_sha3_256_4[] = "81EE769BED0950862B1DDDED2E84AAA6AB7BFDD3CEAA471BE31163D40336363C";
+static char const s_sha3_256_5[] = "52860AA301214C610D922A6B6CAB981CCD06012E54EF689D744021E738B9ED20";
+
+static char const s_sha3_384_0[] = "0C63A75B845E4F7D01107D852E4C2485C51A50AAAA94FC61995E71BBEE983A2AC3713831264ADB47FB6BD1E058D5F004";
+static char const s_sha3_384_1[] = "737C9B491885E9BF7428E792741A7BF8DCA9653471C3E148473F2C236B6A0A6455EB1DCE9F779B4B6B237FEF171B1C64";
+static char const s_sha3_384_2[] = "955B4DD1BE03261BD76F807A7EFD432435C417362811B8A50C564E7EE9585E1AC7626DDE2FDC030F876196EA267F08C3";
+static char const s_sha3_384_3[] = "1881DE2CA7E41EF95DC4732B8F5F002B189CC1E42B74168ED1732649CE1DBCDD76197A31FD55EE989F2D7050DD473E8F";
+static char const s_sha3_384_4[] = "A31FDBD8D576551C21FB1191B54BDA65B6C5FE97F0F4A69103424B43F7FDB835979FDBEAE8B3FE16CB82E587381EB624";
+static char const s_sha3_384_5[] = "3485D3B280BD384CF4A777844E94678173055D1CBC40C7C2C3833D9EF12345172D6FCD31923BB8795AC81847D3D8855C";
+
+static char const s_sha3_512_0[] = "A69F73CCA23A9AC5C8B567DC185A756E97C982164FE25859E0D1DCC1475C80A615B2123AF1F5F94C11E3E9402C3AC558F500199D95B6D3E301758586281DCD26";
+static char const s_sha3_512_1[] = "A13E01494114C09800622A70288C432121CE70039D753CADD2E006E4D961CB27544C1481E5814BDCEB53BE6733D5E099795E5E81918ADDB058E22A9F24883F37";
+static char const s_sha3_512_2[] = "9834C05A11E1C5D3DA9C740E1C106D9E590A0E530B6F6AAA7830525D075CA5DB1BD8A6AA981A28613AC334934A01823CD45F45E49B6D7E6917F2F16778067BAB";
+static char const s_sha3_512_3[] = "E76DFAD22084A8B1467FCF2FFA58361BEC7628EDF5F3FDC0E4805DC48CAEECA81B7C13C30ADF52A3659584739A2DF46BE589C51CA1A4A8416DF6545A1CE8BA00";
+static char const s_sha3_512_4[] = "FC4A167CCB31A937D698FDE82B04348C9539B28F0C9D3B4505709C03812350E4990E9622974F6E575C47861C0D2E638CCFC2023C365BB60A93F528550698786B";
+static char const s_sha3_512_5[] = "CF9A30AC1F1F6AC0916F9FEF1919C595DEBE2EE80C85421210FDF05F1C6AF73AA9CAC881D0F91DB6D034A2BBADC1CF7FBCB2ECFA9D191D3A5016FB3FAD8709C9";
+
+static char const s_msg_0[] = "";
+static char const s_msg_1[] = "11001";
+static char const s_msg_2[] = "110010100001101011011110100110";
 static char const s_msg_3[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -68,9 +88,6 @@ static char const s_msg_3[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101";
-static char const s_sha3_224_3[] = "9376816ABA503F72F96CE7EB65AC095DEEE3BE4BF9BBC2A1CB7E11E0";
-static char const s_sha3_256_3[] = "79F38ADEC5C20307A98EF76E8324AFBFD46CFD81B22E3973C65FA1BD9DE31787";
-
 static char const s_msg_4[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -123,9 +140,6 @@ static char const s_msg_4[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000";
-static char const s_sha3_224_4[] = "22D2F7BB0B173FD8C19686F9173166E3EE62738047D7EADD69EFB228";
-static char const s_sha3_256_4[] = "81EE769BED0950862B1DDDED2E84AAA6AB7BFDD3CEAA471BE31163D40336363C";
-
 static char const s_msg_5[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -178,8 +192,6 @@ static char const s_msg_5[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"110001011100010111000101110001";
-static char const s_sha3_224_5[] = "4E907BB1057861F200A599E9D4F85B02D88453BF5B8ACE9AC589134C";
-static char const s_sha3_256_5[] = "52860AA301214C610D922A6B6CAB981CCD06012E54EF689D744021E738B9ED20";
 
 
 struct task_s
@@ -188,18 +200,23 @@ struct task_s
 	int m_len;
 	char const* m_sha3_224;
 	char const* m_sha3_256;
+	char const* m_sha3_384;
+	char const* m_sha3_512;
 };
 
 
 static struct task_s const s_tasks[] =
 {
-	{s_msg_0, sizeof(s_msg_0) - 1, s_sha3_224_0, s_sha3_256_0},
-	{s_msg_1, sizeof(s_msg_1) - 1, s_sha3_224_1, s_sha3_256_1},
-	{s_msg_2, sizeof(s_msg_2) - 1, s_sha3_224_2, s_sha3_256_2},
-	{s_msg_3, sizeof(s_msg_3) - 1, s_sha3_224_3, s_sha3_256_3},
-	{s_msg_4, sizeof(s_msg_4) - 1, s_sha3_224_4, s_sha3_256_4},
-	{s_msg_5, sizeof(s_msg_5) - 1, s_sha3_224_5, s_sha3_256_5},
+	{s_msg_0, sizeof(s_msg_0) - 1, s_sha3_224_0, s_sha3_256_0, s_sha3_384_0, s_sha3_512_0},
+	{s_msg_1, sizeof(s_msg_1) - 1, s_sha3_224_1, s_sha3_256_1, s_sha3_384_1, s_sha3_512_1},
+	{s_msg_2, sizeof(s_msg_2) - 1, s_sha3_224_2, s_sha3_256_2, s_sha3_384_2, s_sha3_512_2},
+	{s_msg_3, sizeof(s_msg_3) - 1, s_sha3_224_3, s_sha3_256_3, s_sha3_384_3, s_sha3_512_3},
+	{s_msg_4, sizeof(s_msg_4) - 1, s_sha3_224_4, s_sha3_256_4, s_sha3_384_4, s_sha3_512_4},
+	{s_msg_5, sizeof(s_msg_5) - 1, s_sha3_224_5, s_sha3_256_5, s_sha3_384_5, s_sha3_512_5},
 };
+
+
+bool g_baseline_checked = false;
 
 
 static inline void bit_string_to_binary(char const* in, int len, void* out)
@@ -305,15 +322,58 @@ static inline void process_task(struct task_s const* task)
 		int volatile* volatile ptr = NULL;
 		*ptr = 0;
 	}
+
+
+	unsigned char sha3_384_buff[48];
+	hex_string_to_binary(task->m_sha3_384, 48 * 2, &sha3_384_buff);
+
+	struct mk_sha3_384_state_s mk_sha3_384_state;
+	unsigned char mk_sha3_384_digest[48];
+
+	mk_sha3_384_init(&mk_sha3_384_state);
+	mk_sha3_384_append(&mk_sha3_384_state, msg_buff, task->m_len);
+	mk_sha3_384_finish(&mk_sha3_384_state, mk_sha3_384_digest);
+
+	if(memcmp(&mk_sha3_384_digest, &sha3_384_buff, 48) != 0)
+	{
+		int volatile* volatile ptr = NULL;
+		*ptr = 0;
+	}
+
+
+	unsigned char sha3_512_buff[64];
+	hex_string_to_binary(task->m_sha3_512, 64 * 2, &sha3_512_buff);
+
+	struct mk_sha3_512_state_s mk_sha3_512_state;
+	unsigned char mk_sha3_512_digest[64];
+
+	mk_sha3_512_init(&mk_sha3_512_state);
+	mk_sha3_512_append(&mk_sha3_512_state, msg_buff, task->m_len);
+	mk_sha3_512_finish(&mk_sha3_512_state, mk_sha3_512_digest);
+
+	if(memcmp(&mk_sha3_512_digest, &sha3_512_buff, 64) != 0)
+	{
+		int volatile* volatile ptr = NULL;
+		*ptr = 0;
+	}
 }
 
-
-int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+static inline void check_baseline(void)
 {
 	int ntasks = sizeof(s_tasks) / sizeof(s_tasks[0]);
 	for(int i = 0; i != ntasks; ++i)
 	{
 		process_task(s_tasks + i);
+	}
+}
+
+
+int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+{
+	if(!g_baseline_checked)
+	{
+		check_baseline();
+		g_baseline_checked = true;
 	}
 
 	return 0;

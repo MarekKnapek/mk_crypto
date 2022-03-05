@@ -5,7 +5,7 @@
 #include <assert.h> /* static_assert */
 #include <limits.h> /* CHAR_BIT SIZE_MAX */
 #include <stdbool.h> /* bool true false */ /* C99 */
-#include <stdint.h> /* uint16_t uint64_t */ /* C99 */
+#include <stdint.h> /* uint64_t */ /* C99 */
 #include <string.h> /* memcpy memset */
 
 
