@@ -136,13 +136,9 @@ static inline void hex_string_to_binary(char const* in, int len, void* out)
 	unsigned char* output = (unsigned char*)out;
 	for(int i = 0; i != len / 2; ++i)
 	{
-		int v;
-
-		v = hex_symbol_to_int(in[2 * i + 0]);
-		output[i] = (unsigned char)(v << 4);
-
-		v = hex_symbol_to_int(in[2 * i + 1]);
-		output[i] |= (unsigned char)(v << 0);
+		int hi = hex_symbol_to_int(in[2 * i + 0]);
+		int lo = hex_symbol_to_int(in[2 * i + 1]);
+		output[i] = (unsigned char)((hi << 4) | (lo << 0));
 	}
 }
 
