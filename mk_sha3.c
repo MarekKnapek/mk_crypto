@@ -423,6 +423,7 @@ static inline void mk_sha3_detail_sponge_block(int w, int block_size, enum mk_sh
 {
 	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
 	MK_ASSERT(block_size % CHAR_BIT == 0);
+	MK_ASSERT(block_size % (CHAR_BIT * sizeof(uint64_t)) == 0);
 	MK_ASSERT(fnc >= mk_sha3_detail_sponge_fnc_e_begin && fnc < mk_sha3_detail_sponge_fnc_e_end);
 	MK_ASSERT(r > 0);
 	MK_ASSERT(r < mk_sha3_detail_w2b(w));
@@ -430,21 +431,14 @@ static inline void mk_sha3_detail_sponge_block(int w, int block_size, enum mk_sh
 	MK_ASSERT(state_);
 	MK_ASSERT(block);
 
-	#define worst_case_b 1600
-	#define s_elems (worst_case_b / CHAR_BIT / sizeof(uint64_t))
-
 	int b = mk_sha3_detail_w2b(w);
 	uint64_t* state = (uint64_t*)state_;
 
-	uint64_t tmp[s_elems];
-
-	unsigned char* tt = (unsigned char*)tmp;
-	memcpy(tt + 0, block, block_size / CHAR_BIT);
-	memset(tt + block_size/ CHAR_BIT, 0, sizeof(tmp) - block_size/ CHAR_BIT);
-
-	for(int i = 0; i != s_elems; ++i)
+	uint64_t const* items = (uint64_t const*)block;
+	int block_items = block_size / CHAR_BIT / sizeof(uint64_t);
+	for(int i = 0; i != block_items; ++i)
 	{
-		state[i] ^= tmp[i];
+		state[i] ^= items[i];
 	}
 
 	switch(fnc)
