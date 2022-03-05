@@ -1,17 +1,23 @@
 #include "mk_sha3.h"
 
-#include <assert.h> /* assert */
-#include <string.h> /* memset memcmp */
+#include <assert.h> /* assert static_assert */ /* C11 */
 #include <limits.h> /* CHAR_BIT */
+#include <string.h> /* memset memcmp NULL */
 
 
-static char const input_1[] = "";
-static unsigned char const output_1[] = {0x6B, 0x4E, 0x03, 0x42, 0x36, 0x67, 0xDB, 0xB7, 0x3B, 0x6E, 0x15, 0x45, 0x4F, 0x0E, 0xB1, 0xAB, 0xD4, 0x59, 0x7F, 0x9A, 0x1B, 0x07, 0x8E, 0x3F, 0x5B, 0x5A, 0x6B, 0xC7};
-static char const input_2[] = "11001";
-static unsigned char const output_2[] = {0xFF, 0xBA, 0xD5, 0xDA, 0x96, 0xBA, 0xD7, 0x17, 0x89, 0x33, 0x02, 0x06, 0xDC, 0x67, 0x68, 0xEC, 0xAE, 0xB1, 0xB3, 0x2D, 0xCA, 0x6B, 0x33, 0x01, 0x48, 0x96, 0x74, 0xAB};
-static char const input_3[] = "110010100001101011011110100110";
-static unsigned char const output_3[] = {0xD6, 0x66, 0xA5, 0x14, 0xCC, 0x9D, 0xBA, 0x25, 0xAC, 0x1B, 0xA6, 0x9E, 0xD3, 0x93, 0x04, 0x60, 0xDE, 0xAA, 0xC9, 0x85, 0x1B, 0x5F, 0x0B, 0xAA, 0xB0, 0x07, 0xDF, 0x3B};
-static char const input_4[] =
+static char const s_msg_0[] = "";
+static char const s_sha3_224_0[] = "6B4E03423667DBB73B6E15454F0EB1ABD4597F9A1B078E3F5B5A6BC7";
+static char const s_sha3_256_0[] = "A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A";
+
+static char const s_msg_1[] = "11001";
+static char const s_sha3_224_1[] = "FFBAD5DA96BAD71789330206DC6768ECAEB1B32DCA6B3301489674AB";
+static char const s_sha3_256_1[] = "7B0047CF5A456882363CBF0FB05322CF65F4B7059A46365E830132E3B5D957AF";
+
+static char const s_msg_2[] = "110010100001101011011110100110";
+static char const s_sha3_224_2[] = "D666A514CC9DBA25AC1BA69ED3930460DEAAC9851B5F0BAAB007DF3B";
+static char const s_sha3_256_2[] = "C8242FEF409E5AE9D1F1C857AE4DC624B92B19809F62AA8C07411C54A078B1D0";
+
+static char const s_msg_3[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -62,8 +68,10 @@ static char const input_4[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101";
-static unsigned char const output_4[] = {0x93, 0x76, 0x81, 0x6A, 0xBA, 0x50, 0x3F, 0x72, 0xF9, 0x6C, 0xE7, 0xEB, 0x65, 0xAC, 0x09, 0x5D, 0xEE, 0xE3, 0xBE, 0x4B, 0xF9, 0xBB, 0xC2, 0xA1, 0xCB, 0x7E, 0x11, 0xE0};
-static char const input_5[] =
+static char const s_sha3_224_3[] = "9376816ABA503F72F96CE7EB65AC095DEEE3BE4BF9BBC2A1CB7E11E0";
+static char const s_sha3_256_3[] = "79F38ADEC5C20307A98EF76E8324AFBFD46CFD81B22E3973C65FA1BD9DE31787";
+
+static char const s_msg_4[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -115,8 +123,10 @@ static char const input_5[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000";
-static unsigned char const output_5[] ={0x22, 0xD2, 0xF7, 0xBB, 0x0B, 0x17, 0x3F, 0xD8, 0xC1, 0x96, 0x86, 0xF9, 0x17, 0x31, 0x66, 0xE3, 0xEE, 0x62, 0x73, 0x80, 0x47, 0xD7, 0xEA, 0xDD, 0x69, 0xEF, 0xB2, 0x28};
-static char const input_6[] =
+static char const s_sha3_224_4[] = "22D2F7BB0B173FD8C19686F9173166E3EE62738047D7EADD69EFB228";
+static char const s_sha3_256_4[] = "81EE769BED0950862B1DDDED2E84AAA6AB7BFDD3CEAA471BE31163D40336363C";
+
+static char const s_msg_5[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
@@ -168,46 +178,90 @@ static char const input_6[] =
 	"11000101110001011100010111000101"
 	"11000101110001011100010111000101"
 	"110001011100010111000101110001";
-static unsigned char const output_6[] = {0x4E, 0x90, 0x7B, 0xB1, 0x05, 0x78, 0x61, 0xF2, 0x00, 0xA5, 0x99, 0xE9, 0xD4, 0xF8, 0x5B, 0x02, 0xD8, 0x84, 0x53, 0xBF, 0x5B, 0x8A, 0xCE, 0x9A, 0xC5, 0x89, 0x13, 0x4C};
+static char const s_sha3_224_5[] = "4E907BB1057861F200A599E9D4F85B02D88453BF5B8ACE9AC589134C";
+static char const s_sha3_256_5[] = "52860AA301214C610D922A6B6CAB981CCD06012E54EF689D744021E738B9ED20";
 
 
 struct task_s
 {
-	char const* m_data;
+	char const* m_msg;
 	int m_len;
-	unsigned char const* m_digest;
+	char const* m_sha3_224;
+	char const* m_sha3_256;
 };
 
 
-struct task_s tasks[] =
+static struct task_s const s_tasks[] =
 {
-	{input_1, sizeof(input_1) - 1, output_1},
-	{input_2, sizeof(input_2) - 1, output_2},
-	{input_3, sizeof(input_3) - 1, output_3},
-	{input_4, sizeof(input_4) - 1, output_4},
-	{input_5, sizeof(input_5) - 1, output_5},
-	{input_6, sizeof(input_6) - 1, output_6},
+	{s_msg_0, sizeof(s_msg_0) - 1, s_sha3_224_0, s_sha3_256_0},
+	{s_msg_1, sizeof(s_msg_1) - 1, s_sha3_224_1, s_sha3_256_1},
+	{s_msg_2, sizeof(s_msg_2) - 1, s_sha3_224_2, s_sha3_256_2},
+	{s_msg_3, sizeof(s_msg_3) - 1, s_sha3_224_3, s_sha3_256_3},
+	{s_msg_4, sizeof(s_msg_4) - 1, s_sha3_224_4, s_sha3_256_4},
+	{s_msg_5, sizeof(s_msg_5) - 1, s_sha3_224_5, s_sha3_256_5},
 };
 
 
-static inline void bit_string_to_binary(char const* in, int len, void* out_)
+static inline void bit_string_to_binary(char const* in, int len, void* out)
 {
 	assert(in);
-	assert(out_);
+	assert(out);
 
-	unsigned char* out = (unsigned char*)out_;
+	unsigned char* output = (unsigned char*)out;
 	for(int i = 0; i != len; ++i)
 	{
+		int byte = i / CHAR_BIT;
+		int bit = i % CHAR_BIT;
 		if(in[i] == '1')
 		{
-			int byte = i / CHAR_BIT;
-			int bit = i % CHAR_BIT;
-			out[byte] |= (unsigned char)(1u << bit);
+			output[byte] = (output[byte] & ~(1u << bit)) | (unsigned char)(1u << bit);
 		}
 		else
 		{
 			assert(in[i] == '0');
+			output[byte] = (output[byte] & ~(1u << bit));
 		}
+	}
+}
+
+static inline int hex_symbol_to_int(char const hs)
+{
+	static char const s_hex_alphabet_lc[] = "0123456789abcdef";
+	static char const s_hex_alphabet_uc[] = "0123456789ABCDEF";
+
+	static_assert(sizeof(s_hex_alphabet_lc) == sizeof(s_hex_alphabet_uc), "");
+
+	for(int i = 0; i != sizeof(s_hex_alphabet_lc) - 1; ++i)
+	{
+		if(hs == s_hex_alphabet_lc[i])
+		{
+			return i;
+		}
+		if(hs == s_hex_alphabet_uc[i])
+		{
+			return i;
+		}
+	}
+	assert(0);
+	return -1;
+}
+
+static inline void hex_string_to_binary(char const* in, int len, void* out)
+{
+	assert(in);
+	assert(out);
+	assert(len % 2 == 0);
+
+	unsigned char* output = (unsigned char*)out;
+	for(int i = 0; i != len / 2; ++i)
+	{
+		int v;
+
+		v = hex_symbol_to_int(in[2 * i + 0]);
+		output[i] = (unsigned char)(v << 4);
+
+		v = hex_symbol_to_int(in[2 * i + 1]);
+		output[i] |= (unsigned char)(v << 0);
 	}
 }
 
@@ -215,30 +269,51 @@ static inline void process_task(struct task_s const* task)
 {
 	assert(task);
 
-	unsigned char buff[256];
-	memset(&buff, 0, sizeof(buff));
-	bit_string_to_binary(task->m_data, task->m_len, &buff);
+	unsigned char msg_buff[256];
+	bit_string_to_binary(task->m_msg, task->m_len, &msg_buff);
+
+
+	unsigned char sha3_224_buff[28];
+	hex_string_to_binary(task->m_sha3_224, 28 * 2, &sha3_224_buff);
 
 	struct mk_sha3_224_state_s mk_sha3_224_state;
 	unsigned char mk_sha3_224_digest[28];
 
 	mk_sha3_224_init(&mk_sha3_224_state);
-	mk_sha3_224_append(&mk_sha3_224_state, buff, task->m_len);
+	mk_sha3_224_append(&mk_sha3_224_state, msg_buff, task->m_len);
 	mk_sha3_224_finish(&mk_sha3_224_state, mk_sha3_224_digest);
 
-	if(memcmp(&mk_sha3_224_digest, task->m_digest, 28) != 0)
+	if(memcmp(&mk_sha3_224_digest, &sha3_224_buff, 28) != 0)
 	{
-		__debugbreak();
+		int volatile* volatile ptr = NULL;
+		*ptr = 0;
+	}
+
+
+	unsigned char sha3_256_buff[32];
+	hex_string_to_binary(task->m_sha3_256, 32 * 2, &sha3_256_buff);
+
+	struct mk_sha3_256_state_s mk_sha3_256_state;
+	unsigned char mk_sha3_256_digest[32];
+
+	mk_sha3_256_init(&mk_sha3_256_state);
+	mk_sha3_256_append(&mk_sha3_256_state, msg_buff, task->m_len);
+	mk_sha3_256_finish(&mk_sha3_256_state, mk_sha3_256_digest);
+
+	if(memcmp(&mk_sha3_256_digest, &sha3_256_buff, 32) != 0)
+	{
+		int volatile* volatile ptr = NULL;
+		*ptr = 0;
 	}
 }
 
 
 int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
-	int ntasks = sizeof(tasks) / sizeof(tasks[0]);
+	int ntasks = sizeof(s_tasks) / sizeof(s_tasks[0]);
 	for(int i = 0; i != ntasks; ++i)
 	{
-		process_task(tasks + i);
+		process_task(s_tasks + i);
 	}
 
 	return 0;
