@@ -80,7 +80,7 @@ static struct task_s const s_tasks[] =
 };
 
 
-bool g_baseline_checked = false;
+static bool g_baseline_checked = false;
 
 
 static inline void bit_string_to_binary(char const* in, int len, void* out)
