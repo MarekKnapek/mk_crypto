@@ -56,6 +56,15 @@ static inline void mk_sha3_detail_string_set_bit(void* s, int n, bool val)
 	output[byte] = (output[byte] & ~(1u << bit)) | (val ? (1u << bit) : 0u);
 }
 
+static inline int mk_sha3_detail_bs2c(int bs)
+{
+	MK_ASSERT(bs == 1600 - 2 * 128 || bs == 1600 - 2 * 224 || bs == 1600 - 2 * 256 || bs == 1600 - 2 * 384 || bs == 1600 - 2 * 512);
+
+	int c = 1600 - bs;
+
+	return c;
+}
+
 static inline int mk_sha3_detail_b2l(int b)
 {
 	MK_ASSERT(b == 25 || b == 50 || b == 100 || b == 200 || b == 400 || b == 800 || b == 1600);
@@ -108,102 +117,6 @@ static inline int mk_sha3_detail_w2l(int w)
 	int l = w == 1 ? 0 : w == 2 ? 1 : w == 4 ? 2 : w == 8 ? 3 : w == 16 ? 4 : w == 20 ? 5 : 6;
 
 	return l;
-}
-
-bool mk_sha3_detail_state_arr_get_bit(int w, struct mk_sha3_detail_state_s const* arr, int x, int y, int z)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-	MK_ASSERT(arr);
-	MK_ASSERT(x >= 0 && x < 5);
-	MK_ASSERT(y >= 0 && y < 5);
-	MK_ASSERT(z >= 0 && z < w);
-
-	uint64_t data = arr->m_data[y][x];
-
-	return ((data >> (w-1-z)) & 0x01) == 0 ? false : true;
-}
-
-void mk_sha3_detail_state_arr_set_bit(int w, struct mk_sha3_detail_state_s* arr, int x, int y, int z, bool bit)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-	MK_ASSERT(arr);
-	MK_ASSERT(x >= 0 && x < 5);
-	MK_ASSERT(y >= 0 && y < 5);
-	MK_ASSERT(z >= 0 && z < w);
-
-	uint64_t data = arr->m_data[y][x];
-
-	if(bit)
-	{
-		data |= ((uint64_t)1u) << z;
-	}
-	else
-	{
-		data &= ~(((uint64_t)1u) << z);
-	}
-
-	arr->m_data[y][x] = data;
-}
-
-static inline void mk_sha3_detail_state_arr_from_string(int w, void const* string, struct mk_sha3_detail_state_s* arr)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-	MK_ASSERT(string);
-	MK_ASSERT(arr);
-
-	for(int x = 0; x != 5; ++x)
-	{
-		for(int y = 0; y != 5; ++y)
-		{
-			for(int z = 0; z != w; ++z)
-			{
-				int idx = w * (5 * y + x) + z;
-				bool bit = mk_sha3_detail_string_get_bit(string, idx);
-				mk_sha3_detail_state_arr_set_bit(w, arr, x, y, z, bit);
-			}
-		}
-	}
-}
-
-static inline void mk_sha3_detail_state_arr_to_string(int w, struct mk_sha3_detail_state_s const* arr, void* string)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-	MK_ASSERT(arr);
-	MK_ASSERT(string);
-
-	for(int x = 0; x != 5; ++x)
-	{
-		for(int y = 0; y != 5; ++y)
-		{
-			for(int z = 0; z != w; ++z)
-			{
-				int idx = w * (5 * y + x) + z;
-				bool bit = mk_sha3_detail_state_arr_get_bit(w, arr, x, y, z);
-				mk_sha3_detail_string_set_bit(string, idx, bit);
-			}
-		}
-	}
-}
-
-
-static inline int mk_sha3_detail_coordinate_mapping_x(int x)
-{
-	return (x + 2) % 5;
-}
-
-static inline int mk_sha3_detail_coordinate_mapping_y(int y)
-{
-	return mk_sha3_detail_mod(y - 2, 5);
-}
-
-bool mk_sha3_detail_state_arr_get_bit_mapped(int w, struct mk_sha3_detail_state_s const* arr, int x, int y, int z)
-{
-	return mk_sha3_detail_state_arr_get_bit(w, arr, mk_sha3_detail_coordinate_mapping_x(x), mk_sha3_detail_coordinate_mapping_y(y), z);
-}
-
-void mk_sha3_detail_state_arr_set_bit_mapped(int w, struct mk_sha3_detail_state_s* arr, int x, int y, int z, bool bit)
-{
-	mk_sha3_detail_state_arr_set_bit(w, arr, mk_sha3_detail_coordinate_mapping_x(x), mk_sha3_detail_coordinate_mapping_y(y), z, bit);
 }
 
 static inline uint64_t mk_sha3_detail_rot(uint64_t x, int n)
@@ -348,119 +261,56 @@ static inline void mk_sha3_detail_rnd(struct mk_sha3_detail_state_s* state, int 
 	mk_sha3_detail_iota(state, ir);
 }
 
-static inline void mk_sha3_detail_keccak_p(int b, int nr, void* s)
+static inline void mk_sha3_detail_keccak_p(void* s)
 {
-	MK_ASSERT(b == 25 || b == 50 || b == 100 || b == 200 || b == 400 || b == 800 || b == 1600);
 	MK_ASSERT(s);
-
-	int l = mk_sha3_detail_b2l(b);
 
 	struct mk_sha3_detail_state_s* state = (struct mk_sha3_detail_state_s*)s;
 
-	for(int ir = 12 + 2 * l - nr; ir != 12 + 2 * l; ++ir)
+	for(int ir = 0; ir != 24; ++ir)
 	{
 		mk_sha3_detail_rnd(state, ir);
 	}
 }
 
-static inline void mk_sha3_detail_keccak_f(int b, void* s)
+static inline void mk_sha3_detail_keccak_f(void* s)
 {
-	MK_ASSERT(b == 25 || b == 50 || b == 100 || b == 200 || b == 400 || b == 800 || b == 1600);
 	MK_ASSERT(s);
 
-	int l = mk_sha3_detail_b2l(b);
-	int nr = 12 + 2 * l;
-
-	mk_sha3_detail_keccak_p(b, nr, s);
+	mk_sha3_detail_keccak_p(s);
 }
 
-static inline void mk_sha3_detail_keccak_pad_101(int x, int m, void* p)
+static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const* block)
 {
-	MK_ASSERT(x > 0);
-	MK_ASSERT(m >= 0);
-	MK_ASSERT(p);
-
-	int j = mk_sha3_detail_mod(-m - 2, x);
-
-	mk_sha3_detail_string_set_bit(p, 0, true);
-	for(int i = 0; i != j; ++i)
-	{
-		mk_sha3_detail_string_set_bit(p, 1 + i, false);
-	}
-	mk_sha3_detail_string_set_bit(p, 1 + j, true);
-}
-
-
-
-
-
-
-
-
-enum mk_sha3_detail_sponge_fnc_e
-{
-	mk_sha3_detail_sponge_fnc_e_begin,
-	mk_sha3_detail_sponge_fnc_e_p_1600_24 = 0,
-	mk_sha3_detail_sponge_fnc_e_end,
-};
-
-enum mk_sha3_detail_sponge_pad_e
-{
-	mk_sha3_detail_sponge_pad_e_begin,
-	mk_sha3_detail_sponge_pad_e_101 = 0,
-	mk_sha3_detail_sponge_pad_e_end,
-};
-
-static inline void mk_sha3_detail_sponge_block(int w, int block_size, enum mk_sha3_detail_sponge_fnc_e fnc, int r, void* state_, void const* block)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
 	MK_ASSERT(block_size % CHAR_BIT == 0);
 	MK_ASSERT(block_size % (CHAR_BIT * sizeof(uint64_t)) == 0);
-	MK_ASSERT(fnc >= mk_sha3_detail_sponge_fnc_e_begin && fnc < mk_sha3_detail_sponge_fnc_e_end);
-	MK_ASSERT(r > 0);
-	MK_ASSERT(r < mk_sha3_detail_w2b(w));
-	MK_ASSERT(r == block_size);
-	MK_ASSERT(state_);
+	MK_ASSERT(s);
 	MK_ASSERT(block);
 
-	int b = mk_sha3_detail_w2b(w);
-	uint64_t* state = (uint64_t*)state_;
-
+	uint64_t* state = (uint64_t*)s;
 	uint64_t const* items = (uint64_t const*)block;
-	int block_items = block_size / CHAR_BIT / sizeof(uint64_t);
-	for(int i = 0; i != block_items; ++i)
+	int block_items_count = block_size / (CHAR_BIT * sizeof(uint64_t));
+	for(int i = 0; i != block_items_count; ++i)
 	{
 		state[i] ^= items[i];
 	}
-
-	switch(fnc)
-	{
-		case mk_sha3_detail_sponge_fnc_e_p_1600_24:
-		{
-			mk_sha3_detail_keccak_f(b, state);
-		}
-		break;
-		default:
-		{
-			MK_ASSERT(0);
-		}
-		break;
-	}
-
-	#undef worst_case_b
-	#undef s_elems
 }
 
-static inline void mk_sha3_detail_keccak_block(int c, int block_size, void* state, void const* block)
+static inline void mk_sha3_detail_sponge_block(int block_size, void* s, void const* block)
+{
+	MK_ASSERT(s);
+	MK_ASSERT(block);
+
+	mk_sha3_detail_mix_block(block_size, s, block);
+	mk_sha3_detail_keccak_f(s);
+}
+
+static inline void mk_sha3_detail_keccak_block(int block_size, void* state, void const* block)
 {
 	MK_ASSERT(state);
 	MK_ASSERT(block);
 
-	int b = 1600;
-	int w = mk_sha3_detail_b2w(b);
-	int r = b - c;
-
-	mk_sha3_detail_sponge_block(w, block_size, mk_sha3_detail_sponge_fnc_e_p_1600_24, r, state, block);
+	mk_sha3_detail_sponge_block(block_size, state, block);
 }
 
 enum mk_sha3_detail_domain_e
@@ -470,19 +320,12 @@ enum mk_sha3_detail_domain_e
 	mk_sha3_detail_domain_e_raw_shake,
 };
 
-enum mk_sha3_detail_pad_e
-{
-	mk_sha3_detail_pad_e_101,
-};
-
-static inline void mk_sha3_detail_keccak_pad(enum mk_sha3_detail_domain_e domain, int block_size, void* state, int* block_idx, void* block_)
+static inline void mk_sha3_detail_pad(int block_size, enum mk_sha3_detail_domain_e domain, void* state, int* block_idx, void* block_)
 {
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx < block_size);
 	MK_ASSERT(block_);
-
-	enum mk_sha3_detail_pad_e pad = mk_sha3_detail_sponge_pad_e_101; /* TODO move from keccak to sponge */
 
 	unsigned char suffix;
 	int suffix_bits;
@@ -517,84 +360,32 @@ static inline void mk_sha3_detail_keccak_pad(enum mk_sha3_detail_domain_e domain
 		break;
 	}
 
-	switch(pad)
+	unsigned char* block = (unsigned char*)block_;
+	unsigned idx_byte = (*block_idx + (CHAR_BIT - 1)) / CHAR_BIT;
+	memset(block + idx_byte, 0, block_size / CHAR_BIT - idx_byte);
+
+	idx_byte = *block_idx / CHAR_BIT;
+	unsigned idx = *block_idx % CHAR_BIT;
+	for(int i = 0; i != suffix_bits; ++i)
 	{
-		case mk_sha3_detail_pad_e_101:
-		{
-			unsigned char* block = (unsigned char*)block_;
-			unsigned idx_byte = (*block_idx + (CHAR_BIT - 1)) / CHAR_BIT;
-			memset(block + idx_byte, 0, block_size / CHAR_BIT - idx_byte);
-
-			idx_byte = *block_idx / CHAR_BIT;
-			unsigned idx = *block_idx % CHAR_BIT;
-			for(int i = 0; i != suffix_bits; ++i)
-			{
-				bool bit = mk_sha3_detail_string_get_bit(&suffix, i);
-				mk_sha3_detail_string_set_bit(block + idx_byte, idx + i, bit);
-			}
-
-			mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits, true);
-			for(int i = 0; i != CHAR_BIT - 1; ++i)
-			{
-				mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits + 1 + i, false);
-			}
-			mk_sha3_detail_string_set_bit(block + block_size / CHAR_BIT - 1, CHAR_BIT - 1, true);
-
-#if 0
-			/*
-			#define worst_case_b 1600
-			#define worst_case_c 448
-			#define worst_case_block_size ((1600 - worst_case_c) / CHAR_BIT)
-			#define worst_min_padding_bits (4 + 2)
-			#define worst_min_padding_bytes ((worst_min_padding_bits - 1) / CHAR_BIT + 1)
-			#define worst_case_padding_len (worst_case_block_size + worst_min_padding_bytes - 1)
-
-			unsigned char padding[worst_case_padding_len];
-			memset(padding, 0, sizeof(padding));
-			*/
-
-			unsigned char* padding = (unsigned char*)block + *block_idx;
-			memset(padding + 1, 0, block_size - *block_idx - 1);
-
-			padding[0] = suffix;
-
-			/* padding[0] = (padding[0] << 1) | 0x01; */
-			mk_sha3_detail_string_set_bit(padding, suffix_bits, true);
-			int len_n = *block_idx * CHAR_BIT + suffix_bits;
-			int j = mk_sha3_detail_mod(-len_n - 2, r);
-			mk_sha3_detail_string_set_bit(padding, suffix_bits + 1 + j, true);
-
-			int padding_bits = len_n + 1 + j + 1;
-			MK_ASSERT((padding_bits % CHAR_BIT) == 0);
-			int padding_bytes = padding_bits / CHAR_BIT;
-			
-			MK_ASSERT(*block_idx + padding_bytes == (unsigned)block_size);
-			*block_idx = 0;
-			
-			/*#undef worst_case_b
-			#undef worst_case_c
-			#undef worst_case_block_size
-			#undef worst_min_padding_bits
-			#undef worst_min_padding_bytes
-			#undef worst_case_padding_len*/
-#endif
-		}
-		break;
-		default:
-		{
-			MK_ASSERT(0);
-		}
-		break;
+		bool bit = mk_sha3_detail_string_get_bit(&suffix, i);
+		mk_sha3_detail_string_set_bit(block + idx_byte, idx + i, bit);
 	}
+
+	mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits, true);
+	for(int i = 0; i != CHAR_BIT - 1; ++i)
+	{
+		mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits + 1 + i, false);
+	}
+	mk_sha3_detail_string_set_bit(block + block_size / CHAR_BIT - 1, CHAR_BIT - 1, true);
 }
 
-
-static inline void mk_sha3_detail_process_block(int c, int block_size, void* state, void const* block)
+static inline void mk_sha3_detail_process_block(int block_size, void* state, void const* block)
 {
 	MK_ASSERT(state);
 	MK_ASSERT(block);
 
-	mk_sha3_detail_keccak_block(c, block_size, state, block);
+	mk_sha3_detail_keccak_block(block_size, state, block);
 }
 
 
@@ -629,7 +420,7 @@ static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, voi
 	}
 }
 
-static inline void mk_sha3_detail_append_a(int c, int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
+static inline void mk_sha3_detail_append_a(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
 	MK_ASSERT(state);
@@ -650,14 +441,14 @@ static inline void mk_sha3_detail_append_a(int c, int block_size, void* state, i
 	{
 		int capacity_bytes = capacity / CHAR_BIT;
 		memcpy(block + idx_bytes, input, capacity_bytes);
-		mk_sha3_detail_process_block(c, block_size, state, block);
+		mk_sha3_detail_process_block(block_size, state, block);
 		input += capacity_bytes;
 		remaining -= capacity;
 		int block_size_bytes = block_size / CHAR_BIT;
 		size_t blocks = remaining / block_size;
 		for(size_t i = 0; i != blocks; ++i)
 		{
-			mk_sha3_detail_process_block(c, block_size, state, input);
+			mk_sha3_detail_process_block(block_size, state, input);
 			input += block_size_bytes;
 		}
 		remaining -= blocks * block_size;
@@ -669,8 +460,7 @@ static inline void mk_sha3_detail_append_a(int c, int block_size, void* state, i
 	*block_idx = idx_bytes * CHAR_BIT + (int)remaining;
 }
 
-static inline void mk_sha3_detail_append_u(int c, int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
-{
+static inline void mk_sha3_detail_append_u(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
 	MK_ASSERT(state);
@@ -692,7 +482,7 @@ static inline void mk_sha3_detail_append_u(int c, int block_size, void* state, i
 	if(remaining >= (size_t)capacity)
 	{
 		mk_sha3_detail_memcpy_bits(block + idx_bytes, idx, input, 0, capacity);
-		mk_sha3_detail_process_block(c, block_size, state, block);
+		mk_sha3_detail_process_block(block_size, state, block);
 		input += capacity / CHAR_BIT;
 		input_idx = capacity % CHAR_BIT;
 		remaining -= capacity;
@@ -701,7 +491,7 @@ static inline void mk_sha3_detail_append_u(int c, int block_size, void* state, i
 		for(size_t i = 0; i != blocks; ++i)
 		{
 			mk_sha3_detail_memcpy_bits(block, 0, input, input_idx, block_size);
-			mk_sha3_detail_process_block(c, block_size, state, block);
+			mk_sha3_detail_process_block(block_size, state, block);
 			input += block_size_bytes;
 		}
 		remaining -= blocks * block_size;
@@ -712,9 +502,8 @@ static inline void mk_sha3_detail_append_u(int c, int block_size, void* state, i
 	mk_sha3_detail_memcpy_bits(block + idx_bytes, idx, input, input_idx, (int)remaining);
 	*block_idx = idx_bytes * CHAR_BIT + (int)remaining;
 }
-}
 
-static inline void mk_sha3_detail_append(int c, int block_size, void* state, int* block_idx, void* block, void const* data, size_t data_len_bits)
+static inline void mk_sha3_detail_append(int block_size, void* state, int* block_idx, void* block, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
 	MK_ASSERT(state);
@@ -724,44 +513,42 @@ static inline void mk_sha3_detail_append(int c, int block_size, void* state, int
 	bool aligned = *block_idx % CHAR_BIT == 0 ? true : false;
 	if(aligned)
 	{
-		mk_sha3_detail_append_a(c, block_size, state, block_idx, block, data, data_len_bits);
+		mk_sha3_detail_append_a(block_size, state, block_idx, block, data, data_len_bits);
 	}
 	else
 	{
-		mk_sha3_detail_append_u(c, block_size, state, block_idx, block, data, data_len_bits);
+		mk_sha3_detail_append_u(block_size, state, block_idx, block, data, data_len_bits);
 	}
 }
 
-static inline void mk_sha3_detail_finish(enum mk_sha3_detail_domain_e domain, int c, int block_size, int d, void* state, int* block_idx, void* block, void* z)
+static inline void mk_sha3_detail_finish(enum mk_sha3_detail_domain_e domain, int block_size, int d, void* state, int* block_idx, void* block, void* z)
 {
+	MK_ASSERT(d > 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx < block_size);
 	MK_ASSERT(block);
 	MK_ASSERT(z);
 
-	int b = 1600;
-	/*int w = mk_sha3_detail_b2w(b);*/
-	int r = b - c;
+	mk_sha3_detail_pad(block_size, domain, state, block_idx, block);
+	mk_sha3_detail_mix_block(block_size, state, block);
 
-	mk_sha3_detail_keccak_pad(domain, block_size, state, block_idx, block);
-	mk_sha3_detail_process_block(c, block_size, state, block);
+	int block_size_bytes = block_size / CHAR_BIT;
+	unsigned char* output = (unsigned char*)z;
 
-	int z_idx = 0;
-	for(;;)
+	int remaining_bytes = (d + (CHAR_BIT - 1)) / CHAR_BIT;
+	int blocks_count = remaining_bytes / block_size_bytes;
+	for(int i = 0; i != blocks_count; ++i)
 	{
-		int max_copy = r < (d - z_idx) ? r : (d - z_idx);
-		for(int i = 0; i != max_copy; ++i)
-		{
-			bool bit = mk_sha3_detail_string_get_bit(state, i);
-			mk_sha3_detail_string_set_bit(z, z_idx + i, bit);
-		}
-		z_idx += max_copy;
-		if(z_idx == d)
-		{
-			break;
-		}
-		mk_sha3_detail_keccak_f(b, state);
+		mk_sha3_detail_keccak_f(state);
+		memcpy(output, state, block_size_bytes);
+		output += block_size_bytes;
+	}
+	remaining_bytes -= blocks_count * block_size_bytes;
+	if(remaining_bytes != 0)
+	{
+		mk_sha3_detail_keccak_f(state);
+		memcpy(output, state, remaining_bytes);
 	}
 }
 
@@ -777,7 +564,7 @@ void mk_sha3_224_append(struct mk_sha3_224_state_s* self, void const* msg, size_
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(448, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_224_finish(struct mk_sha3_224_state_s* self, void* digest)
@@ -785,7 +572,7 @@ void mk_sha3_224_finish(struct mk_sha3_224_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, 448, sizeof(self->m_block) * CHAR_BIT, 224, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 224, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -800,7 +587,7 @@ void mk_sha3_256_append(struct mk_sha3_256_state_s* self, void const* msg, size_
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(512, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_256_finish(struct mk_sha3_256_state_s* self, void* digest)
@@ -808,7 +595,7 @@ void mk_sha3_256_finish(struct mk_sha3_256_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, 512, sizeof(self->m_block) * CHAR_BIT, 256, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 256, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -823,7 +610,7 @@ void mk_sha3_384_append(struct mk_sha3_384_state_s* self, void const* msg, size_
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(768, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* digest)
@@ -831,7 +618,7 @@ void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, 768, sizeof(self->m_block) * CHAR_BIT, 384, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 384, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -846,7 +633,7 @@ void mk_sha3_512_append(struct mk_sha3_512_state_s* self, void const* msg, size_
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(1024, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* digest)
@@ -854,7 +641,7 @@ void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, 1024, sizeof(self->m_block) * CHAR_BIT, 512, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 512, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -869,7 +656,7 @@ void mk_sha3_shake_128_append(struct mk_sha3_shake_128_state_s* self, void const
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(256, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_shake_128_finish(struct mk_sha3_shake_128_state_s* self, int digest_len_bits, void* digest)
@@ -878,7 +665,7 @@ void mk_sha3_shake_128_finish(struct mk_sha3_shake_128_state_s* self, int digest
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, 256, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -893,7 +680,7 @@ void mk_sha3_shake_256_append(struct mk_sha3_shake_256_state_s* self, void const
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(512, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_shake_256_finish(struct mk_sha3_shake_256_state_s* self, int digest_len_bits, void* digest)
@@ -902,7 +689,7 @@ void mk_sha3_shake_256_finish(struct mk_sha3_shake_256_state_s* self, int digest
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, 512, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -917,7 +704,7 @@ void mk_sha3_raw_shake_128_append(struct mk_sha3_raw_shake_128_state_s* self, vo
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(256, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_raw_shake_128_finish(struct mk_sha3_raw_shake_128_state_s* self, int digest_len_bits, void* digest)
@@ -926,7 +713,7 @@ void mk_sha3_raw_shake_128_finish(struct mk_sha3_raw_shake_128_state_s* self, in
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, 256, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -941,7 +728,7 @@ void mk_sha3_raw_shake_256_append(struct mk_sha3_raw_shake_256_state_s* self, vo
 {
 	MK_ASSERT(self);
 
-	mk_sha3_detail_append(512, sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
+	mk_sha3_detail_append(sizeof(self->m_block) * CHAR_BIT, self->m_state, &self->m_idx, self->m_block, msg, msg_len_bits);
 }
 
 void mk_sha3_raw_shake_256_finish(struct mk_sha3_raw_shake_256_state_s* self, int digest_len_bits, void* digest)
@@ -950,7 +737,7 @@ void mk_sha3_raw_shake_256_finish(struct mk_sha3_raw_shake_256_state_s* self, in
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, 512, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
