@@ -72,8 +72,8 @@ static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, voi
 		unsigned char* output = (unsigned char*)dst;
 		for(size_t i = 0; i != bits; ++i)
 		{
-			bool bit = mk_sha3_detail_string_get_bit(input + i / CHAR_BIT, i % CHAR_BIT + src_bit_offset);
-			mk_sha3_detail_string_set_bit(output + i / CHAR_BIT, i % CHAR_BIT + dst_bit_offset, bit);
+			bool bit = mk_sha3_detail_string_get_bit(input + i / CHAR_BIT, src_bit_offset + i % CHAR_BIT);
+			mk_sha3_detail_string_set_bit(output + i / CHAR_BIT, dst_bit_offset + i % CHAR_BIT, bit);
 		}
 	}
 }
