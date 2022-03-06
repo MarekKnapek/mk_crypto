@@ -521,7 +521,7 @@ static inline void mk_sha3_detail_append(int block_size, void* state, int* block
 	}
 }
 
-static inline void mk_sha3_detail_finish(enum mk_sha3_detail_domain_e domain, int block_size, int d, void* state, int* block_idx, void* block, void* z)
+static inline void mk_sha3_detail_finish(int block_size, enum mk_sha3_detail_domain_e domain, int d, void* state, int* block_idx, void* block, void* z)
 {
 	MK_ASSERT(d > 0);
 	MK_ASSERT(state);
@@ -572,7 +572,7 @@ void mk_sha3_224_finish(struct mk_sha3_224_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 224, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, 224, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -595,7 +595,7 @@ void mk_sha3_256_finish(struct mk_sha3_256_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 256, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, 256, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -618,7 +618,7 @@ void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 384, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, 384, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -641,7 +641,7 @@ void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* digest)
 	MK_ASSERT(self);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_sha3, sizeof(self->m_block) * CHAR_BIT, 512, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, 512, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -665,7 +665,7 @@ void mk_sha3_shake_128_finish(struct mk_sha3_shake_128_state_s* self, int digest
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_shake, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -689,7 +689,7 @@ void mk_sha3_shake_256_finish(struct mk_sha3_shake_256_state_s* self, int digest
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_shake, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -713,7 +713,7 @@ void mk_sha3_raw_shake_128_finish(struct mk_sha3_raw_shake_128_state_s* self, in
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_raw_shake, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
@@ -737,7 +737,7 @@ void mk_sha3_raw_shake_256_finish(struct mk_sha3_raw_shake_256_state_s* self, in
 	MK_ASSERT(digest_len_bits > 0);
 	MK_ASSERT(digest);
 
-	mk_sha3_detail_finish(mk_sha3_detail_domain_e_raw_shake, sizeof(self->m_block) * CHAR_BIT, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
+	mk_sha3_detail_finish(sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_raw_shake, digest_len_bits, self->m_state, &self->m_idx, self->m_block, digest);
 }
 
 
