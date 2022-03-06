@@ -78,69 +78,6 @@ static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, voi
 	}
 }
 
-static inline int mk_sha3_detail_bs2c(int bs)
-{
-	MK_ASSERT(bs == 1600 - 2 * 128 || bs == 1600 - 2 * 224 || bs == 1600 - 2 * 256 || bs == 1600 - 2 * 384 || bs == 1600 - 2 * 512);
-
-	int c = 1600 - bs;
-
-	return c;
-}
-
-static inline int mk_sha3_detail_b2l(int b)
-{
-	MK_ASSERT(b == 25 || b == 50 || b == 100 || b == 200 || b == 400 || b == 800 || b == 1600);
-
-	int l = b == 25 ? 0 : b == 50 ? 1 : b == 100 ? 2 : b == 200 ? 3 : b == 400 ? 4 : b == 800 ? 5 : 6;
-
-	return l;
-}
-
-static inline int mk_sha3_detail_b2w(int b)
-{
-	MK_ASSERT(b == 25 || b == 50 || b == 100 || b == 200 || b == 400 || b == 800 || b == 1600);
-
-	int w = b == 25 ? 1 : b == 50 ? 2 : b == 100 ? 4 : b == 200 ? 8 : b == 400 ? 16 : b == 800 ? 32 : 64;
-
-	return w;
-}
-
-static inline int mk_sha3_detail_l2b(int l)
-{
-	MK_ASSERT(l == 0 || l == 1 || l == 2 || l == 3 || l == 4 || l == 5 || l == 6);
-
-	int b = l == 0 ? 25 : l == 1 ? 50 : l == 2 ? 100 : l == 3 ? 200 : l == 4 ? 400 : l == 5 ? 800 : 1600;
-
-	return b;
-}
-
-static inline int mk_sha3_detail_l2w(int l)
-{
-	MK_ASSERT(l == 0 || l == 1 || l == 2 || l == 3 || l == 4 || l == 5 || l == 6);
-
-	int w = l == 0 ? 1 : l == 1 ? 2 : l == 2 ? 4 : l == 3 ? 8 : l == 4 ? 16 : l == 5 ? 32 : 64;
-
-	return w;
-}
-
-static inline int mk_sha3_detail_w2b(int w)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-
-	int b = w == 1 ? 25 : w == 2 ? 50 : w == 4 ? 100 : w == 8 ? 200 : w == 16 ? 400 : w == 20 ? 800 : 1600;
-
-	return b;
-}
-
-static inline int mk_sha3_detail_w2l(int w)
-{
-	MK_ASSERT(w == 1 || w == 2 || w == 4 || w == 8 || w == 16 || w == 32 || w == 64);
-
-	int l = w == 1 ? 0 : w == 2 ? 1 : w == 4 ? 2 : w == 8 ? 3 : w == 16 ? 4 : w == 20 ? 5 : 6;
-
-	return l;
-}
-
 static inline uint64_t mk_sha3_detail_rot(uint64_t x, int n)
 {
 	MK_ASSERT(n > 0);
