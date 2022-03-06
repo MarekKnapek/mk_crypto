@@ -54,7 +54,7 @@ void mk_win_md5_append(struct mk_win_md5_state_s* self, void const* data, size_t
 {
 	assert(self);
 	
-	NTSTATUS hashed = BCryptHashData(self->m_alg, (void*)data, len, 0);
+	NTSTATUS hashed = BCryptHashData(self->m_alg, (void*)data, (ULONG)len, 0);
 	if(hashed != 0)
 	{
 		exit(EXIT_FAILURE);
