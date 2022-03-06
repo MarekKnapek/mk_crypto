@@ -56,6 +56,28 @@ static inline void mk_sha3_detail_string_set_bit(void* s, int n, bool val)
 	output[byte] = (output[byte] & ~(1u << bit)) | (val ? (1u << bit) : 0u);
 }
 
+static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, void const* src, int src_bit_offset, size_t bits)
+{
+	MK_ASSERT(dst_bit_offset >= 0 && dst_bit_offset < CHAR_BIT);
+	MK_ASSERT(src_bit_offset >= 0 && src_bit_offset < CHAR_BIT);
+
+	if(dst_bit_offset == 0 && src_bit_offset == 0)
+	{
+		size_t bytes = (bits + (CHAR_BIT - 1)) / CHAR_BIT;
+		memcpy(dst, src, bytes);
+	}
+	else
+	{
+		unsigned char const* input = (unsigned char const*)src;
+		unsigned char* output = (unsigned char*)dst;
+		for(size_t i = 0; i != bits; ++i)
+		{
+			bool bit = mk_sha3_detail_string_get_bit(input + i / CHAR_BIT, i % CHAR_BIT + src_bit_offset);
+			mk_sha3_detail_string_set_bit(output + i / CHAR_BIT, i % CHAR_BIT + dst_bit_offset, bit);
+		}
+	}
+}
+
 static inline int mk_sha3_detail_bs2c(int bs)
 {
 	MK_ASSERT(bs == 1600 - 2 * 128 || bs == 1600 - 2 * 224 || bs == 1600 - 2 * 256 || bs == 1600 - 2 * 384 || bs == 1600 - 2 * 512);
@@ -397,28 +419,6 @@ static inline void mk_sha3_detail_init(uint64_t* state, int* idx)
 
 	memset(state, 0, 25 * sizeof(uint64_t));
 	*idx = 0;
-}
-
-static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, void const* src, int src_bit_offset, size_t bits)
-{
-	MK_ASSERT(dst_bit_offset >= 0 && dst_bit_offset < CHAR_BIT);
-	MK_ASSERT(src_bit_offset >= 0 && src_bit_offset < CHAR_BIT);
-
-	if(dst_bit_offset == 0 && src_bit_offset == 0)
-	{
-		size_t bytes = (bits + (CHAR_BIT - 1)) / CHAR_BIT;
-		memcpy(dst, src, bytes);
-	}
-	else
-	{
-		unsigned char const* input = (unsigned char const*)src;
-		unsigned char* output = (unsigned char*)dst;
-		for(size_t i = 0; i != bits; ++i)
-		{
-			bool bit = mk_sha3_detail_string_get_bit(input + i / CHAR_BIT, i % CHAR_BIT + src_bit_offset);
-			mk_sha3_detail_string_set_bit(output + i / CHAR_BIT, i % CHAR_BIT + dst_bit_offset, bit);
-		}
-	}
 }
 
 static inline void mk_sha3_detail_append_a(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
