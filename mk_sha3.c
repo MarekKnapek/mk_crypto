@@ -424,6 +424,7 @@ static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, voi
 static inline void mk_sha3_detail_append_a(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
+	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx % CHAR_BIT == 0);
@@ -464,6 +465,7 @@ static inline void mk_sha3_detail_append_a(int block_size, void* state, int* blo
 static inline void mk_sha3_detail_append_u(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
+	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx % CHAR_BIT != 0);
@@ -507,6 +509,7 @@ static inline void mk_sha3_detail_append_u(int block_size, void* state, int* blo
 static inline void mk_sha3_detail_append(int block_size, void* state, int* block_idx, void* block, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
+	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(block);
@@ -524,6 +527,8 @@ static inline void mk_sha3_detail_append(int block_size, void* state, int* block
 
 static inline void mk_sha3_detail_finish(int block_size, enum mk_sha3_detail_domain_e domain, int d, void* state, int* block_idx, void* block, void* z)
 {
+	MK_ASSERT((block_size % CHAR_BIT) == 0);
+	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
 	MK_ASSERT(d > 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
