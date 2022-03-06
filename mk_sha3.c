@@ -280,6 +280,21 @@ static inline void mk_sha3_detail_keccak_f(void* s)
 	mk_sha3_detail_keccak_p(s);
 }
 
+static inline uint64_t mk_sha3_binary_le_to_uint64(void const* binary)
+{
+	unsigned char const* input = (unsigned char*)binary;
+	uint64_t ret =
+		((uint64_t)(input[0])) << (0 * CHAR_BIT) |
+		((uint64_t)(input[1])) << (1 * CHAR_BIT) |
+		((uint64_t)(input[2])) << (2 * CHAR_BIT) |
+		((uint64_t)(input[3])) << (3 * CHAR_BIT) |
+		((uint64_t)(input[4])) << (4 * CHAR_BIT) |
+		((uint64_t)(input[5])) << (5 * CHAR_BIT) |
+		((uint64_t)(input[6])) << (6 * CHAR_BIT) |
+		((uint64_t)(input[7])) << (7 * CHAR_BIT);
+	return ret;
+}
+
 static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const* block)
 {
 	MK_ASSERT(block_size % CHAR_BIT == 0);
@@ -288,11 +303,13 @@ static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const*
 	MK_ASSERT(block);
 
 	uint64_t* state = (uint64_t*)s;
-	uint64_t const* items = (uint64_t const*)block;
+	unsigned char const* input = (unsigned char const*)block;
+
 	int block_items_count = block_size / (CHAR_BIT * sizeof(uint64_t));
 	for(int i = 0; i != block_items_count; ++i)
 	{
-		state[i] ^= items[i];
+		state[i] ^= mk_sha3_binary_le_to_uint64(input);
+		input += sizeof(uint64_t);
 	}
 }
 
