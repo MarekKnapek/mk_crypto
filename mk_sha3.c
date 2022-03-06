@@ -313,23 +313,6 @@ static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const*
 	}
 }
 
-static inline void mk_sha3_detail_sponge_block(int block_size, void* s, void const* block)
-{
-	MK_ASSERT(s);
-	MK_ASSERT(block);
-
-	mk_sha3_detail_mix_block(block_size, s, block);
-	mk_sha3_detail_keccak_f(s);
-}
-
-static inline void mk_sha3_detail_keccak_block(int block_size, void* state, void const* block)
-{
-	MK_ASSERT(state);
-	MK_ASSERT(block);
-
-	mk_sha3_detail_sponge_block(block_size, state, block);
-}
-
 enum mk_sha3_detail_domain_e
 {
 	mk_sha3_detail_domain_e_sha3,
@@ -402,7 +385,8 @@ static inline void mk_sha3_detail_process_block(int block_size, void* state, voi
 	MK_ASSERT(state);
 	MK_ASSERT(block);
 
-	mk_sha3_detail_keccak_block(block_size, state, block);
+	mk_sha3_detail_mix_block(block_size, state, block);
+	mk_sha3_detail_keccak_f(state);
 }
 
 
