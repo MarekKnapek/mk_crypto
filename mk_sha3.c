@@ -18,18 +18,6 @@ struct mk_sha3_detail_state_s
 };
 
 
-static inline int mk_sha3_detail_mod(int m, int n)
-{
-	MK_ASSERT(n > 0);
-
-	int r;
-
-	r = m % n;
-	r = r < 0 ? r + n : r;
-
-	return r;
-}
-
 static inline bool mk_sha3_detail_string_get_bit(void const* s, int n)
 {
 	MK_ASSERT(s);
@@ -76,6 +64,18 @@ static inline void mk_sha3_detail_memcpy_bits(void* dst, int dst_bit_offset, voi
 			mk_sha3_detail_string_set_bit(output + i / CHAR_BIT, dst_bit_offset + i % CHAR_BIT, bit);
 		}
 	}
+}
+
+static inline int mk_sha3_detail_mod(int m, int n)
+{
+	MK_ASSERT(n > 0);
+
+	int r;
+
+	r = m % n;
+	r = r < 0 ? r + n : r;
+
+	return r;
 }
 
 static inline uint64_t mk_sha3_detail_rot(uint64_t x, int n)
