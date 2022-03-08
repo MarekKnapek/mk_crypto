@@ -1,6 +1,8 @@
 #include "mk_test_utils.h"
 
-#include <assert.h> /* assert static_assert */ /* C11 */
+#include "../mk_assert.h"
+
+#include <assert.h> /* static_assert */ /* C11 */
 
 
 int hex_symbol_to_int(char const hs)
@@ -10,28 +12,32 @@ int hex_symbol_to_int(char const hs)
 
 	static_assert(sizeof(s_hex_alphabet_lc) == sizeof(s_hex_alphabet_uc), "");
 
+	int ret = -1;
 	for(int i = 0; i != sizeof(s_hex_alphabet_lc) - 1; ++i)
 	{
 		if(hs == s_hex_alphabet_lc[i])
 		{
-			return i;
+			ret = i;
+			break;
 		}
 		if(hs == s_hex_alphabet_uc[i])
 		{
-			return i;
+			ret = i;
+			break;
 		}
 	}
-	assert(0);
-	return -1;
+	MK_ASSERT(ret != -1);
+	return ret;
 }
 
 void hex_string_to_binary(char const* in, int len, void* out)
 {
-	assert(in);
-	assert(out);
-	assert(len % 2 == 0);
+	MK_ASSERT(in);
+	MK_ASSERT(out);
+	MK_ASSERT(len % 2 == 0);
 
 	unsigned char* output = (unsigned char*)out;
+	
 	for(int i = 0; i != len / 2; ++i)
 	{
 		int hi = hex_symbol_to_int(in[2 * i + 0]);
