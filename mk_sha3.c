@@ -272,73 +272,6 @@ static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const*
 	}
 }
 
-enum mk_sha3_detail_domain_e
-{
-	mk_sha3_detail_domain_e_sha3,
-	mk_sha3_detail_domain_e_shake,
-	mk_sha3_detail_domain_e_raw_shake,
-};
-
-static inline void mk_sha3_detail_pad(int block_size, enum mk_sha3_detail_domain_e domain, void* state, int* block_idx, void* block_)
-{
-	MK_ASSERT(state);
-	MK_ASSERT(block_idx);
-	MK_ASSERT(*block_idx < block_size);
-	MK_ASSERT(block_);
-
-	unsigned char suffix;
-	int suffix_bits;
-
-	switch(domain)
-	{
-		case mk_sha3_detail_domain_e_sha3:
-		{
-			suffix = 0x02;
-			suffix_bits = 2;
-		}
-		break;
-		case mk_sha3_detail_domain_e_shake:
-		{
-			suffix = 0x0f;
-			suffix_bits = 4;
-		}
-		break;
-		case mk_sha3_detail_domain_e_raw_shake:
-		{
-			suffix = 0x03;
-			suffix_bits = 2;
-		}
-		break;
-		default:
-		{
-			MK_ASSERT(0);
-			/* To silence warning. */
-			suffix = 0; 
-			suffix_bits = 0;
-		}
-		break;
-	}
-
-	unsigned char* block = (unsigned char*)block_;
-	unsigned idx_byte = (*block_idx + (CHAR_BIT - 1)) / CHAR_BIT;
-	memset(block + idx_byte, 0, block_size / CHAR_BIT - idx_byte);
-
-	idx_byte = *block_idx / CHAR_BIT;
-	unsigned idx = *block_idx % CHAR_BIT;
-	for(int i = 0; i != suffix_bits; ++i)
-	{
-		bool bit = mk_sha3_detail_string_get_bit(&suffix, i);
-		mk_sha3_detail_string_set_bit(block + idx_byte, idx + i, bit);
-	}
-
-	mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits, true);
-	for(int i = 0; i != CHAR_BIT - 1; ++i)
-	{
-		mk_sha3_detail_string_set_bit(block + idx_byte, idx + suffix_bits + 1 + i, false);
-	}
-	mk_sha3_detail_string_set_bit(block + block_size / CHAR_BIT - 1, CHAR_BIT - 1, true);
-}
-
 static inline void mk_sha3_detail_process_block(int block_size, void* state, void const* block)
 {
 	MK_ASSERT(state);
@@ -347,7 +280,6 @@ static inline void mk_sha3_detail_process_block(int block_size, void* state, voi
 	mk_sha3_detail_mix_block(block_size, state, block);
 	mk_sha3_detail_keccak_f(state);
 }
-
 
 static inline void mk_sha3_detail_init(uint64_t* state, int* idx)
 {
@@ -462,6 +394,69 @@ static inline void mk_sha3_detail_append(int block_size, void* state, int* block
 	}
 }
 
+enum mk_sha3_detail_domain_e
+{
+	mk_sha3_detail_domain_e_sha3,
+	mk_sha3_detail_domain_e_shake,
+	mk_sha3_detail_domain_e_raw_shake,
+};
+
+static inline void mk_sha3_detail_pad(int block_size, enum mk_sha3_detail_domain_e domain, void* state, int* block_idx, void* block_)
+{
+	MK_ASSERT(state);
+	MK_ASSERT(block_idx);
+	MK_ASSERT(*block_idx < block_size);
+	MK_ASSERT(block_);
+
+	union
+	{
+		uint64_t m_words[21];
+		unsigned char m_bytes[21 * sizeof(uint64_t) + 1];
+	} padding;
+	memset(&padding.m_bytes, 0, sizeof(padding.m_bytes));
+
+	unsigned char suffix;
+	int suffix_bits;
+
+	switch(domain)
+	{
+		case mk_sha3_detail_domain_e_sha3:
+		{
+			suffix = 0x06;
+			suffix_bits = 3;
+		}
+		break;
+		case mk_sha3_detail_domain_e_shake:
+		{
+			suffix = 0x1f;
+			suffix_bits = 5;
+		}
+		break;
+		case mk_sha3_detail_domain_e_raw_shake:
+		{
+			suffix = 0x07;
+			suffix_bits = 3;
+		}
+		break;
+		default:
+		{
+			/* To silence warning. */
+			suffix = 0; 
+			suffix_bits = 0;
+			MK_ASSERT(0);
+		}
+		break;
+	}
+
+	padding.m_bytes[0] = suffix;
+
+	int capacity = block_size - *block_idx;
+	int bits = capacity < suffix_bits + 1 ? capacity + block_size : capacity;
+	mk_sha3_detail_string_set_bit(padding.m_bytes, bits - 1, true);
+
+	mk_sha3_detail_append(block_size, state, block_idx, block_, padding.m_bytes, bits);
+}
+
 static inline void mk_sha3_detail_finish(int block_size, enum mk_sha3_detail_domain_e domain, int d, void* state, int* block_idx, void* block, void* z)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
@@ -474,12 +469,17 @@ static inline void mk_sha3_detail_finish(int block_size, enum mk_sha3_detail_dom
 	MK_ASSERT(z);
 
 	mk_sha3_detail_pad(block_size, domain, state, block_idx, block);
-	mk_sha3_detail_mix_block(block_size, state, block);
 
 	int block_size_bytes = block_size / CHAR_BIT;
 	unsigned char* output = (unsigned char*)z;
 
-	int remaining_bytes = (d + (CHAR_BIT - 1)) / CHAR_BIT;
+	int to_copy_bits = d > block_size ? block_size : d;
+	int to_copy_bytes = (to_copy_bits + (CHAR_BIT - 1)) / CHAR_BIT;
+	memcpy(output, state, to_copy_bytes);
+	output += to_copy_bytes;
+	int remaining_bits = d - to_copy_bits;
+
+	int remaining_bytes = (remaining_bits + (CHAR_BIT - 1)) / CHAR_BIT;
 	int blocks_count = remaining_bytes / block_size_bytes;
 	for(int i = 0; i != blocks_count; ++i)
 	{
