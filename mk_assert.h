@@ -5,10 +5,7 @@
 #ifdef NDEBUG
 
 
-#include "mk_unreachable.h"
-
-
-#define MK_ASSERT(X) do{ if(!(X)){ mk_unreachable(); } }while(0)
+#define MK_ASSERT(x) (__assume(x))
 
 
 #else
