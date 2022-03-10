@@ -62,7 +62,7 @@ static inline int process_monte(struct context_s* context)
 			struct mk_sha3_224_state_s sha3;
 			for(int i = 0; i != 1'000; ++i)
 			{
-				mk_sha3_224_init  (&sha3);
+				mk_sha3_224_init(&sha3);
 				mk_sha3_224_append(&sha3, &data, sizeof(data) * CHAR_BIT);
 				mk_sha3_224_finish(&sha3, &data);
 			}
@@ -80,7 +80,7 @@ static inline int process_monte(struct context_s* context)
 			struct mk_sha3_256_state_s sha3;
 			for(int i = 0; i != 1'000; ++i)
 			{
-				mk_sha3_256_init  (&sha3);
+				mk_sha3_256_init(&sha3);
 				mk_sha3_256_append(&sha3, &data, sizeof(data) * CHAR_BIT);
 				mk_sha3_256_finish(&sha3, &data);
 			}
@@ -98,7 +98,7 @@ static inline int process_monte(struct context_s* context)
 			struct mk_sha3_384_state_s sha3;
 			for(int i = 0; i != 1'000; ++i)
 			{
-				mk_sha3_384_init  (&sha3);
+				mk_sha3_384_init(&sha3);
 				mk_sha3_384_append(&sha3, &data, sizeof(data) * CHAR_BIT);
 				mk_sha3_384_finish(&sha3, &data);
 			}
@@ -116,7 +116,7 @@ static inline int process_monte(struct context_s* context)
 			struct mk_sha3_512_state_s sha3;
 			for(int i = 0; i != 1'000; ++i)
 			{
-				mk_sha3_512_init  (&sha3);
+				mk_sha3_512_init(&sha3);
 				mk_sha3_512_append(&sha3, &data, sizeof(data) * CHAR_BIT);
 				mk_sha3_512_finish(&sha3, &data);
 			}
