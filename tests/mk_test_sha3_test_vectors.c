@@ -483,10 +483,10 @@ static inline int test_file(char const* file_name, int* msg_count)
 	return 0;
 }
 
-static inline int test_files(int* file_count, int* msg_count)
+static inline int test_files(int* msg_count, int* file_count)
 {
-	MK_ASSERT(file_count);
 	MK_ASSERT(msg_count);
+	MK_ASSERT(file_count);
 
 	int n = sizeof(s_file_names) / sizeof(s_file_names[0]);
 	for(int i = 0; i != n; ++i)
@@ -501,10 +501,10 @@ static inline int test_files(int* file_count, int* msg_count)
 
 int main()
 {
-	int file_count = 0;
 	int msg_count = 0;
+	int file_count = 0;
 
-	int err = test_files(&file_count, &msg_count);
+	int err = test_files(&msg_count, &file_count);
 	if(err != 0)
 	{
 		printf("Failure: %d.\n", err);
