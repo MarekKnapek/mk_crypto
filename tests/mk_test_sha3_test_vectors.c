@@ -246,7 +246,8 @@ static inline int expect_msg(struct context_s* context, char const* line)
 	MK_ASSERT(context);
 	MK_ASSERT(line);
 
-	int msg_len_bytes = (context->m_msg_len_bits + (CHAR_BIT - 1)) / CHAR_BIT;
+	int msg_len_bits = context->m_msg_len_bits != 0 ? context->m_msg_len_bits : 1;
+	int msg_len_bytes = (msg_len_bits + (CHAR_BIT - 1)) / CHAR_BIT;
 	int buff_len = 2 * msg_len_bytes + 1;
 	char* msg = (char*)malloc(buff_len);
 	mk_check(msg);
