@@ -176,55 +176,56 @@ static inline void mk_sha3_detail_chi(struct mk_sha3_detail_state_s const* in, s
 	}
 }
 
-static inline uint64_t mk_sha3_detail_alg_rc(int t)
+static inline uint64_t mk_sha3_detail_rc_next_bit(unsigned* rc)
 {
-	int modded = t % 255;
+	MK_ASSERT(rc);
 
-	if(modded == 0)
-	{
-		return 1;
-	}
+	uint64_t ret;
+	unsigned r = *rc;
+	ret = r & 0x01;
 
-	unsigned r = 1;
-	for(int i = 0; i != modded; ++i)
-	{
-		r <<= 1;
-		r = (r & ~(1u << 0)) | ((((r >> 0) & 0x1) ^ ((r >> 8) & 0x1)) << 0);
-		r = (r & ~(1u << 4)) | ((((r >> 4) & 0x1) ^ ((r >> 8) & 0x1)) << 4);
-		r = (r & ~(1u << 5)) | ((((r >> 5) & 0x1) ^ ((r >> 8) & 0x1)) << 5);
-		r = (r & ~(1u << 6)) | ((((r >> 6) & 0x1) ^ ((r >> 8) & 0x1)) << 6);
-	}
+	r <<= 1;
+	r = (r & ~(1u << 0)) | ((((r >> 0) & 0x1) ^ ((r >> 8) & 0x1)) << 0);
+	r = (r & ~(1u << 4)) | ((((r >> 4) & 0x1) ^ ((r >> 8) & 0x1)) << 4);
+	r = (r & ~(1u << 5)) | ((((r >> 5) & 0x1) ^ ((r >> 8) & 0x1)) << 5);
+	r = (r & ~(1u << 6)) | ((((r >> 6) & 0x1) ^ ((r >> 8) & 0x1)) << 6);
 
-	return r & 0x1;
+	*rc = r;
+
+	return ret;
 }
 
-static inline uint64_t mk_sha3_detail_get_rc(int ir)
+static inline uint64_t mk_sha3_detail_rc_next_num(unsigned* rc)
 {
-	uint64_t rc = 0;
+	MK_ASSERT(rc);
 
-	rc |= mk_sha3_detail_alg_rc(0 + 7 * ir) << 0;
-	rc |= mk_sha3_detail_alg_rc(1 + 7 * ir) << 1;
-	rc |= mk_sha3_detail_alg_rc(2 + 7 * ir) << 3;
-	rc |= mk_sha3_detail_alg_rc(3 + 7 * ir) << 7;
-	rc |= mk_sha3_detail_alg_rc(4 + 7 * ir) << 15;
-	rc |= mk_sha3_detail_alg_rc(5 + 7 * ir) << 31;
-	rc |= mk_sha3_detail_alg_rc(6 + 7 * ir) << 63;
+	uint64_t rc_num = 0;
 
-	return rc;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 0;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 1;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 3;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 7;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 15;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 31;
+	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 63;
+
+	return rc_num;
 }
 
-static inline void mk_sha3_detail_iota(struct mk_sha3_detail_state_s* state, int ir)
+static inline void mk_sha3_detail_iota(struct mk_sha3_detail_state_s* state, unsigned* rc)
 {
 	MK_ASSERT(state);
+	MK_ASSERT(rc);
 
-	uint64_t rc = mk_sha3_detail_get_rc(ir);
+	uint64_t rc_num = mk_sha3_detail_rc_next_num(rc);
 
-	state->m_data[0][0] ^= rc;
+	state->m_data[0][0] ^= rc_num;
 }
 
-static inline void mk_sha3_detail_rnd(struct mk_sha3_detail_state_s* state, int ir)
+static inline void mk_sha3_detail_rnd(struct mk_sha3_detail_state_s* state, unsigned* rc)
 {
 	MK_ASSERT(state);
+	MK_ASSERT(rc);
 
 	struct mk_sha3_detail_state_s tmp;
 
@@ -232,7 +233,7 @@ static inline void mk_sha3_detail_rnd(struct mk_sha3_detail_state_s* state, int 
 	mk_sha3_detail_rho(state);
 	mk_sha3_detail_pi(state, &tmp);
 	mk_sha3_detail_chi(&tmp, state);
-	mk_sha3_detail_iota(state, ir);
+	mk_sha3_detail_iota(state, rc);
 }
 
 static inline void mk_sha3_detail_keccak_p(void* s)
@@ -240,10 +241,11 @@ static inline void mk_sha3_detail_keccak_p(void* s)
 	MK_ASSERT(s);
 
 	struct mk_sha3_detail_state_s* state = (struct mk_sha3_detail_state_s*)s;
+	unsigned rc = 1;
 
 	for(int ir = 0; ir != 24; ++ir)
 	{
-		mk_sha3_detail_rnd(state, ir);
+		mk_sha3_detail_rnd(state, &rc);
 	}
 }
 
