@@ -1,22 +1,22 @@
 #include "mk_uint_64.h"
 
 
-#include "mk_uint_long.h"
+#include "mk_uint_short.h"
 
 
-#define mk_uint_small_t unsigned long
-#define mk_uint_small_zero mk_uint_long_zero
-#define mk_uint_small_one mk_uint_long_one
-#define mk_uint_small_from_int mk_uint_long_from_int
-#define mk_uint_small_or mk_uint_long_or
-#define mk_uint_small_and mk_uint_long_and
-#define mk_uint_small_xor mk_uint_long_xor
-#define mk_uint_small_shl mk_uint_long_shl
-#define mk_uint_small_shr mk_uint_long_shr
-#define mk_uint_small_lt mk_uint_long_lt
-#define mk_uint_small_le mk_uint_long_le
-#define mk_uint_small_add mk_uint_long_add
-#define mk_uint_small_sub mk_uint_long_sub
+#define mk_uint_small_t unsigned short
+#define mk_uint_small_zero mk_uint_short_zero
+#define mk_uint_small_one mk_uint_short_one
+#define mk_uint_small_from_int mk_uint_short_from_int
+#define mk_uint_small_or mk_uint_short_or
+#define mk_uint_small_and mk_uint_short_and
+#define mk_uint_small_xor mk_uint_short_xor
+#define mk_uint_small_shl mk_uint_short_shl
+#define mk_uint_small_shr mk_uint_short_shr
+#define mk_uint_small_lt mk_uint_short_lt
+#define mk_uint_small_le mk_uint_short_le
+#define mk_uint_small_add mk_uint_short_add
+#define mk_uint_small_sub mk_uint_short_sub
 
 
 #define mk_uint_t struct mk_uint64_s

@@ -5,7 +5,7 @@
 
 
 
-#define mk_uint_small_t unsigned long
+#define mk_uint_small_t unsigned short
 
 
 #define mk_uint_bits 64
