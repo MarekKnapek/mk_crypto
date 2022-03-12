@@ -1,7 +1,8 @@
-#ifndef MK_INCLUDE_GUARD_UINT_FUZZ32
-#define MK_INCLUDE_GUARD_UINT_FUZZ32
+#ifndef MK_INCLUDE_GUARD_UINT_FUZZ_32
+#define MK_INCLUDE_GUARD_UINT_FUZZ_32
 
 
+void mk_uint_fuzz_32_from_int(unsigned char const* data);
 void mk_uint_fuzz_32_or(unsigned char const* data);
 void mk_uint_fuzz_32_and(unsigned char const* data);
 void mk_uint_fuzz_32_xor(unsigned char const* data);

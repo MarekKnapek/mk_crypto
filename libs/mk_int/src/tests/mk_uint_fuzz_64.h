@@ -1,7 +1,8 @@
-#ifndef MK_INCLUDE_GUARD_UINT_FUZZ64
-#define MK_INCLUDE_GUARD_UINT_FUZZ64
+#ifndef MK_INCLUDE_GUARD_UINT_FUZZ_64
+#define MK_INCLUDE_GUARD_UINT_FUZZ_64
 
 
+void mk_uint_fuzz_64_from_int(unsigned char const* data);
 void mk_uint_fuzz_64_or(unsigned char const* data);
 void mk_uint_fuzz_64_and(unsigned char const* data);
 void mk_uint_fuzz_64_xor(unsigned char const* data);

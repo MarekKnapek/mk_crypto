@@ -2,6 +2,7 @@
 #define MK_INCLUDE_GUARD_UINT_FUZZ_8
 
 
+void mk_uint_fuzz_8_from_int(unsigned char const* data);
 void mk_uint_fuzz_8_or(unsigned char const* data);
 void mk_uint_fuzz_8_and(unsigned char const* data);
 void mk_uint_fuzz_8_xor(unsigned char const* data);

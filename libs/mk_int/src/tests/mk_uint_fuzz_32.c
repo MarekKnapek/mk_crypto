@@ -11,6 +11,21 @@
 #define test(x) do{ if(!(x)){ int volatile* volatile ptr = NULL; *ptr = 0; } }while(0)
 
 
+void mk_uint_fuzz_32_from_int(unsigned char const* data)
+{
+	unsigned bn;
+	uint32_t br;
+	memcpy(&bn, data, sizeof(unsigned));
+	br = (uint32_t)bn;
+
+	unsigned mn;
+	struct mk_uint32_s mr;
+	memcpy(&mn, data, sizeof(unsigned));
+	mk_uint32_from_int(&mr, mn);
+
+	test(memcmp(&br, &mr, 32 / CHAR_BIT) == 0);
+}
+
 void mk_uint_fuzz_32_or(unsigned char const* data)
 {
 	uint32_t ba;
@@ -189,6 +204,7 @@ void mk_uint_fuzz_32_sub(unsigned char const* data)
 
 void mk_uint_fuzz_32(unsigned char const* data)
 {
+	mk_uint_fuzz_32_from_int(data);
 	mk_uint_fuzz_32_or(data);
 	mk_uint_fuzz_32_and(data);
 	mk_uint_fuzz_32_xor(data);
