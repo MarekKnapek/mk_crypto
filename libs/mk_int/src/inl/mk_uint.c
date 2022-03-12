@@ -53,6 +53,25 @@ void mk_uint_from_int(mk_uint_t* out, unsigned in)
 	}
 }
 
+unsigned mk_uint_to_int(mk_uint_t const* x)
+{
+	MK_ASSERT(x);
+
+	unsigned r;
+	int parts;
+	int i;
+
+	r = 0;
+	parts = sizeof(unsigned) / sizeof(mk_uint_small_t);
+	parts = parts < mk_uint_parts ? parts : mk_uint_parts;
+	for(i = 0; i != parts; ++i)
+	{
+		r |= mk_uint_small_to_int(x->m_data + i) << (i * mk_uint_small_bits);
+	}
+
+	return r;
+}
+
 
 void mk_uint_or(mk_uint_t* out, mk_uint_t const* a, mk_uint_t const* b)
 {
