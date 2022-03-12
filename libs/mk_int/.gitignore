@@ -1,0 +1,13 @@
+project/.vs
+
+project/Debug
+project/Release
+project/x64/Debug
+project/x64/Release
+
+project/mk_int/Debug
+project/mk_int/Release
+project/mk_int/x64/Debug
+project/mk_int/x64/Release
+
+project/mk_int/mk_int.vcxproj.user

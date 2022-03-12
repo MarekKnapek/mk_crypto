@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="utils">
+      <UniqueIdentifier>{7921b858-10b5-41b8-b633-3757a011ee21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{a6e4b418-7843-409a-b139-947491bc2741}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{1d346d39-3d95-4af7-813e-7e12e08795f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inl">
+      <UniqueIdentifier>{331b5124-f1a9-401c-8c32-90099a152598}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\inl\mk_uint.c">
+      <Filter>inl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_char.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_int.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_short.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tests\mk_uint_fuzz.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_long.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_llong.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_128.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_16.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_32.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_64.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\src\mk_uint_8.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tests\mk_uint_fuzz_16.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tests\mk_uint_fuzz_32.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tests\mk_uint_fuzz_64.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tests\mk_uint_fuzz_8.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\inl\mk_uint.h">
+      <Filter>inl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_char.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_int.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_short.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils\mk_assert.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_long.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_llong.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_128.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_16.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_32.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_64.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\src\mk_uint_8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tests\mk_uint_fuzz_16.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tests\mk_uint_fuzz_32.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tests\mk_uint_fuzz_64.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tests\mk_uint_fuzz_8.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
