@@ -5,6 +5,7 @@
 void mk_uint_llong_zero(unsigned long long* out);
 void mk_uint_llong_one(unsigned long long* out);
 void mk_uint_llong_from_int(unsigned long long* out, unsigned in);
+unsigned mk_uint_llong_to_int(unsigned long long const* x);
 
 void mk_uint_llong_or(unsigned long long* out, unsigned long long const* a, unsigned long long const* b);
 void mk_uint_llong_and(unsigned long long* out, unsigned long long const* a, unsigned long long const* b);

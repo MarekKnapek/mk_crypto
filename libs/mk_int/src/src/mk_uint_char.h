@@ -5,6 +5,7 @@
 void mk_uint_char_zero(unsigned char* out);
 void mk_uint_char_one(unsigned char* out);
 void mk_uint_char_from_int(unsigned char* out, unsigned in);
+unsigned mk_uint_char_to_int(unsigned char const* x);
 
 void mk_uint_char_or(unsigned char* out, unsigned char const* a, unsigned char const* b);
 void mk_uint_char_and(unsigned char* out, unsigned char const* a, unsigned char const* b);

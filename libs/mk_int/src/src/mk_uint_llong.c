@@ -24,6 +24,13 @@ void mk_uint_llong_from_int(unsigned long long* out, unsigned in)
 	*out = (unsigned long long)in;
 }
 
+unsigned mk_uint_llong_to_int(unsigned long long const* x)
+{
+	MK_ASSERT(x);
+
+	return (unsigned)*x;
+}
+
 
 void mk_uint_llong_or(unsigned long long* out, unsigned long long const* a, unsigned long long const* b)
 {

@@ -24,6 +24,13 @@ void mk_uint_char_from_int(unsigned char* out, unsigned in)
 	*out = (unsigned char)in;
 }
 
+unsigned mk_uint_char_to_int(unsigned char const* x)
+{
+	MK_ASSERT(x);
+
+	return (unsigned)*x;
+}
+
 
 void mk_uint_char_or(unsigned char* out, unsigned char const* a, unsigned char const* b)
 {
