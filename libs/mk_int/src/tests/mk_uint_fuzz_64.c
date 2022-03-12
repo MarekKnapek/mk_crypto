@@ -26,6 +26,21 @@ void mk_uint_fuzz_64_from_int(unsigned char const* data)
 	test(memcmp(&br, &mr, 64 / CHAR_BIT) == 0);
 }
 
+void mk_uint_fuzz_64_to_int(unsigned char const* data)
+{
+	uint64_t bx;
+	unsigned br;
+	memcpy(&bx, data, 64 / CHAR_BIT);
+	br = (unsigned)bx;
+
+	struct mk_uint64_s mx;
+	unsigned mr;
+	memcpy(&mx, data, 64 / CHAR_BIT);
+	mr = mk_uint64_to_int(&mx);
+
+	test(memcmp(&br, &mr, sizeof(unsigned)) == 0);
+}
+
 void mk_uint_fuzz_64_or(unsigned char const* data)
 {
 	uint64_t ba;
@@ -205,6 +220,7 @@ void mk_uint_fuzz_64_sub(unsigned char const* data)
 void mk_uint_fuzz_64(unsigned char const* data)
 {
 	mk_uint_fuzz_64_from_int(data);
+	mk_uint_fuzz_64_to_int(data);
 	mk_uint_fuzz_64_or(data);
 	mk_uint_fuzz_64_and(data);
 	mk_uint_fuzz_64_xor(data);

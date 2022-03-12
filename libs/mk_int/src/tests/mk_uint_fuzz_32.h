@@ -3,6 +3,7 @@
 
 
 void mk_uint_fuzz_32_from_int(unsigned char const* data);
+void mk_uint_fuzz_32_to_int(unsigned char const* data);
 void mk_uint_fuzz_32_or(unsigned char const* data);
 void mk_uint_fuzz_32_and(unsigned char const* data);
 void mk_uint_fuzz_32_xor(unsigned char const* data);

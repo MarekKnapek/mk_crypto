@@ -26,6 +26,21 @@ void mk_uint_fuzz_32_from_int(unsigned char const* data)
 	test(memcmp(&br, &mr, 32 / CHAR_BIT) == 0);
 }
 
+void mk_uint_fuzz_32_to_int(unsigned char const* data)
+{
+	uint32_t bx;
+	unsigned br;
+	memcpy(&bx, data, 32 / CHAR_BIT);
+	br = (unsigned)bx;
+
+	struct mk_uint32_s mx;
+	unsigned mr;
+	memcpy(&mx, data, 32 / CHAR_BIT);
+	mr = mk_uint32_to_int(&mx);
+
+	test(memcmp(&br, &mr, sizeof(unsigned)) == 0);
+}
+
 void mk_uint_fuzz_32_or(unsigned char const* data)
 {
 	uint32_t ba;
@@ -205,6 +220,7 @@ void mk_uint_fuzz_32_sub(unsigned char const* data)
 void mk_uint_fuzz_32(unsigned char const* data)
 {
 	mk_uint_fuzz_32_from_int(data);
+	mk_uint_fuzz_32_to_int(data);
 	mk_uint_fuzz_32_or(data);
 	mk_uint_fuzz_32_and(data);
 	mk_uint_fuzz_32_xor(data);
