@@ -8,6 +8,7 @@
 #define mk_uint_small_zero mk_uint16_zero
 #define mk_uint_small_one mk_uint16_one
 #define mk_uint_small_from_int mk_uint16_from_int
+#define mk_uint_small_to_int mk_uint16_to_int
 #define mk_uint_small_or mk_uint16_or
 #define mk_uint_small_and mk_uint16_and
 #define mk_uint_small_xor mk_uint16_xor
@@ -23,6 +24,7 @@
 #define mk_uint_zero mk_uint32_zero
 #define mk_uint_one mk_uint32_one
 #define mk_uint_from_int mk_uint32_from_int
+#define mk_uint_to_int mk_uint32_to_int
 #define mk_uint_or mk_uint32_or
 #define mk_uint_and mk_uint32_and
 #define mk_uint_xor mk_uint32_xor
@@ -41,6 +43,7 @@
 #undef mk_uint_small_zero
 #undef mk_uint_small_one
 #undef mk_uint_small_from_int
+#undef mk_uint_small_to_int
 #undef mk_uint_small_or
 #undef mk_uint_small_and
 #undef mk_uint_small_xor
@@ -56,6 +59,7 @@
 #undef mk_uint_zero
 #undef mk_uint_one
 #undef mk_uint_from_int
+#undef mk_uint_to_int
 #undef mk_uint_or
 #undef mk_uint_and
 #undef mk_uint_xor

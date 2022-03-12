@@ -1,11 +1,11 @@
-#ifndef MK_INCLUDE_GUARD_UINT128
-#define MK_INCLUDE_GUARD_UINT128
+#ifndef MK_INCLUDE_GUARD_UINT_128
+#define MK_INCLUDE_GUARD_UINT_128
 
 
 
 
 
-#define mk_uint_small_t unsigned int
+#define mk_uint_small_t unsigned
 
 
 #define mk_uint_bits 128
@@ -13,6 +13,7 @@
 #define mk_uint_zero mk_uint128_zero
 #define mk_uint_one mk_uint128_one
 #define mk_uint_from_int mk_uint128_from_int
+#define mk_uint_to_int mk_uint128_to_int
 #define mk_uint_or mk_uint128_or
 #define mk_uint_and mk_uint128_and
 #define mk_uint_xor mk_uint128_xor
@@ -35,6 +36,7 @@
 #undef mk_uint_zero
 #undef mk_uint_one
 #undef mk_uint_from_int
+#undef mk_uint_to_int
 #undef mk_uint_or
 #undef mk_uint_and
 #undef mk_uint_xor
