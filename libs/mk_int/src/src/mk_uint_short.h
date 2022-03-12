@@ -4,6 +4,7 @@
 
 void mk_uint_short_zero(unsigned short* out);
 void mk_uint_short_one(unsigned short* out);
+void mk_uint_short_from_int(unsigned short* out, unsigned in);
 
 void mk_uint_short_or(unsigned short* out, unsigned short const* a, unsigned short const* b);
 void mk_uint_short_and(unsigned short* out, unsigned short const* a, unsigned short const* b);

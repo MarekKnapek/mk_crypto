@@ -17,6 +17,13 @@ void mk_uint_short_one(unsigned short* out)
 	*out = 1;
 }
 
+void mk_uint_short_from_int(unsigned short* out, unsigned in)
+{
+	MK_ASSERT(out);
+
+	*out = (unsigned short)in;
+}
+
 
 void mk_uint_short_or(unsigned short* out, unsigned short const* a, unsigned short const* b)
 {

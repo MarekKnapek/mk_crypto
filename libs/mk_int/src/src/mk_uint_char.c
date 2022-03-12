@@ -17,6 +17,13 @@ void mk_uint_char_one(unsigned char* out)
 	*out = 1;
 }
 
+void mk_uint_char_from_int(unsigned char* out, unsigned in)
+{
+	MK_ASSERT(out);
+
+	*out = (unsigned char)in;
+}
+
 
 void mk_uint_char_or(unsigned char* out, unsigned char const* a, unsigned char const* b)
 {
