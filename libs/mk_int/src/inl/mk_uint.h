@@ -12,6 +12,7 @@ mk_uint_t
 
 void mk_uint_zero(mk_uint_t* out);
 void mk_uint_one(mk_uint_t* out);
+void mk_uint_from_int(mk_uint_t* out, unsigned in);
 
 void mk_uint_or(mk_uint_t* out, mk_uint_t const* a, mk_uint_t const* b);
 void mk_uint_and(mk_uint_t* out, mk_uint_t const* a, mk_uint_t const* b);

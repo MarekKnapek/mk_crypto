@@ -12,6 +12,7 @@
 #define mk_uint_t struct mk_uint8_s
 #define mk_uint_zero mk_uint8_zero
 #define mk_uint_one mk_uint8_one
+#define mk_uint_from_int mk_uint8_from_int
 #define mk_uint_or mk_uint8_or
 #define mk_uint_and mk_uint8_and
 #define mk_uint_xor mk_uint8_xor
@@ -33,6 +34,7 @@
 #undef mk_uint_t
 #undef mk_uint_zero
 #undef mk_uint_one
+#undef mk_uint_from_int
 #undef mk_uint_or
 #undef mk_uint_and
 #undef mk_uint_xor

@@ -34,6 +34,25 @@ void mk_uint_one(mk_uint_t* out)
 	}
 }
 
+void mk_uint_from_int(mk_uint_t* out, unsigned in)
+{
+	MK_ASSERT(out);
+
+	int parts;
+	int i;
+
+	parts = sizeof(in) / sizeof(mk_uint_small_t);
+	parts = parts < mk_uint_parts ? parts : mk_uint_parts;
+	for(i = 0; i != parts; ++i)
+	{
+		mk_uint_small_from_int(out->m_data + i, in >> (i * mk_uint_small_bits));
+	}
+	for(i = parts; i != mk_uint_parts; ++i)
+	{
+		mk_uint_small_zero(out->m_data + i);
+	}
+}
+
 
 void mk_uint_or(mk_uint_t* out, mk_uint_t const* a, mk_uint_t const* b)
 {

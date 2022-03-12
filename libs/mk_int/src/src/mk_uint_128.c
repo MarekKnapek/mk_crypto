@@ -7,6 +7,7 @@
 #define mk_uint_small_t unsigned int
 #define mk_uint_small_zero mk_uint_int_zero
 #define mk_uint_small_one mk_uint_int_one
+#define mk_uint_small_from_int mk_uint_int_from_int
 #define mk_uint_small_or mk_uint_int_or
 #define mk_uint_small_and mk_uint_int_and
 #define mk_uint_small_xor mk_uint_int_xor
@@ -21,6 +22,7 @@
 #define mk_uint_t struct mk_uint128_s
 #define mk_uint_zero mk_uint128_zero
 #define mk_uint_one mk_uint128_one
+#define mk_uint_from_int mk_uint128_from_int
 #define mk_uint_or mk_uint128_or
 #define mk_uint_and mk_uint128_and
 #define mk_uint_xor mk_uint128_xor
@@ -38,6 +40,7 @@
 #undef mk_uint_small_t
 #undef mk_uint_small_zero
 #undef mk_uint_small_one
+#undef mk_uint_small_from_int
 #undef mk_uint_small_or
 #undef mk_uint_small_and
 #undef mk_uint_small_xor
@@ -52,6 +55,7 @@
 #undef mk_uint_t
 #undef mk_uint_zero
 #undef mk_uint_one
+#undef mk_uint_from_int
 #undef mk_uint_or
 #undef mk_uint_and
 #undef mk_uint_xor
