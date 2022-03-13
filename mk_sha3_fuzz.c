@@ -3,6 +3,7 @@
 #include <assert.h> /* assert static_assert */ /* C11 */
 #include <limits.h> /* CHAR_BIT */
 #include <stdbool.h> /* bool true false */ /* C99 */
+#include <stddef.h> /* size_t */
 #include <string.h> /* memset memcmp NULL */
 
 
@@ -262,7 +263,7 @@ static inline void check_baseline(void)
 }
 
 
-int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+/*int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
 	if(!g_baseline_checked)
 	{
@@ -271,4 +272,4 @@ int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 	}
 
 	return 0;
-}
+}*/

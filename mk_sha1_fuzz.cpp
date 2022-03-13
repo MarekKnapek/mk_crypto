@@ -5,7 +5,7 @@
 #include <string.h> /* memcmp */
 
 
-extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+/*extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
 	mk_sha1_state_s mk_sha1_state;
 	unsigned char mk_sha1_digest[20];
@@ -29,4 +29,4 @@ extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 	}
 
 	return 0;
-}
+}*/

@@ -228,7 +228,7 @@ static inline void mk_sha2_512_fuzz(unsigned char const* data, size_t size)
 }
 
 
-extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+/*extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
 	mk_sha2_256_224_fuzz(data, size);
 	mk_sha2_256_fuzz(data, size);
@@ -238,4 +238,4 @@ extern "C" int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 	mk_sha2_512_fuzz(data, size);
 
 	return 0;
-}
+}*/

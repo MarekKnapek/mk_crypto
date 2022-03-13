@@ -500,7 +500,7 @@ static inline int test_files(int* msg_count, int* file_count)
 }
 
 
-int main()
+/*int main()
 {
 	int msg_count = 0;
 	int file_count = 0;
@@ -514,4 +514,4 @@ int main()
 
 	printf("Success, processed %d messages in %d files.\n", msg_count, file_count);
 	return EXIT_SUCCESS;
-}
+}*/

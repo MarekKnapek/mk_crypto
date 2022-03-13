@@ -6,7 +6,7 @@
 #include <string.h> /* memcmp */
 
 
-int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
+/*int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
 	struct mk_md4_state_s mk_md4_state;
 	struct mk_md4_digest_s mk_md4_digest;
@@ -46,4 +46,4 @@ int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 
 
 	return 0;
-}
+}*/

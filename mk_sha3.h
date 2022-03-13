@@ -23,6 +23,7 @@ struct mk_sha3_224_state_s
 
 MK_EXTERN_C void mk_sha3_224_init(struct mk_sha3_224_state_s* self);
 MK_EXTERN_C void mk_sha3_224_append(struct mk_sha3_224_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_224_append_bytes(struct mk_sha3_224_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_224_finish(struct mk_sha3_224_state_s* self, void* digest);
 
 
@@ -36,6 +37,7 @@ struct mk_sha3_256_state_s
 
 MK_EXTERN_C void mk_sha3_256_init(struct mk_sha3_256_state_s* self);
 MK_EXTERN_C void mk_sha3_256_append(struct mk_sha3_256_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_256_append_bytes(struct mk_sha3_256_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_256_finish(struct mk_sha3_256_state_s* self, void* digest);
 
 
@@ -49,6 +51,7 @@ struct mk_sha3_384_state_s
 
 MK_EXTERN_C void mk_sha3_384_init(struct mk_sha3_384_state_s* self);
 MK_EXTERN_C void mk_sha3_384_append(struct mk_sha3_384_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_384_append_bytes(struct mk_sha3_384_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* digest);
 
 
@@ -62,6 +65,7 @@ struct mk_sha3_512_state_s
 
 MK_EXTERN_C void mk_sha3_512_init(struct mk_sha3_512_state_s* self);
 MK_EXTERN_C void mk_sha3_512_append(struct mk_sha3_512_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_512_append_bytes(struct mk_sha3_512_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* digest);
 
 
@@ -75,6 +79,7 @@ struct mk_sha3_shake_128_state_s
 
 MK_EXTERN_C void mk_sha3_shake_128_init(struct mk_sha3_shake_128_state_s* self);
 MK_EXTERN_C void mk_sha3_shake_128_append(struct mk_sha3_shake_128_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_shake_128_append_bytes(struct mk_sha3_shake_128_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_shake_128_finish(struct mk_sha3_shake_128_state_s* self, int digest_len_bits, void* digest);
 
 
@@ -88,6 +93,7 @@ struct mk_sha3_shake_256_state_s
 
 MK_EXTERN_C void mk_sha3_shake_256_init(struct mk_sha3_shake_256_state_s* self);
 MK_EXTERN_C void mk_sha3_shake_256_append(struct mk_sha3_shake_256_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_shake_256_append_bytes(struct mk_sha3_shake_256_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_shake_256_finish(struct mk_sha3_shake_256_state_s* self, int digest_len_bits, void* digest);
 
 
@@ -101,6 +107,7 @@ struct mk_sha3_raw_shake_128_state_s
 
 MK_EXTERN_C void mk_sha3_raw_shake_128_init(struct mk_sha3_raw_shake_128_state_s* self);
 MK_EXTERN_C void mk_sha3_raw_shake_128_append(struct mk_sha3_raw_shake_128_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_raw_shake_128_append_bytes(struct mk_sha3_raw_shake_128_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_raw_shake_128_finish(struct mk_sha3_raw_shake_128_state_s* self, int digest_len_bits, void* digest);
 
 
@@ -114,6 +121,7 @@ struct mk_sha3_raw_shake_256_state_s
 
 MK_EXTERN_C void mk_sha3_raw_shake_256_init(struct mk_sha3_raw_shake_256_state_s* self);
 MK_EXTERN_C void mk_sha3_raw_shake_256_append(struct mk_sha3_raw_shake_256_state_s* self, void const* msg, size_t msg_len_bits);
+MK_EXTERN_C void mk_sha3_raw_shake_256_append_bytes(struct mk_sha3_raw_shake_256_state_s* self, void const* msg, size_t msg_len_bytes);
 MK_EXTERN_C void mk_sha3_raw_shake_256_finish(struct mk_sha3_raw_shake_256_state_s* self, int digest_len_bits, void* digest);
 
 

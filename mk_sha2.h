@@ -2,7 +2,7 @@
 #define MK_INCLUDE_GUARD_SHA2
 
 
-#include "mk_uint128.h"
+#include "mk_uint128_.h"
 
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t uint64_t */ /* C99 */
@@ -44,7 +44,7 @@ MK_EXTERN_C void mk_sha2_256_finish(struct mk_sha2_256_state_s* self, void* dige
 struct mk_sha2_512_224_state_s
 {
 	uint64_t m_hash[8];
-	struct mk_uint128_s m_len;
+	struct mk_uint128_s_ m_len;
 	unsigned char m_block[16 * sizeof(uint64_t)];
 };
 
@@ -57,7 +57,7 @@ MK_EXTERN_C void mk_sha2_512_224_finish(struct mk_sha2_512_224_state_s* self, vo
 struct mk_sha2_512_256_state_s
 {
 	uint64_t m_hash[8];
-	struct mk_uint128_s m_len;
+	struct mk_uint128_s_ m_len;
 	unsigned char m_block[16 * sizeof(uint64_t)];
 };
 
@@ -70,7 +70,7 @@ MK_EXTERN_C void mk_sha2_512_256_finish(struct mk_sha2_512_256_state_s* self, vo
 struct mk_sha2_512_384_state_s
 {
 	uint64_t m_hash[8];
-	struct mk_uint128_s m_len;
+	struct mk_uint128_s_ m_len;
 	unsigned char m_block[16 * sizeof(uint64_t)];
 };
 
@@ -83,7 +83,7 @@ MK_EXTERN_C void mk_sha2_512_384_finish(struct mk_sha2_512_384_state_s* self, vo
 struct mk_sha2_512_state_s
 {
 	uint64_t m_hash[8];
-	struct mk_uint128_s m_len;
+	struct mk_uint128_s_ m_len;
 	unsigned char m_block[16 * sizeof(uint64_t)];
 };
 
