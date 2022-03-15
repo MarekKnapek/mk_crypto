@@ -562,9 +562,11 @@ void mk_sha2_512_append(struct mk_sha2_512_state_s* self, void const* data, size
 	unsigned char const* input = (unsigned char const*)data;
 	size_t remaining = len;
 
-	unsigned idx = self->m_len.m_lo % 128;
+	unsigned idx = mk_uint128_to_int(&self->m_len) % 128;
 	unsigned capacity = 128 - idx;
-	mk_uint128_add_size(&self->m_len, &self->m_len, len);
+	struct mk_uint128_s tmp;
+	mk_uint128_from_sizet(&tmp, len);
+	mk_uint128_add(&self->m_len, &self->m_len, &tmp);
 	if(remaining >= capacity)
 	{
 		memcpy(self->m_block + idx, input, capacity);
@@ -588,12 +590,12 @@ void mk_sha2_512_finish(struct mk_sha2_512_state_s* self, void* digest)
 	assert(self);
 	assert(digest);
 
-	#define s_mandatory_padding_len (1 + 2 * sizeof(uint64_t))
+	#define s_mandatory_padding_len (1 + sizeof(struct mk_uint128_s))
 	#define s_worst_padding_len (128 + s_mandatory_padding_len - 1)
 	
 	unsigned char padding[s_worst_padding_len];
 
-	unsigned idx = self->m_len.m_lo % 128;
+	unsigned idx = mk_uint128_to_int(&self->m_len) % 128;
 	unsigned capacity = 128 - idx;
 	unsigned zeros =
 		(capacity >= s_mandatory_padding_len) ?
@@ -609,10 +611,9 @@ void mk_sha2_512_finish(struct mk_sha2_512_state_s* self, void* digest)
 
 	struct mk_uint128_s len;
 	mk_uint128_shl(&len, &self->m_len, 3);
-	mk_sha2_detail_ints2be64(&len.m_hi, 1, padding + 1 + zeros + 0 * sizeof(uint64_t));
-	mk_sha2_detail_ints2be64(&len.m_lo, 1, padding + 1 + zeros + 1 * sizeof(uint64_t));
+	mk_uint128_to_buff_be(&len, padding + 1 + zeros);
 
-	mk_sha2_512_append(self, padding, 1 + zeros + 2 * sizeof(uint64_t));
+	mk_sha2_512_append(self, padding, 1 + zeros + sizeof(struct mk_uint128_s));
 
 	mk_sha2_detail_ints2be64(self->m_hash, 8, digest);
 }

@@ -2,7 +2,7 @@
 #define MK_INCLUDE_GUARD_SHA2
 
 
-#include "mk_uint128.h"
+#include "../mk_int/src/exact/mk_uint_128.h"
 
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t uint64_t */ /* C99 */
