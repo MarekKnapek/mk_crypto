@@ -77,7 +77,6 @@
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha1_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_fuzz.h" />
-    <ClInclude Include="..\..\..\src\mk_endian.h" />
     <ClInclude Include="..\..\..\src\mk_md2.h" />
     <ClInclude Include="..\..\..\src\mk_md4.h" />
     <ClInclude Include="..\..\..\src\mk_md5.h" />
@@ -90,6 +89,7 @@
     <ClInclude Include="..\..\..\src\mk_win_sha2.h" />
     <ClInclude Include="..\..\..\utils\mk_align.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
+    <ClInclude Include="..\..\..\utils\mk_endian.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

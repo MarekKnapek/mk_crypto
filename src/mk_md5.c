@@ -1,6 +1,6 @@
 #include "mk_md5.h"
 
-#include "mk_endian.h"
+#include "../utils/mk_endian.h"
 
 #include <assert.h> /* assert, static_assert */ /* C11 */
 #include <limits.h> /* CHAR_BIT */

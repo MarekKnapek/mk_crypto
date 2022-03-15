@@ -116,9 +116,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\mk_endian.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mk_md2.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -208,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\mk_int\src\utils\mk_assert.h">
       <Filter>libs\mk_int\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\utils\mk_endian.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
