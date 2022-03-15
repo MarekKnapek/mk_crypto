@@ -2,10 +2,11 @@
 
 #include "mk_assert.h"
 
+#include "../mk_int/src/exact/mk_uint_64.h"
+
 #include <assert.h> /* static_assert */
 #include <limits.h> /* CHAR_BIT SIZE_MAX */
 #include <stdbool.h> /* bool true false */ /* C99 */
-#include <stdint.h> /* uint64_t */ /* C99 */
 #include <string.h> /* memcpy memset */
 
 
@@ -14,22 +15,16 @@ static_assert(CHAR_BIT == 8, "Must have 8bit byte.");
 
 struct mk_sha3_detail_state_s
 {
-	uint64_t m_data[5][5];
+	struct mk_uint64_s m_data[5][5];
 };
 
 
-static inline uint64_t mk_sha3_binary_le_to_uint64(void const* binary)
+static inline struct mk_uint64_s mk_sha3_binary_le_to_uint64(void const* binary)
 {
-	unsigned char const* input = (unsigned char*)binary;
-	uint64_t ret =
-		((uint64_t)(input[0])) << (0 * CHAR_BIT) |
-		((uint64_t)(input[1])) << (1 * CHAR_BIT) |
-		((uint64_t)(input[2])) << (2 * CHAR_BIT) |
-		((uint64_t)(input[3])) << (3 * CHAR_BIT) |
-		((uint64_t)(input[4])) << (4 * CHAR_BIT) |
-		((uint64_t)(input[5])) << (5 * CHAR_BIT) |
-		((uint64_t)(input[6])) << (6 * CHAR_BIT) |
-		((uint64_t)(input[7])) << (7 * CHAR_BIT);
+	struct mk_uint64_s ret;
+
+	mk_uint64_from_buff_le(&ret, binary);
+
 	return ret;
 }
 
@@ -93,39 +88,34 @@ static inline int mk_sha3_detail_mod(int m, int n)
 	return r;
 }
 
-static inline uint64_t mk_sha3_detail_rot(uint64_t x, int n)
-{
-	MK_ASSERT(n > 0);
-	MK_ASSERT(n < 64);
-
-	return (x << n) | (x >> (64 - n));
-}
-
 static inline void mk_sha3_detail_theta(struct mk_sha3_detail_state_s* state)
 {
 	MK_ASSERT(state);
 
-	uint64_t c[5];
-	c[0] = (state->m_data[0][0] ^ state->m_data[1][0]) ^ (state->m_data[2][0] ^ state->m_data[3][0]) ^ state->m_data[4][0];
-	c[1] = (state->m_data[0][1] ^ state->m_data[1][1]) ^ (state->m_data[2][1] ^ state->m_data[3][1]) ^ state->m_data[4][1];
-	c[2] = (state->m_data[0][2] ^ state->m_data[1][2]) ^ (state->m_data[2][2] ^ state->m_data[3][2]) ^ state->m_data[4][2];
-	c[3] = (state->m_data[0][3] ^ state->m_data[1][3]) ^ (state->m_data[2][3] ^ state->m_data[3][3]) ^ state->m_data[4][3];
-	c[4] = (state->m_data[0][4] ^ state->m_data[1][4]) ^ (state->m_data[2][4] ^ state->m_data[3][4]) ^ state->m_data[4][4];
+	struct mk_uint64_s c[5];
+	for(int x = 0; x != 5; ++x)
+	{
+		c[x] = state->m_data[0][x];
+		for(int y = 1; y != 5; ++y)
+		{
+			mk_uint64_xor(&c[x], &c[x], &state->m_data[y][x]);
+		}
+	}
 
-	uint64_t d[5];
-	d[0] = c[4] ^ mk_sha3_detail_rot(c[1], 1);
-	d[1] = c[0] ^ mk_sha3_detail_rot(c[2], 1);
-	d[2] = c[1] ^ mk_sha3_detail_rot(c[3], 1);
-	d[3] = c[2] ^ mk_sha3_detail_rot(c[4], 1);
-	d[4] = c[3] ^ mk_sha3_detail_rot(c[0], 1);
+	struct mk_uint64_s d[5];
+	for(int x = 0; x != 5; ++x)
+	{
+		struct mk_uint64_s tmp;
+		mk_uint64_rotl(&tmp, &c[(x + 1) % 5], 1);
+		mk_uint64_xor(&d[x], &c[(x + 4) % 5], &tmp);
+	}
 
 	for(int y = 0; y != 5; ++y)
 	{
-		state->m_data[y][0] ^= d[0];
-		state->m_data[y][1] ^= d[1];
-		state->m_data[y][2] ^= d[2];
-		state->m_data[y][3] ^= d[3];
-		state->m_data[y][4] ^= d[4];
+		for(int x = 0; x != 5; ++x)
+		{
+			mk_uint64_xor(&state->m_data[y][x], &state->m_data[y][x], &d[x]);
+		}
 	}
 }
 
@@ -137,7 +127,7 @@ static inline void mk_sha3_detail_rho(struct mk_sha3_detail_state_s* state)
 	int y = 0;
 	for(int t = 0; t != 24; ++t)
 	{
-		state->m_data[y][x] = mk_sha3_detail_rot(state->m_data[y][x], (((t + 1) * (t + 2)) / 2) % 64);
+		mk_uint64_rotl(&state->m_data[y][x], &state->m_data[y][x], (((t + 1) * (t + 2)) / 2) % 64);
 		int old_x = x;
 		x = y;
 		y = (2 * old_x + 3 * y) % 5;
@@ -171,18 +161,21 @@ static inline void mk_sha3_detail_chi(struct mk_sha3_detail_state_s const* in, s
 	{
 		for(int x = 0; x != 5; ++x)
 		{
-			out->m_data[y][x] = in->m_data[y][x] ^ (~in->m_data[y][(x + 1) % 5] & in->m_data[y][(x + 2) % 5]);
+			struct mk_uint64_s tmp;
+			mk_uint64_cmplmnt(&tmp, &in->m_data[y][(x + 1) % 5]);
+			mk_uint64_and(&tmp, &tmp, &in->m_data[y][(x + 2) % 5]);
+			mk_uint64_xor(&out->m_data[y][x], &in->m_data[y][x], &tmp);
 		}
 	}
 }
 
-static inline uint64_t mk_sha3_detail_rc_next_bit(unsigned* rc)
+static inline struct mk_uint64_s mk_sha3_detail_rc_next_bit(unsigned* rc)
 {
 	MK_ASSERT(rc);
 
-	uint64_t ret;
+	struct mk_uint64_s ret;
 	unsigned r = *rc;
-	ret = r & 0x01;
+	mk_uint64_from_int(&ret, r & 0x01);
 
 	r <<= 1;
 	r = (r & ~(1u << 0)) | ((((r >> 0) & 0x1) ^ ((r >> 8) & 0x1)) << 0);
@@ -195,19 +188,20 @@ static inline uint64_t mk_sha3_detail_rc_next_bit(unsigned* rc)
 	return ret;
 }
 
-static inline uint64_t mk_sha3_detail_rc_next_num(unsigned* rc)
+static inline struct mk_uint64_s mk_sha3_detail_rc_next_num(unsigned* rc)
 {
 	MK_ASSERT(rc);
 
-	uint64_t rc_num = 0;
+	struct mk_uint64_s rc_num;
+	mk_uint64_zero(&rc_num);
 
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 0;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 1;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 3;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 7;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 15;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 31;
-	rc_num |= mk_sha3_detail_rc_next_bit(rc) << 63;
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp,  0); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp,  1); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp,  3); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp,  7); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp, 15); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp, 31); mk_uint64_or(&rc_num, &rc_num, &tmp); }
+	{ struct mk_uint64_s tmp; tmp = mk_sha3_detail_rc_next_bit(rc); mk_uint64_shl(&tmp, &tmp, 63); mk_uint64_or(&rc_num, &rc_num, &tmp); }
 
 	return rc_num;
 }
@@ -217,9 +211,9 @@ static inline void mk_sha3_detail_iota(struct mk_sha3_detail_state_s* state, uns
 	MK_ASSERT(state);
 	MK_ASSERT(rc);
 
-	uint64_t rc_num = mk_sha3_detail_rc_next_num(rc);
+	struct mk_uint64_s rc_num = mk_sha3_detail_rc_next_num(rc);
 
-	state->m_data[0][0] ^= rc_num;
+	mk_uint64_xor(&state->m_data[0][0], &state->m_data[0][0], &rc_num);
 }
 
 static inline void mk_sha3_detail_rnd(struct mk_sha3_detail_state_s* state, unsigned* rc)
@@ -259,18 +253,20 @@ static inline void mk_sha3_detail_keccak_f(void* s)
 static inline void mk_sha3_detail_mix_block(int block_size, void* s, void const* block)
 {
 	MK_ASSERT(block_size % CHAR_BIT == 0);
-	MK_ASSERT(block_size % (CHAR_BIT * sizeof(uint64_t)) == 0);
+	MK_ASSERT(block_size % (CHAR_BIT * sizeof(struct mk_uint64_s)) == 0);
 	MK_ASSERT(s);
 	MK_ASSERT(block);
 
-	uint64_t* state = (uint64_t*)s;
+	struct mk_uint64_s* state = (struct mk_uint64_s*)s;
 	unsigned char const* input = (unsigned char const*)block;
 
-	int block_item_count = block_size / (CHAR_BIT * sizeof(uint64_t));
+	int block_item_count = block_size / (CHAR_BIT * sizeof(struct mk_uint64_s));
 	for(int i = 0; i != block_item_count; ++i)
 	{
-		state[i] ^= mk_sha3_binary_le_to_uint64(input);
-		input += sizeof(uint64_t);
+		struct mk_uint64_s tmp;
+		tmp = mk_sha3_binary_le_to_uint64(input);
+		mk_uint64_xor(&state[i], &state[i], &tmp);
+		input += sizeof(struct mk_uint64_s);
 	}
 }
 
@@ -283,19 +279,19 @@ static inline void mk_sha3_detail_process_block(int block_size, void* state, voi
 	mk_sha3_detail_keccak_f(state);
 }
 
-static inline void mk_sha3_detail_init(uint64_t* state, int* idx)
+static inline void mk_sha3_detail_init(struct mk_uint64_s* state, int* idx)
 {
 	MK_ASSERT(state);
 	MK_ASSERT(idx);
 
-	memset(state, 0, 25 * sizeof(uint64_t));
+	memset(state, 0, 25 * sizeof(struct mk_uint64_s));
 	*idx = 0;
 }
 
 static inline void mk_sha3_detail_append_a(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
-	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
+	MK_ASSERT((block_size % (sizeof(struct mk_uint64_s) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx % CHAR_BIT == 0);
@@ -336,7 +332,7 @@ static inline void mk_sha3_detail_append_a(int block_size, void* state, int* blo
 static inline void mk_sha3_detail_append_u(int block_size, void* state, int* block_idx, void* block_, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
-	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
+	MK_ASSERT((block_size % (sizeof(struct mk_uint64_s) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(*block_idx % CHAR_BIT != 0);
@@ -380,7 +376,7 @@ static inline void mk_sha3_detail_append_u(int block_size, void* state, int* blo
 static inline void mk_sha3_detail_append(int block_size, void* state, int* block_idx, void* block, void const* data, size_t data_len_bits)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
-	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
+	MK_ASSERT((block_size % (sizeof(struct mk_uint64_s) * CHAR_BIT)) == 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
 	MK_ASSERT(block);
@@ -412,8 +408,8 @@ static inline void mk_sha3_detail_pad(int block_size, enum mk_sha3_detail_domain
 
 	union
 	{
-		uint64_t m_words[21];
-		unsigned char m_bytes[21 * sizeof(uint64_t) + 1];
+		struct mk_uint64_s m_words[21];
+		unsigned char m_bytes[21 * sizeof(struct mk_uint64_s) + 1];
 	} padding;
 	memset(&padding.m_bytes, 0, sizeof(padding.m_bytes));
 
@@ -462,7 +458,7 @@ static inline void mk_sha3_detail_pad(int block_size, enum mk_sha3_detail_domain
 static inline void mk_sha3_detail_finish(int block_size, enum mk_sha3_detail_domain_e domain, int d, void* state, int* block_idx, void* block, void* z)
 {
 	MK_ASSERT((block_size % CHAR_BIT) == 0);
-	MK_ASSERT((block_size % (sizeof(uint64_t) * CHAR_BIT)) == 0);
+	MK_ASSERT((block_size % (sizeof(struct mk_uint64_s) * CHAR_BIT)) == 0);
 	MK_ASSERT(d > 0);
 	MK_ASSERT(state);
 	MK_ASSERT(block_idx);
