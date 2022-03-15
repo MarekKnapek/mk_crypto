@@ -2,8 +2,9 @@
 #define MK_INCLUDE_GUARD_WIN_SHA3
 
 
+#include "../mk_int/src/exact/mk_uint_64.h"
+
 #include <stddef.h> /* size_t */
-#include <stdint.h> /* uint64_t */ /* C99 */
 
 
 #ifdef __cplusplus
@@ -15,9 +16,9 @@
 
 struct mk_sha3_224_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[18];
+	struct mk_uint64_s m_block[18];
 };
 
 
@@ -28,9 +29,9 @@ MK_EXTERN_C void mk_sha3_224_finish(struct mk_sha3_224_state_s* self, void* dige
 
 struct mk_sha3_256_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[17];
+	struct mk_uint64_s m_block[17];
 };
 
 
@@ -41,9 +42,9 @@ MK_EXTERN_C void mk_sha3_256_finish(struct mk_sha3_256_state_s* self, void* dige
 
 struct mk_sha3_384_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[13];
+	struct mk_uint64_s m_block[13];
 };
 
 
@@ -54,9 +55,9 @@ MK_EXTERN_C void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* dige
 
 struct mk_sha3_512_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[9];
+	struct mk_uint64_s m_block[9];
 };
 
 
@@ -67,9 +68,9 @@ MK_EXTERN_C void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* dige
 
 struct mk_sha3_shake_128_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[21];
+	struct mk_uint64_s m_block[21];
 };
 
 
@@ -80,9 +81,9 @@ MK_EXTERN_C void mk_sha3_shake_128_finish(struct mk_sha3_shake_128_state_s* self
 
 struct mk_sha3_shake_256_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[17];
+	struct mk_uint64_s m_block[17];
 };
 
 
@@ -93,9 +94,9 @@ MK_EXTERN_C void mk_sha3_shake_256_finish(struct mk_sha3_shake_256_state_s* self
 
 struct mk_sha3_raw_shake_128_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[21];
+	struct mk_uint64_s m_block[21];
 };
 
 
@@ -106,9 +107,9 @@ MK_EXTERN_C void mk_sha3_raw_shake_128_finish(struct mk_sha3_raw_shake_128_state
 
 struct mk_sha3_raw_shake_256_state_s
 {
-	uint64_t m_state[25];
+	struct mk_uint64_s m_state[25];
 	int m_idx;
-	uint64_t m_block[17];
+	struct mk_uint64_s m_block[17];
 };
 
 
