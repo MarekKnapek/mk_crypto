@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="fuzz">
+      <UniqueIdentifier>{d5f4bebb-9a17-4182-b5e1-7f146d6bf864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{e89c83d8-356f-44bf-ac27-f34aa18d8234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{cf7cd392-efe8-48a9-a621-597f82a8793f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{e74c4801-88bf-4a25-9b89-95b89f2ae4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\mk_int">
+      <UniqueIdentifier>{4d47d096-d94f-4b56-8ed7-685ba3eaf832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\mk_int\base">
+      <UniqueIdentifier>{42c28561-9eb1-4bd5-a117-28cf827202de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\mk_int\exact">
+      <UniqueIdentifier>{ea5ae806-4344-4338-94e7-47c560a8c43d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\mk_int\utils">
+      <UniqueIdentifier>{a54ea20e-542e-4a4a-9eae-4e67f7fc6cdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\mk_int\inl">
+      <UniqueIdentifier>{49f3e3ee-cbac-4a17-ba5b-5c156487610f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\mk_md2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_md4.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_md5.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_sha1.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_sha2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_md2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_md4.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_md5.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_sha1.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_sha2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_md5_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_sha1_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_sha2_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_char.c">
+      <Filter>libs\mk_int\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_int.c">
+      <Filter>libs\mk_int\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_llong.c">
+      <Filter>libs\mk_int\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_long.c">
+      <Filter>libs\mk_int\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_short.c">
+      <Filter>libs\mk_int\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_128.c">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_16.c">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_32.c">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_64.c">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_8.c">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\inl\mk_uint.c">
+      <Filter>libs\mk_int\inl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\mk_int\src\utils\maybe_initialize.c">
+      <Filter>libs\mk_int\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\mk_endian.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_md2.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_md4.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_md5.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_sha1.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_sha2.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_md2.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_md4.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_md5.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_sha1.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_sha2.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_sha1_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_sha2_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\utils\mk_assert.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\utils\mk_align.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_char.h">
+      <Filter>libs\mk_int\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_int.h">
+      <Filter>libs\mk_int\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_llong.h">
+      <Filter>libs\mk_int\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_long.h">
+      <Filter>libs\mk_int\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_short.h">
+      <Filter>libs\mk_int\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_128.h">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_16.h">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_32.h">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_64.h">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_8.h">
+      <Filter>libs\mk_int\exact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\inl\mk_uint.h">
+      <Filter>libs\mk_int\inl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\utils\maybe_initialize.h">
+      <Filter>libs\mk_int\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\mk_int\src\utils\mk_assert.h">
+      <Filter>libs\mk_int\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

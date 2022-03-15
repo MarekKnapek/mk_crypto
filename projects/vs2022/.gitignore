@@ -1,0 +1,11 @@
+.vs
+
+Debug
+Release
+x64/Debug
+x64/Release
+
+mk_crypto/Debug
+mk_crypto/Release
+mk_crypto/x64/Debug
+mk_crypto/x64/Release
