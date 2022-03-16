@@ -1,6 +1,7 @@
 #include "mk_md2.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_inline.h"
 
 #include <string.h> /* memcpy, memset */
 
@@ -26,32 +27,36 @@ static unsigned char const s_mk_md2_detail_table[256] =
 };
 
 
-static inline void mk_md2_detail_process_block(struct mk_md2_state_s* self, unsigned char const* input)
+static mk_inline void mk_md2_detail_process_block(struct mk_md2_state_s* self, unsigned char const* input)
 {
+	unsigned char x[48];
+	int j;
+	unsigned t;
+	int k;
+	unsigned l;
+
 	mk_assert(self);
 	mk_assert(input);
 
-	unsigned char x[48];
-	
 	memcpy(x + 0 * 16, self->m_state, 16);
 	memcpy(x + 1 * 16, input, 16);
-	for(int j = 0; j != 16; ++j)
+	for(j = 0; j != 16; ++j)
 	{
 		x[2 * 16 + j] = self->m_state[j] ^ input[j];
 	}
 
-	unsigned t = 0;
-	for(int j = 0; j != 18; ++j)
+	t = 0;
+	for(j = 0; j != 18; ++j)
 	{
-		for(int k = 0; k != 48; ++k)
+		for(k = 0; k != 48; ++k)
 		{
 			t = x[k] ^= s_mk_md2_detail_table[t];
 		}
 		t = (t + j) & 0xff;
 	}
 
-	unsigned l = self->m_checksum[15];
-	for(int j = 0; j != 16; ++j)
+	l = self->m_checksum[15];
+	for(j = 0; j != 16; ++j)
 	{
 		l = self->m_checksum[j] ^= s_mk_md2_detail_table[input[j] ^ l];
 	}
@@ -71,13 +76,20 @@ void mk_md2_init(struct mk_md2_state_s* self)
 
 void mk_md2_append(struct mk_md2_state_s* self, void const* msg, size_t msg_len_bytes)
 {
+	unsigned char const* input;
+	size_t remaining;
+	unsigned idx;
+	unsigned capacity;
+	size_t blocks;
+	size_t i;
+
 	mk_assert(self);
 
-	unsigned char const* input = (unsigned char const*)msg;
-	size_t remaining = msg_len_bytes;
+	input = (unsigned char const*)msg;
+	remaining = msg_len_bytes;
 
-	unsigned idx = self->m_len;
-	unsigned capacity = 16 - idx;
+	idx = self->m_len;
+	capacity = 16 - idx;
 	self->m_len = (self->m_len + remaining) & 0xf;
 
 	if(remaining >= capacity)
@@ -87,8 +99,8 @@ void mk_md2_append(struct mk_md2_state_s* self, void const* msg, size_t msg_len_
 		input += capacity;
 		remaining -= capacity;
 
-		size_t blocks = remaining / 16;
-		for(size_t i = 0; i != blocks; ++i)
+		blocks = remaining / 16;
+		for(i = 0; i != blocks; ++i)
 		{
 			mk_md2_detail_process_block(self, input);
 			input += 16;
@@ -102,16 +114,19 @@ void mk_md2_append(struct mk_md2_state_s* self, void const* msg, size_t msg_len_
 
 void mk_md2_finish(struct mk_md2_state_s* self, void* digest)
 {
+	unsigned char buff[16];
+	unsigned len;
+	unsigned capacity;
+	unsigned padding_len;
+
 	mk_assert(self);
 	mk_assert(digest);
 
-	unsigned char buff[16];
-
-	unsigned len = self->m_len;
-	unsigned capacity = 16 - len;
+	len = self->m_len;
+	capacity = 16 - len;
 	mk_assert(capacity >= 1 && capacity <= 16);
 
-	unsigned padding_len = capacity;
+	padding_len = capacity;
 	memset(buff, padding_len, padding_len);
 
 	mk_md2_append(self, buff, padding_len);

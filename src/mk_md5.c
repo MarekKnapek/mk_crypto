@@ -1,17 +1,12 @@
 #include "mk_md5.h"
 
 #include "../utils/mk_align.h"
+#include "../utils/mk_assert.h"
 #include "../utils/mk_endian.h"
+#include "../utils/mk_inline.h"
 
-#include <assert.h> /* assert, static_assert */ /* C11 */
-#include <limits.h> /* CHAR_BIT */
-#include <stdalign.h> /* alignof */ /* C11 */
-#include <stddef.h> /* NULL */
 #include <stdint.h> /* uintptr_t */
 #include <string.h> /* memcpy, memset */
-
-
-static_assert(CHAR_BIT == 8, "Must have 8bit byte.");
 
 
 #define mk_md5_detail_block_size (16 * sizeof(uint32_t)) /* 16 32bit words, 64 bytes, 512 bits */
@@ -30,109 +25,105 @@ static uint32_t const mk_md5_detail_table[64] =
 };
 
 
-static inline uint32_t mk_md5_detail_f(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline uint32_t mk_md5_detail_f(uint32_t x, uint32_t y, uint32_t z)
 {
 	return (x & y) | ((~x) & z);
 }
 
-static inline uint32_t mk_md5_detail_g(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline uint32_t mk_md5_detail_g(uint32_t x, uint32_t y, uint32_t z)
 {
 	return (x & z) | (y & (~z));
 }
 
-static inline uint32_t mk_md5_detail_h(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline uint32_t mk_md5_detail_h(uint32_t x, uint32_t y, uint32_t z)
 {
 	return x ^ y ^ z;
 }
 
-static inline uint32_t mk_md5_detail_i(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline uint32_t mk_md5_detail_i(uint32_t x, uint32_t y, uint32_t z)
 {
 	return y ^ (x | (~z));
 }
 
-static inline uint32_t mk_md5_detail_rot(uint32_t x, int s)
+static mk_inline uint32_t mk_md5_detail_rot(uint32_t x, int s)
 {
-	assert(s > 0);
-	assert(s < 32);
+	mk_assert(s > 0);
+	mk_assert(s < 32);
 
 	return (x << s) | (x >> (32 - s));
 }
 
-static inline uint32_t mk_md5_detail_round_1(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
+static mk_inline uint32_t mk_md5_detail_round_1(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
 {
-	assert(k >= 0);
-	assert(k < 16);
-	assert(i - 1 >= 0);
-	assert(i - 1 < 64);
-	assert(x);
+	mk_assert(k >= 0);
+	mk_assert(k < 16);
+	mk_assert(i - 1 >= 0);
+	mk_assert(i - 1 < 64);
+	mk_assert(x);
 
 	return b + mk_md5_detail_rot(a + mk_md5_detail_f(b, c, d) + x[k] + mk_md5_detail_table[i - 1], s);
 }
 
-static inline uint32_t mk_md5_detail_round_2(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
+static mk_inline uint32_t mk_md5_detail_round_2(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
 {
-	assert(k >= 0);
-	assert(k < 16);
-	assert(i - 1 >= 0);
-	assert(i - 1 < 64);
-	assert(x);
+	mk_assert(k >= 0);
+	mk_assert(k < 16);
+	mk_assert(i - 1 >= 0);
+	mk_assert(i - 1 < 64);
+	mk_assert(x);
 
 	return b + mk_md5_detail_rot(a + mk_md5_detail_g(b, c, d) + x[k] + mk_md5_detail_table[i - 1], s);
 }
 
-static inline uint32_t mk_md5_detail_round_3(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
+static mk_inline uint32_t mk_md5_detail_round_3(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
 {
-	assert(k >= 0);
-	assert(k < 16);
-	assert(i - 1 >= 0);
-	assert(i - 1 < 64);
-	assert(x);
+	mk_assert(k >= 0);
+	mk_assert(k < 16);
+	mk_assert(i - 1 >= 0);
+	mk_assert(i - 1 < 64);
+	mk_assert(x);
 
 	return b + mk_md5_detail_rot(a + mk_md5_detail_h(b, c, d) + x[k] + mk_md5_detail_table[i - 1], s);
 }
 
-static inline uint32_t mk_md5_detail_round_4(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
+static mk_inline uint32_t mk_md5_detail_round_4(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, int i, uint32_t const* x)
 {
-	assert(k >= 0);
-	assert(k < 16);
-	assert(i - 1 >= 0);
-	assert(i - 1 < 64);
-	assert(x);
+	mk_assert(k >= 0);
+	mk_assert(k < 16);
+	mk_assert(i - 1 >= 0);
+	mk_assert(i - 1 < 64);
+	mk_assert(x);
 
 	return b + mk_md5_detail_rot(a + mk_md5_detail_i(b, c, d) + x[k] + mk_md5_detail_table[i - 1], s);
 }
 
 static void mk_md5_detail_process_block(struct mk_md5_state_s* self, void const* aligned_data)
 {
-	assert(self);
-
 	uint32_t const* x;
-#if MK_ENDIAN == MK_ENDIAN_LITTLE
-	assert(!aligned_data || (((uintptr_t)aligned_data) % mk_alignof(uint32_t)) == 0);
-	x = aligned_data ? (uint32_t const*)aligned_data : self->m_block.m_words;
-#else
-	(void)aligned_data;
-	uint32_t xx[16];
-	for(int i = 0; i != 16; ++i)
-	{
-		xx[i] =
-			((uint32_t)(self->m_block.m_bytes[i * sizeof(uint32_t) + 0])) << (0 * 8) |
-			((uint32_t)(self->m_block.m_bytes[i * sizeof(uint32_t) + 1])) << (1 * 8) |
-			((uint32_t)(self->m_block.m_bytes[i * sizeof(uint32_t) + 2])) << (2 * 8) |
-			((uint32_t)(self->m_block.m_bytes[i * sizeof(uint32_t) + 3])) << (3 * 8);
-	}
-	x = xx;
-#endif
+	uint32_t aa;
+	uint32_t bb;
+	uint32_t cc;
+	uint32_t dd;
+	uint32_t a;
+	uint32_t b;
+	uint32_t c;
+	uint32_t d;
 
-	uint32_t aa = self->m_abcd[0];
-	uint32_t bb = self->m_abcd[1];
-	uint32_t cc = self->m_abcd[2];
-	uint32_t dd = self->m_abcd[3];
+	mk_assert(self);
+	mk_assert(aligned_data);
+	mk_assert((((uintptr_t)aligned_data) % mk_alignof(uint32_t)) == 0);
 
-	uint32_t a = aa;
-	uint32_t b = bb;
-	uint32_t c = cc;
-	uint32_t d = dd;
+	x = (uint32_t const*)aligned_data;
+
+	aa = self->m_abcd[0];
+	bb = self->m_abcd[1];
+	cc = self->m_abcd[2];
+	dd = self->m_abcd[3];
+
+	a = aa;
+	b = bb;
+	c = cc;
+	d = dd;
 
 	a = mk_md5_detail_round_1(a, b, c, d,  0,  7,  1, x);
 	d = mk_md5_detail_round_1(d, a, b, c,  1, 12,  2, x);
@@ -228,7 +219,7 @@ static void mk_md5_detail_process_block(struct mk_md5_state_s* self, void const*
 
 void mk_md5_init(struct mk_md5_state_s* self)
 {
-	assert(self);
+	mk_assert(self);
 
 	self->m_abcd[0] = (uint32_t)0x67452301;
 	self->m_abcd[1] = (uint32_t)0xefcdab89;
@@ -239,36 +230,45 @@ void mk_md5_init(struct mk_md5_state_s* self)
 
 void mk_md5_append(struct mk_md5_state_s* self, void const* data, size_t len)
 {
-	assert(self);
+	unsigned char const* input;
+	size_t remaining;
+	unsigned idx;
+	unsigned capacity;
+	unsigned to_copy;
+	int buffer_full;
+	size_t blocks;
+	size_t i;
+
+	mk_assert(self);
 
 	if(len == 0)
 	{
 		return;
 	}
 
-	unsigned char const* input = (unsigned char const*)data;
-	size_t remaining = len;
+	input = (unsigned char const*)data;
+	remaining = len;
 
-	unsigned idx = self->m_len % mk_md5_detail_block_size;
+	idx = self->m_len % mk_md5_detail_block_size;
 	if(idx != 0)
 	{
-		unsigned capacity = mk_md5_detail_block_size - idx;
-		unsigned to_copy = remaining < capacity ? (unsigned)remaining : capacity;
+		capacity = mk_md5_detail_block_size - idx;
+		to_copy = remaining < capacity ? (unsigned)remaining : capacity;
 		memcpy(self->m_block.m_bytes + idx, input, to_copy);
 		input += to_copy;
 		remaining -= to_copy;
-		int buffer_full = to_copy == capacity;
+		buffer_full = to_copy == capacity;
 		if(buffer_full)
 		{
-			mk_md5_detail_process_block(self, NULL);
+			mk_md5_detail_process_block(self, self->m_block.m_words);
 		}
 	}
 
-	size_t blocks = remaining / mk_md5_detail_block_size;
+	blocks = remaining / mk_md5_detail_block_size;
 #if MK_ENDIAN == MK_ENDIAN_LITTLE
 	if((((uintptr_t)input) % mk_alignof(uint32_t)) == 0)
 	{
-		for(size_t i = 0; i != blocks; ++i)
+		for(i = 0; i != blocks; ++i)
 		{
 			mk_md5_detail_process_block(self, input);
 			input += mk_md5_detail_block_size;
@@ -277,16 +277,16 @@ void mk_md5_append(struct mk_md5_state_s* self, void const* data, size_t len)
 	else
 #endif
 	{
-		for(size_t i = 0; i != blocks; ++i)
+		for(i = 0; i != blocks; ++i)
 		{
 			memcpy(self->m_block.m_bytes, input, mk_md5_detail_block_size);
-			mk_md5_detail_process_block(self, NULL);
+			mk_md5_detail_process_block(self, self->m_block.m_words);
 			input += mk_md5_detail_block_size;
 		}
 	}
 	remaining -= blocks * mk_md5_detail_block_size;
 
-	assert(remaining < mk_md5_detail_block_size);
+	mk_assert(remaining < mk_md5_detail_block_size);
 	if(remaining != 0)
 	{
 		memcpy(self->m_block.m_bytes, input, remaining);
@@ -297,23 +297,28 @@ void mk_md5_append(struct mk_md5_state_s* self, void const* data, size_t len)
 
 void mk_md5_finish(struct mk_md5_state_s* self, void* digest)
 {
-	assert(self);
-	assert(digest);
-
 	#define s_mandatory_padding_len (1 + sizeof(uint64_t))
 	#define s_worst_case_buff_len (mk_md5_detail_block_size + s_mandatory_padding_len - 1)
 
-	unsigned idx = self->m_len % mk_md5_detail_block_size;
-	unsigned capacity = mk_md5_detail_block_size - idx;
-	unsigned padding_len =
+	unsigned idx;
+	unsigned capacity;
+	unsigned padding_len;
+	unsigned char buff[s_worst_case_buff_len];
+	uint64_t len;
+
+	mk_assert(self);
+	mk_assert(digest);
+
+	idx = self->m_len % mk_md5_detail_block_size;
+	capacity = mk_md5_detail_block_size - idx;
+	padding_len =
 		(capacity >= s_mandatory_padding_len) ?
 		(capacity - s_mandatory_padding_len) :
 		(capacity + mk_md5_detail_block_size - s_mandatory_padding_len);
 
-	unsigned char buff[s_worst_case_buff_len];
 	buff[0] = (unsigned char)(1u << 7);
 	memset(buff + 1, 0, padding_len);
-	uint64_t len = self->m_len * 8;
+	len = self->m_len * 8;
 #if MK_ENDIAN == MK_ENDIAN_LITTLE
 	memcpy(buff + 1 + padding_len, &len, sizeof(uint64_t));
 #else
@@ -327,28 +332,27 @@ void mk_md5_finish(struct mk_md5_state_s* self, void* digest)
 	buff[1 + padding_len + 7] = (unsigned char)((len >> (8 * 7)) & 0xff);
 #endif
 	mk_md5_append(self, buff, padding_len + s_mandatory_padding_len);
-	assert(self->m_len % mk_md5_detail_block_size == 0);
+	mk_assert(self->m_len % mk_md5_detail_block_size == 0);
 
 #if MK_ENDIAN == MK_ENDIAN_LITTLE
 	memcpy(digest, self->m_abcd, 16);
 #else
-	unsigned char* output = (unsigned char*)digest;
-	output[ 0] = (unsigned char)((self->m_abcd[0] >> (8 * 0)) & 0xff);
-	output[ 1] = (unsigned char)((self->m_abcd[0] >> (8 * 1)) & 0xff);
-	output[ 2] = (unsigned char)((self->m_abcd[0] >> (8 * 2)) & 0xff);
-	output[ 3] = (unsigned char)((self->m_abcd[0] >> (8 * 3)) & 0xff);
-	output[ 4] = (unsigned char)((self->m_abcd[1] >> (8 * 0)) & 0xff);
-	output[ 5] = (unsigned char)((self->m_abcd[1] >> (8 * 1)) & 0xff);
-	output[ 6] = (unsigned char)((self->m_abcd[1] >> (8 * 2)) & 0xff);
-	output[ 7] = (unsigned char)((self->m_abcd[1] >> (8 * 3)) & 0xff);
-	output[ 8] = (unsigned char)((self->m_abcd[2] >> (8 * 0)) & 0xff);
-	output[ 9] = (unsigned char)((self->m_abcd[2] >> (8 * 1)) & 0xff);
-	output[10] = (unsigned char)((self->m_abcd[2] >> (8 * 2)) & 0xff);
-	output[11] = (unsigned char)((self->m_abcd[2] >> (8 * 3)) & 0xff);
-	output[12] = (unsigned char)((self->m_abcd[3] >> (8 * 0)) & 0xff);
-	output[13] = (unsigned char)((self->m_abcd[3] >> (8 * 1)) & 0xff);
-	output[14] = (unsigned char)((self->m_abcd[3] >> (8 * 2)) & 0xff);
-	output[15] = (unsigned char)((self->m_abcd[3] >> (8 * 3)) & 0xff);
+	((unsigned char*)digest)[ 0] = (unsigned char)((self->m_abcd[0] >> (8 * 0)) & 0xff);
+	((unsigned char*)digest)[ 1] = (unsigned char)((self->m_abcd[0] >> (8 * 1)) & 0xff);
+	((unsigned char*)digest)[ 2] = (unsigned char)((self->m_abcd[0] >> (8 * 2)) & 0xff);
+	((unsigned char*)digest)[ 3] = (unsigned char)((self->m_abcd[0] >> (8 * 3)) & 0xff);
+	((unsigned char*)digest)[ 4] = (unsigned char)((self->m_abcd[1] >> (8 * 0)) & 0xff);
+	((unsigned char*)digest)[ 5] = (unsigned char)((self->m_abcd[1] >> (8 * 1)) & 0xff);
+	((unsigned char*)digest)[ 6] = (unsigned char)((self->m_abcd[1] >> (8 * 2)) & 0xff);
+	((unsigned char*)digest)[ 7] = (unsigned char)((self->m_abcd[1] >> (8 * 3)) & 0xff);
+	((unsigned char*)digest)[ 8] = (unsigned char)((self->m_abcd[2] >> (8 * 0)) & 0xff);
+	((unsigned char*)digest)[ 9] = (unsigned char)((self->m_abcd[2] >> (8 * 1)) & 0xff);
+	((unsigned char*)digest)[10] = (unsigned char)((self->m_abcd[2] >> (8 * 2)) & 0xff);
+	((unsigned char*)digest)[11] = (unsigned char)((self->m_abcd[2] >> (8 * 3)) & 0xff);
+	((unsigned char*)digest)[12] = (unsigned char)((self->m_abcd[3] >> (8 * 0)) & 0xff);
+	((unsigned char*)digest)[13] = (unsigned char)((self->m_abcd[3] >> (8 * 1)) & 0xff);
+	((unsigned char*)digest)[14] = (unsigned char)((self->m_abcd[3] >> (8 * 2)) & 0xff);
+	((unsigned char*)digest)[15] = (unsigned char)((self->m_abcd[3] >> (8 * 3)) & 0xff);
 #endif
 
 	#undef s_mandatory_padding_len
