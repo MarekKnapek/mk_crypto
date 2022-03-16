@@ -209,5 +209,8 @@
     <ClInclude Include="..\..\..\utils\mk_endian.h">
       <Filter>utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\utils\mk_inline.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

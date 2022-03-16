@@ -1,15 +1,13 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-
-#include <stddef.h> /* size_t offsetof */
-#include <stdio.h> /* printf fprintf stderr fopen fclose fread feof */
-#include <stdlib.h> /* EXIT_SUCCESS EXIT_FAILURE */
-
 #include "../../../src/mk_md2.h"
 #include "../../../src/mk_md4.h"
 #include "../../../src/mk_md5.h"
 #include "../../../src/mk_sha1.h"
 #include "../../../src/mk_sha2.h"
+#include "../../../utils/mk_inline.h"
+
+#include <stddef.h> /* size_t offsetof */
+#include <stdio.h> /* printf fprintf stderr fopen fclose fread feof */
+#include <stdlib.h> /* EXIT_SUCCESS EXIT_FAILURE */
 
 
 #define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
@@ -68,40 +66,52 @@ static struct alg_descr_s const s_alg_descrs[] =
 };
 
 
-static inline void mk_bytes_to_string(void const* input, int count, void* output)
+static mk_inline void mk_bytes_to_string(void const* input, int count, void* output)
 {
 	static char const s_alphabet[] = "0123456789abcdef";
 	
 	unsigned char const* in;
 	char* out;
+	int i;
 
 	in = (unsigned char const*)input;
 	out = (char*)output;
-	for(int i = 0; i != count; ++i)
+	for(i = 0; i != count; ++i)
 	{
 		out[i * 2 + 0] = s_alphabet[(in[i] >> 4) & 0x0f];
 		out[i * 2 + 1] = s_alphabet[(in[i] >> 0) & 0x0f];
 	}
 }
 
-static inline int mk_hash_file(int argc, char const* const* argv)
+static mk_inline int mk_hash_file(int argc, char const* const* argv)
 {
+	int alg_count;
+	struct hash_states_s hash_states;
+	int i;
+	char const* file_name;
+	FILE* file;
+	unsigned char buff[1024];
+	int offset;
+	void* hash_state;
+	int longest_name;
+	unsigned char digest_bytes[64];
+	char digest_string[2 * 64 + 1];
+	int digest_len_bytes;
+
 	mk_check(argc == 2);
 
-	int alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
-
-	struct hash_states_s hash_states;
-	for(int i = 0; i != alg_count; ++i)
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	for(i = 0; i != alg_count; ++i)
 	{
-		void* hash_state = (unsigned char*)&hash_states + s_alg_descrs[i].m_offset;
+			offset = s_alg_descrs[i].m_offset;
+			hash_state = (unsigned char*)&hash_states + offset;
 		s_alg_descrs[i].m_init(hash_state);
 	}
 
-	char const* file_name = argv[1];
-	FILE* file = fopen(file_name, "rb");
+	file_name = argv[1];
+	file = fopen(file_name, "rb");
 	mk_check(file);
 
-	unsigned char buff[1024];
 	for(;;)
 	{
 		size_t read = fread(buff, 1, sizeof(buff), file);
@@ -110,28 +120,28 @@ static inline int mk_hash_file(int argc, char const* const* argv)
 			mk_check(feof(file) != 0);
 			break;
 		}
-		for(int i = 0; i != alg_count; ++i)
+		for(i = 0; i != alg_count; ++i)
 		{
-			void* hash_state = (unsigned char*)&hash_states + s_alg_descrs[i].m_offset;
+			offset = s_alg_descrs[i].m_offset;
+			hash_state = (unsigned char*)&hash_states + offset;
 			s_alg_descrs[i].m_append_bytes(hash_state, buff, read);
 		}
 	}
 	
 	mk_check(fclose(file) == 0);
 
-	int longest_name = 0;
-	for(int i = 0; i != alg_count; ++i)
+	longest_name = 0;
+	for(i = 0; i != alg_count; ++i)
 	{
 		longest_name = s_alg_descrs[i].m_name_len > longest_name ? s_alg_descrs[i].m_name_len : longest_name;
 	}
 
-	unsigned char digest_bytes[64];
-	char digest_string[2 * 64 + 1];
-	for(int i = 0; i != alg_count; ++i)
+	for(i = 0; i != alg_count; ++i)
 	{
-		void* hash_state = (unsigned char*)&hash_states + s_alg_descrs[i].m_offset;
+		offset = s_alg_descrs[i].m_offset;
+		hash_state = (unsigned char*)&hash_states + offset;
 		s_alg_descrs[i].m_finish(hash_state, &digest_bytes);
-		int digest_len_bytes = s_alg_descrs[i].m_digest_len_bytes;
+		digest_len_bytes = s_alg_descrs[i].m_digest_len_bytes;
 		mk_bytes_to_string(&digest_bytes, digest_len_bytes, &digest_string);
 		digest_string[digest_len_bytes * 2] = '\0';
 		printf("%-*s %s\n", longest_name, s_alg_descrs[i].m_name, digest_string);

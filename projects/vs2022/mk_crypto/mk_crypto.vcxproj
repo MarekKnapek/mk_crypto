@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\..\utils\mk_align.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\utils\mk_endian.h" />
+    <ClInclude Include="..\..\..\utils\mk_inline.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
