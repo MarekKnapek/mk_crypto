@@ -19,29 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_char.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_int.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_llong.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_long.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\base\mk_uint_short.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_128.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_16.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_32.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_64.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\exact\mk_uint_8.c" />
-    <ClCompile Include="..\..\..\..\mk_int\src\inl\mk_uint.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\mk_int\src\utils\maybe_initialize.c" />
     <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md5_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha1_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_fuzz.c" />
+    <ClCompile Include="..\..\..\libs\mk_int.c" />
     <ClCompile Include="..\..\..\src\mk_md2.c" />
     <ClCompile Include="..\..\..\src\mk_md4.c" />
     <ClCompile Include="..\..\..\src\mk_md5.c" />
@@ -54,25 +38,6 @@
     <ClCompile Include="..\..\..\src\mk_win_sha2.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_char.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_int.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_llong.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_long.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\base\mk_uint_short.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_128.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_16.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_32.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_64.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\exact\mk_uint_8.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\inl\mk_uint.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\mk_int\src\utils\maybe_initialize.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\utils\mk_assert.h" />
-    <ClInclude Include="..\..\..\..\mk_int\src\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
