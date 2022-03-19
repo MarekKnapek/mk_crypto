@@ -3,86 +3,136 @@
 #include "../utils/mk_assert.h"
 #include "../utils/mk_inline.h"
 
+#include "../../mk_int/src/exact/mk_uint_32.h"
+#include "../../mk_int/src/exact/mk_uint_64.h"
+
+#include <stddef.h> /* size_t */
 #include <string.h> /* memcpy memset */
 
 
-static mk_inline uint32_t mk_sha1_detail_rotl(uint32_t x, int n)
+static mk_inline void mk_sha1_detail_ch(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	mk_assert(n > 0 && n < 32);
+	struct mk_uint32_s t1;
+	struct mk_uint32_s t2;
 
-	return (x << n) | (x >> (32 - n));
+	mk_assert(out);
+	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
+
+	/* return (x & y) ^ ((~x) & z); */
+	
+	mk_uint32_and(&t1, x, y);
+	mk_uint32_cmplmnt(&t2, x);
+	mk_uint32_and(&t2, &t2, z);
+	mk_uint32_xor(out, &t1, &t2);
 }
 
-static mk_inline uint32_t mk_sha1_detail_ch(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline void mk_sha1_detail_parity(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	return (x & y) ^ ((~x) & z);
+	struct mk_uint32_s tmp;
+
+	mk_assert(out);
+	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
+
+	/* return x ^ y ^ z; */
+
+	mk_uint32_xor(&tmp, x, y);
+	mk_uint32_xor(out, &tmp, z);
 }
 
-static mk_inline uint32_t mk_sha1_detail_parity(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline void mk_sha1_detail_maj(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	return x ^ y ^ z;
+	struct mk_uint32_s t1;
+	struct mk_uint32_s t2;
+	struct mk_uint32_s t3;
+
+	mk_assert(out);
+	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
+
+	/* return (x & y) ^ (x & z) ^ (y & z); */
+
+	mk_uint32_and(&t1, x, y);
+	mk_uint32_and(&t2, x, z);
+	mk_uint32_and(&t3, y, z);
+	mk_uint32_xor(&t1, &t1, &t2);
+	mk_uint32_xor(out, &t1, &t3);
 }
 
-static mk_inline uint32_t mk_sha1_detail_maj(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline void mk_sha1_detail_f(struct mk_uint32_s* out, int idx, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	return (x & y) ^ (x & z) ^ (y & z);
+	mk_assert(out);
+	mk_assert(idx >= 0 && idx <= 79);
+	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
+
+	if(idx <= 19)
+	{
+		mk_sha1_detail_ch(out, x, y, z);
+	}
+	else if(idx <= 39)
+	{
+		mk_sha1_detail_parity(out, x, y, z);
+	}
+	else if(idx <= 59)
+	{
+		mk_sha1_detail_maj(out, x, y, z);
+	}
+	else
+	{
+		mk_sha1_detail_parity(out, x, y, z);
+	}
 }
 
-static mk_inline uint32_t mk_sha1_detail_f(int idx, uint32_t x, uint32_t y, uint32_t z)
+static mk_inline void mk_sha1_detail_k(struct mk_uint32_s* out, int idx)
 {
+	static struct mk_uint32_s const s_k[] =
+	{
+		mk_uint32_c(0x5a827999),
+		mk_uint32_c(0x6ed9eba1),
+		mk_uint32_c(0x8f1bbcdc),
+		mk_uint32_c(0xca62c1d6),
+	};
+
+	mk_assert(out);
 	mk_assert(idx >= 0 && idx <= 79);
 
 	if(idx <= 19)
 	{
-		return mk_sha1_detail_ch(x, y, z);
+		*out = s_k[0];
 	}
 	else if(idx <= 39)
 	{
-		return mk_sha1_detail_parity(x, y, z);
+		*out = s_k[1];
 	}
 	else if(idx <= 59)
 	{
-		return mk_sha1_detail_maj(x, y, z);
+		*out = s_k[2];
 	}
 	else
 	{
-		return mk_sha1_detail_parity(x, y, z);
-	}
-}
-
-static mk_inline uint32_t mk_sha1_detail_k(int idx)
-{
-	mk_assert(idx >= 0 && idx <= 79);
-
-	if(idx <= 19)
-	{
-		return 0x5a827999;
-	}
-	else if(idx <= 39)
-	{
-		return 0x6ed9eba1;
-	}
-	else if(idx <= 59)
-	{
-		return 0x8f1bbcdc;
-	}
-	else
-	{
-		return 0xca62c1d6;
+		*out = s_k[3];
 	}
 }
 
 static mk_inline void mk_sha1_detail_process_block(struct mk_sha1_state_s* self, void const* data)
 {
 	unsigned char const* input;
-	uint32_t w[80];
-	uint32_t abcde[5];
-	uint32_t t;
-	uint32_t* a;
-	uint32_t* b;
-	uint32_t* c;
-	uint32_t* d;
-	uint32_t* e;
+	struct mk_uint32_s w[80];
+	struct mk_uint32_s abcde[5];
+	struct mk_uint32_s t;
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
+	struct mk_uint32_s* a;
+	struct mk_uint32_s* b;
+	struct mk_uint32_s* c;
+	struct mk_uint32_s* d;
+	struct mk_uint32_s* e;
 	int i;
 
 	mk_assert(self);
@@ -98,15 +148,15 @@ static mk_inline void mk_sha1_detail_process_block(struct mk_sha1_state_s* self,
 
 	for(i = 0; i != 16; ++i)
 	{
-		w[i] =
-			(((uint32_t)(input[i * 4 + 0])) << (3 * 8)) |
-			(((uint32_t)(input[i * 4 + 1])) << (2 * 8)) |
-			(((uint32_t)(input[i * 4 + 2])) << (1 * 8)) |
-			(((uint32_t)(input[i * 4 + 3])) << (0 * 8));
+		mk_uint32_from_buff_be(&w[i], input + i * sizeof(struct mk_uint32_s));
 	}
 	for(i = 16; i != 80; ++i)
 	{
-		w[i] = mk_sha1_detail_rotl(w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16], 1);
+		/* w[i] = rotl(w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16], 1); */
+		mk_uint32_xor(&tmp1, &w[i - 3], &w[i - 8]);
+		mk_uint32_xor(&tmp2, &w[i - 14], &w[i - 16]);
+		mk_uint32_xor(&tmp1, &tmp1, &tmp2);
+		mk_uint32_rotl(&w[i], &tmp1, 1);
 	}
 	
 	*a = self->m_abcde[0];
@@ -117,32 +167,48 @@ static mk_inline void mk_sha1_detail_process_block(struct mk_sha1_state_s* self,
 
 	for(i = 0; i != 80; ++i)
 	{
-		t = mk_sha1_detail_rotl(*a, 5) + mk_sha1_detail_f(i, *b, *c, *d) + *e + mk_sha1_detail_k(i) + w[i];
+		/* t = rotl(*a, 5) + f(i, *b, *c, *d) + *e + k(i) + w[i]; */
+		mk_uint32_rotl(&tmp1, a, 5);
+		mk_sha1_detail_f(&tmp2, i, b, c, d);
+		mk_uint32_add(&tmp1, &tmp1, &tmp2);
+		mk_uint32_add(&tmp1, &tmp1, e);
+		mk_sha1_detail_k(&tmp2, i);
+		mk_uint32_add(&tmp1, &tmp1, &tmp2);
+		mk_uint32_add(&t, &tmp1, &w[i]);
 		*e = *d;
 		*d = *c;
-		*c = mk_sha1_detail_rotl(*b, 30);
+		mk_uint32_rotl(c, b, 30);
 		*b = *a;
 		*a = t;
 	}
 
-	self->m_abcde[0] += *a;
-	self->m_abcde[1] += *b;
-	self->m_abcde[2] += *c;
-	self->m_abcde[3] += *d;
-	self->m_abcde[4] += *e;
+	mk_uint32_add(&self->m_abcde[0], &self->m_abcde[0], a);
+	mk_uint32_add(&self->m_abcde[1], &self->m_abcde[1], b);
+	mk_uint32_add(&self->m_abcde[2], &self->m_abcde[2], c);
+	mk_uint32_add(&self->m_abcde[3], &self->m_abcde[3], d);
+	mk_uint32_add(&self->m_abcde[4], &self->m_abcde[4], e);
 }
 
 
 void mk_sha1_init(struct mk_sha1_state_s* self)
 {
+	static struct mk_uint32_s const s_init[] =
+	{
+		mk_uint32_c(0x67452301),
+		mk_uint32_c(0xefcdab89),
+		mk_uint32_c(0x98badcfe),
+		mk_uint32_c(0x10325476),
+		mk_uint32_c(0xc3d2e1f0),
+	};
+
 	mk_assert(self);
 
-	self->m_abcde[0] = 0x67452301;
-	self->m_abcde[1] = 0xefcdab89;
-	self->m_abcde[2] = 0x98badcfe;
-	self->m_abcde[3] = 0x10325476;
-	self->m_abcde[4] = 0xc3d2e1f0;
-	self->m_len = 0;
+	self->m_abcde[0] = s_init[0];
+	self->m_abcde[1] = s_init[1];
+	self->m_abcde[2] = s_init[2];
+	self->m_abcde[3] = s_init[3];
+	self->m_abcde[4] = s_init[4];
+	mk_uint64_zero(&self->m_len);
 }
 
 void mk_sha1_append(struct mk_sha1_state_s* self, void const* data, size_t len)
@@ -151,6 +217,7 @@ void mk_sha1_append(struct mk_sha1_state_s* self, void const* data, size_t len)
 	size_t remaining;
 	unsigned idx;
 	unsigned capacity;
+	struct mk_uint64_s tmp;
 	size_t blocks;
 	size_t i;
 	
@@ -159,12 +226,13 @@ void mk_sha1_append(struct mk_sha1_state_s* self, void const* data, size_t len)
 	input = (unsigned char const*)data;
 	remaining = len;
 
-	idx = self->m_len % 64;
+	idx = mk_uint64_to_int(&self->m_len) % 64;
 	capacity = 64 - idx;
-	self->m_len += len;
+	mk_uint64_from_sizet(&tmp, len);
+	mk_uint64_add(&self->m_len, &self->m_len, &tmp);
 	if(remaining >= capacity)
 	{
-		memcpy(self->m_block + idx, input, capacity);
+		memcpy((unsigned char*)self->m_block + idx, input, capacity);
 		mk_sha1_detail_process_block(self, self->m_block);
 		input += capacity;
 		remaining -= capacity;
@@ -177,24 +245,25 @@ void mk_sha1_append(struct mk_sha1_state_s* self, void const* data, size_t len)
 		remaining -= blocks * 64;
 		idx = 0;
 	}
-	memcpy(self->m_block + idx, input, remaining);
+	memcpy((unsigned char*)self->m_block + idx, input, remaining);
 }
 
 void mk_sha1_finish(struct mk_sha1_state_s* self, void* digest)
 {
-	#define s_mandatory_padding_len (1 + sizeof(uint64_t))
+	#define s_mandatory_padding_len (1 + sizeof(struct mk_uint64_s))
 	#define s_worst_padding_len (64 + s_mandatory_padding_len - 1)
 	
 	unsigned char padding[s_worst_padding_len];
 	unsigned idx;
 	unsigned capacity;
 	unsigned zeros;
-	uint64_t len;
+	struct mk_uint64_s len;
+	int i;
 
 	mk_assert(self);
 	mk_assert(digest);
 
-	idx = self->m_len % 64;
+	idx = mk_uint64_to_int(&self->m_len) % 64;
 	capacity = 64 - idx;
 	zeros =
 		(capacity >= s_mandatory_padding_len) ?
@@ -208,36 +277,13 @@ void mk_sha1_finish(struct mk_sha1_state_s* self, void* digest)
 
 	memset(padding + 1, 0, zeros);
 
-	len = self->m_len * 8;
-	padding[1 + zeros + 0] = (unsigned char)((len >> (8 * 7)) & 0xff);
-	padding[1 + zeros + 1] = (unsigned char)((len >> (8 * 6)) & 0xff);
-	padding[1 + zeros + 2] = (unsigned char)((len >> (8 * 5)) & 0xff);
-	padding[1 + zeros + 3] = (unsigned char)((len >> (8 * 4)) & 0xff);
-	padding[1 + zeros + 4] = (unsigned char)((len >> (8 * 3)) & 0xff);
-	padding[1 + zeros + 5] = (unsigned char)((len >> (8 * 2)) & 0xff);
-	padding[1 + zeros + 6] = (unsigned char)((len >> (8 * 1)) & 0xff);
-	padding[1 + zeros + 7] = (unsigned char)((len >> (8 * 0)) & 0xff);
+	mk_uint64_shl(&len, &self->m_len, 3);
+	mk_uint64_to_buff_be(&len, padding + 1 + zeros);
 
-	mk_sha1_append(self, padding, 1 + zeros + sizeof(uint64_t));
+	mk_sha1_append(self, padding, 1 + zeros + sizeof(struct mk_uint64_s));
 
-	((unsigned char*)digest)[ 0] = (unsigned char)((self->m_abcde[0] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[ 1] = (unsigned char)((self->m_abcde[0] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[ 2] = (unsigned char)((self->m_abcde[0] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[ 3] = (unsigned char)((self->m_abcde[0] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[ 4] = (unsigned char)((self->m_abcde[1] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[ 5] = (unsigned char)((self->m_abcde[1] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[ 6] = (unsigned char)((self->m_abcde[1] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[ 7] = (unsigned char)((self->m_abcde[1] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[ 8] = (unsigned char)((self->m_abcde[2] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[ 9] = (unsigned char)((self->m_abcde[2] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[10] = (unsigned char)((self->m_abcde[2] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[11] = (unsigned char)((self->m_abcde[2] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[12] = (unsigned char)((self->m_abcde[3] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[13] = (unsigned char)((self->m_abcde[3] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[14] = (unsigned char)((self->m_abcde[3] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[15] = (unsigned char)((self->m_abcde[3] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[16] = (unsigned char)((self->m_abcde[4] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[17] = (unsigned char)((self->m_abcde[4] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[18] = (unsigned char)((self->m_abcde[4] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[19] = (unsigned char)((self->m_abcde[4] >> (8 * 0)) & 0xff);
+	for(i = 0; i != 5; ++i)
+	{
+		mk_uint32_to_buff_be(&self->m_abcde[i], (unsigned char*)digest + i * sizeof(struct mk_uint32_s));
+	}
 }
