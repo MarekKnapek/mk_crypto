@@ -1,5 +1,5 @@
-#ifndef MK_INCLUDE_GUARD_MD4
-#define MK_INCLUDE_GUARD_MD4
+#ifndef mk_include_guard_md4
+#define mk_include_guard_md4
 
 
 #include <stddef.h> /* size_t */
@@ -7,9 +7,9 @@
 
 
 #ifdef __cplusplus
-#define MK_EXTERN_C extern "C"
+#define mk_extern_c extern "C"
 #else
-#define MK_EXTERN_C
+#define mk_extern_c
 #endif
 
 
@@ -34,12 +34,12 @@ struct mk_md4_digest_s
 };
 
 
-MK_EXTERN_C void mk_md4_init(struct mk_md4_state_s* self);
-MK_EXTERN_C void mk_md4_append(struct mk_md4_state_s* self, void const* data, size_t len);
-MK_EXTERN_C void mk_md4_finish(struct mk_md4_state_s* self, void* digest);
+mk_extern_c void mk_md4_init(struct mk_md4_state_s* self);
+mk_extern_c void mk_md4_append(struct mk_md4_state_s* self, void const* data, size_t len);
+mk_extern_c void mk_md4_finish(struct mk_md4_state_s* self, void* digest);
 
 
-#undef MK_EXTERN_C
+#undef mk_extern_c
 
 
 #endif
