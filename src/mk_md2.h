@@ -15,9 +15,9 @@
 struct mk_md2_state_s
 {
 	unsigned char m_state[16];
-	unsigned char m_block[16];
 	unsigned char m_checksum[16];
-	int m_len;
+	unsigned char m_block[16];
+	int m_idx;
 };
 
 
