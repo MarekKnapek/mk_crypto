@@ -277,7 +277,7 @@ void mk_md4_append(struct mk_md4_state_s* self, void const* msg, size_t msg_len_
 
 void mk_md4_finish(struct mk_md4_state_s* self, void* digest)
 {
-	#define s_mandatory_padding_len (1 + sizeof(struct mk_uint64_s))
+	#define s_mandatory_padding_len ((int)(1 + sizeof(struct mk_uint64_s)))
 
 	static unsigned char const mk_md4_detail_padding[64] =
 	{
