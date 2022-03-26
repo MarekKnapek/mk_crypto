@@ -1,308 +1,321 @@
 #include "mk_md4.h"
 
-#include "../utils/mk_align.h"
 #include "../utils/mk_assert.h"
-#include "../utils/mk_endian.h"
 #include "../utils/mk_inline.h"
 
-#include <stdint.h> /* uintptr_t */
-#include <string.h> /* memcpy, memset */
+#include "../../mk_int/src/exact/mk_uint_32.h"
+#include "../../mk_int/src/exact/mk_uint_64.h"
+
+#include <stddef.h> /* size_t */
+#include <string.h> /* memcpy */
 
 
-#define mk_md4_detail_block_size (16 * sizeof(uint32_t)) /* 16 32bit words, 64 bytes, 512 bits */
-
-
-static mk_inline uint32_t mk_md4_detail_f(uint32_t x, uint32_t y, uint32_t z)
+static mk_inline void mk_md4_detail_f(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	return (x & y) | ((~x) & z);
-}
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
 
-static mk_inline uint32_t mk_md4_detail_g(uint32_t x, uint32_t y, uint32_t z)
-{
-	return (x & y) | (x & z) | (y & z);
-}
-
-static mk_inline uint32_t mk_md4_detail_h(uint32_t x, uint32_t y, uint32_t z)
-{
-	return x ^ y ^ z;
-}
-
-static mk_inline uint32_t mk_md4_detail_rot(uint32_t x, int s)
-{
-	mk_assert(s > 0);
-	mk_assert(s < 32);
-
-	return (x << s) | (x >> (32 - s));
-}
-
-static mk_inline uint32_t mk_md4_detail_round_1(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, uint32_t const* x)
-{
-	mk_assert(k >= 0);
-	mk_assert(k < 16);
+	mk_assert(out);
 	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
 
-	return mk_md4_detail_rot(a + mk_md4_detail_f(b, c, d) + x[k], s);
+	/* return (x & y) | ((~x) & z); */
+
+	mk_uint32_and(&tmp1, x, y);
+	mk_uint32_cmplmnt(&tmp2, x);
+	mk_uint32_and(&tmp2, &tmp2, z);
+	mk_uint32_or(out, &tmp1, &tmp2);
 }
 
-static mk_inline uint32_t mk_md4_detail_round_2(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, uint32_t const* x)
+static mk_inline void mk_md4_detail_g(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	mk_assert(k >= 0);
-	mk_assert(k < 16);
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
+	struct mk_uint32_s tmp3;
+
+	mk_assert(out);
 	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
 
-	return mk_md4_detail_rot(a + mk_md4_detail_g(b, c, d) + x[k] + 0x5a827999, s);
+	/* return (x & y) | (x & z) | (y & z); */
+
+	mk_uint32_and(&tmp1, x, y);
+	mk_uint32_and(&tmp2, x, z);
+	mk_uint32_and(&tmp3, y, z);
+	mk_uint32_or(&tmp1, &tmp1, &tmp2);
+	mk_uint32_or(out, &tmp1, &tmp3);
 }
 
-static mk_inline uint32_t mk_md4_detail_round_3(uint32_t a, uint32_t b, uint32_t c, uint32_t d, int k, int s, uint32_t const* x)
+static mk_inline void mk_md4_detail_h(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
-	mk_assert(k >= 0);
-	mk_assert(k < 16);
+	struct mk_uint32_s tmp;
+
+	mk_assert(out);
 	mk_assert(x);
+	mk_assert(y);
+	mk_assert(z);
 
-	return mk_md4_detail_rot(a + mk_md4_detail_h(b, c, d) + x[k] + 0x6ed9eba1, s);
+	/* return x ^ y ^ z; */
+
+	mk_uint32_xor(&tmp, x, y);
+	mk_uint32_xor(out, &tmp, z);
 }
 
-static void mk_md4_detail_process_block(struct mk_md4_state_s* self, void const* aligned_data)
+static mk_inline void mk_md4_detail_round_1(struct mk_uint32_s* a, struct mk_uint32_s const* b, struct mk_uint32_s const* c, struct mk_uint32_s const* d, int s, unsigned char const xk[4])
 {
-	uint32_t const* x;
-	uint32_t aa;
-	uint32_t bb;
-	uint32_t cc;
-	uint32_t dd;
-	uint32_t a;
-	uint32_t b;
-	uint32_t c;
-	uint32_t d;
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
+
+	mk_assert(a);
+	mk_assert(b);
+	mk_assert(c);
+	mk_assert(d);
+	mk_assert(s > 0 && s < 32);
+	mk_assert(xk);
+
+	/* a = rotl(a + f(b, c, d) + x[k], s); */
+
+	mk_md4_detail_f(&tmp1, b, c, d);
+	mk_uint32_from_buff_le(&tmp2, xk);
+
+	mk_uint32_add(a, a, &tmp1);
+	mk_uint32_add(a, a, &tmp2);
+	mk_uint32_rotl(a, a, s);
+}
+
+static mk_inline void mk_md4_detail_round_2(struct mk_uint32_s* a, struct mk_uint32_s const* b, struct mk_uint32_s const* c, struct mk_uint32_s const* d, int s, unsigned char const xk[4])
+{
+	static struct mk_uint32_s const mk_md4_detail_round_2_constant = mk_uint32_c(0x5a827999);
+
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
+
+	mk_assert(a);
+	mk_assert(b);
+	mk_assert(c);
+	mk_assert(d);
+	mk_assert(s > 0 && s < 32);
+	mk_assert(xk);
+
+	/* a = rotl(a + g(b, c, d) + x[k] + 0x5a827999, s); */
+
+	mk_md4_detail_g(&tmp1, b, c, d);
+	mk_uint32_from_buff_le(&tmp2, xk);
+
+	mk_uint32_add(a, a, &tmp1);
+	mk_uint32_add(&tmp2, &tmp2, &mk_md4_detail_round_2_constant);
+	mk_uint32_add(a, a, &tmp2);
+	mk_uint32_rotl(a, a, s);
+}
+
+static mk_inline void mk_md4_detail_round_3(struct mk_uint32_s* a, struct mk_uint32_s const* b, struct mk_uint32_s const* c, struct mk_uint32_s const* d, int s, unsigned char const xk[4])
+{
+	static struct mk_uint32_s const mk_md4_detail_round_3_constant = mk_uint32_c(0x6ed9eba1);
+
+	struct mk_uint32_s tmp1;
+	struct mk_uint32_s tmp2;
+
+	mk_assert(a);
+	mk_assert(b);
+	mk_assert(c);
+	mk_assert(d);
+	mk_assert(s > 0 && s < 32);
+	mk_assert(xk);
+
+	/* a = rotl(a + h(b, c, d) + x[k] + 0x6ed9eba1, s); */
+
+	mk_md4_detail_h(&tmp1, b, c, d);
+	mk_uint32_from_buff_le(&tmp2, xk);
+
+	mk_uint32_add(a, a, &tmp1);
+	mk_uint32_add(&tmp2, &tmp2, &mk_md4_detail_round_3_constant);
+	mk_uint32_add(a, a, &tmp2);
+	mk_uint32_rotl(a, a, s);
+}
+
+static mk_inline void mk_md4_detail_process_block(struct mk_md4_state_s* self, unsigned char const msg[64])
+{
+	struct mk_uint32_s h[4];
+	struct mk_uint32_s* a;
+	struct mk_uint32_s* b;
+	struct mk_uint32_s* c;
+	struct mk_uint32_s* d;
+	int i;
 
 	mk_assert(self);
-	mk_assert(aligned_data);
-	mk_assert((((uintptr_t)aligned_data) % mk_alignof(uint32_t)) == 0);
+	mk_assert(msg);
 	
-	x = (uint32_t const*)aligned_data;
+	a = &h[0];
+	b = &h[1];
+	c = &h[2];
+	d = &h[3];
 
-	aa = self->m_abcd[0];
-	bb = self->m_abcd[1];
-	cc = self->m_abcd[2];
-	dd = self->m_abcd[3];
+	for(i = 0; i != 4; ++i)
+	{
+		h[i] = self->m_state[i];
+	}
 
-	a = aa;
-	b = bb;
-	c = cc;
-	d = dd;
+	mk_md4_detail_round_1(a, b, c, d,  3, msg +  0 * 4);
+	mk_md4_detail_round_1(d, a, b, c,  7, msg +  1 * 4);
+	mk_md4_detail_round_1(c, d, a, b, 11, msg +  2 * 4);
+	mk_md4_detail_round_1(b, c, d, a, 19, msg +  3 * 4);
+	mk_md4_detail_round_1(a, b, c, d,  3, msg +  4 * 4);
+	mk_md4_detail_round_1(d, a, b, c,  7, msg +  5 * 4);
+	mk_md4_detail_round_1(c, d, a, b, 11, msg +  6 * 4);
+	mk_md4_detail_round_1(b, c, d, a, 19, msg +  7 * 4);
+	mk_md4_detail_round_1(a, b, c, d,  3, msg +  8 * 4);
+	mk_md4_detail_round_1(d, a, b, c,  7, msg +  9 * 4);
+	mk_md4_detail_round_1(c, d, a, b, 11, msg + 10 * 4);
+	mk_md4_detail_round_1(b, c, d, a, 19, msg + 11 * 4);
+	mk_md4_detail_round_1(a, b, c, d,  3, msg + 12 * 4);
+	mk_md4_detail_round_1(d, a, b, c,  7, msg + 13 * 4);
+	mk_md4_detail_round_1(c, d, a, b, 11, msg + 14 * 4);
+	mk_md4_detail_round_1(b, c, d, a, 19, msg + 15 * 4);
 
-	a = mk_md4_detail_round_1(a, b, c, d,  0,  3, x);
-	d = mk_md4_detail_round_1(d, a, b, c,  1,  7, x);
-	c = mk_md4_detail_round_1(c, d, a, b,  2, 11, x);
-	b = mk_md4_detail_round_1(b, c, d, a,  3, 19, x);
+	mk_md4_detail_round_2(a, b, c, d,  3, msg +  0 * 4);
+	mk_md4_detail_round_2(d, a, b, c,  5, msg +  4 * 4);
+	mk_md4_detail_round_2(c, d, a, b,  9, msg +  8 * 4);
+	mk_md4_detail_round_2(b, c, d, a, 13, msg + 12 * 4);
+	mk_md4_detail_round_2(a, b, c, d,  3, msg +  1 * 4);
+	mk_md4_detail_round_2(d, a, b, c,  5, msg +  5 * 4);
+	mk_md4_detail_round_2(c, d, a, b,  9, msg +  9 * 4);
+	mk_md4_detail_round_2(b, c, d, a, 13, msg + 13 * 4);
+	mk_md4_detail_round_2(a, b, c, d,  3, msg +  2 * 4);
+	mk_md4_detail_round_2(d, a, b, c,  5, msg +  6 * 4);
+	mk_md4_detail_round_2(c, d, a, b,  9, msg + 10 * 4);
+	mk_md4_detail_round_2(b, c, d, a, 13, msg + 14 * 4);
+	mk_md4_detail_round_2(a, b, c, d,  3, msg +  3 * 4);
+	mk_md4_detail_round_2(d, a, b, c,  5, msg +  7 * 4);
+	mk_md4_detail_round_2(c, d, a, b,  9, msg + 11 * 4);
+	mk_md4_detail_round_2(b, c, d, a, 13, msg + 15 * 4);
 
-	a = mk_md4_detail_round_1(a, b, c, d,  4,  3, x);
-	d = mk_md4_detail_round_1(d, a, b, c,  5,  7, x);
-	c = mk_md4_detail_round_1(c, d, a, b,  6, 11, x);
-	b = mk_md4_detail_round_1(b, c, d, a,  7, 19, x);
+	mk_md4_detail_round_3(a, b, c, d,  3, msg +  0 * 4);
+	mk_md4_detail_round_3(d, a, b, c,  9, msg +  8 * 4);
+	mk_md4_detail_round_3(c, d, a, b, 11, msg +  4 * 4);
+	mk_md4_detail_round_3(b, c, d, a, 15, msg + 12 * 4);
+	mk_md4_detail_round_3(a, b, c, d,  3, msg +  2 * 4);
+	mk_md4_detail_round_3(d, a, b, c,  9, msg + 10 * 4);
+	mk_md4_detail_round_3(c, d, a, b, 11, msg +  6 * 4);
+	mk_md4_detail_round_3(b, c, d, a, 15, msg + 14 * 4);
+	mk_md4_detail_round_3(a, b, c, d,  3, msg +  1 * 4);
+	mk_md4_detail_round_3(d, a, b, c,  9, msg +  9 * 4);
+	mk_md4_detail_round_3(c, d, a, b, 11, msg +  5 * 4);
+	mk_md4_detail_round_3(b, c, d, a, 15, msg + 13 * 4);
+	mk_md4_detail_round_3(a, b, c, d,  3, msg +  3 * 4);
+	mk_md4_detail_round_3(d, a, b, c,  9, msg + 11 * 4);
+	mk_md4_detail_round_3(c, d, a, b, 11, msg +  7 * 4);
+	mk_md4_detail_round_3(b, c, d, a, 15, msg + 15 * 4);
 
-	a = mk_md4_detail_round_1(a, b, c, d,  8,  3, x);
-	d = mk_md4_detail_round_1(d, a, b, c,  9,  7, x);
-	c = mk_md4_detail_round_1(c, d, a, b, 10, 11, x);
-	b = mk_md4_detail_round_1(b, c, d, a, 11, 19, x);
-
-	a = mk_md4_detail_round_1(a, b, c, d, 12,  3, x);
-	d = mk_md4_detail_round_1(d, a, b, c, 13,  7, x);
-	c = mk_md4_detail_round_1(c, d, a, b, 14, 11, x);
-	b = mk_md4_detail_round_1(b, c, d, a, 15, 19, x);
-
-	a = mk_md4_detail_round_2(a, b, c, d,  0,  3, x);
-	d = mk_md4_detail_round_2(d, a, b, c,  4,  5, x);
-	c = mk_md4_detail_round_2(c, d, a, b,  8,  9, x);
-	b = mk_md4_detail_round_2(b, c, d, a, 12, 13, x);
-
-	a = mk_md4_detail_round_2(a, b, c, d,  1,  3, x);
-	d = mk_md4_detail_round_2(d, a, b, c,  5,  5, x);
-	c = mk_md4_detail_round_2(c, d, a, b,  9,  9, x);
-	b = mk_md4_detail_round_2(b, c, d, a, 13, 13, x);
-
-	a = mk_md4_detail_round_2(a, b, c, d,  2,  3, x);
-	d = mk_md4_detail_round_2(d, a, b, c,  6,  5, x);
-	c = mk_md4_detail_round_2(c, d, a, b, 10,  9, x);
-	b = mk_md4_detail_round_2(b, c, d, a, 14, 13, x);
-
-	a = mk_md4_detail_round_2(a, b, c, d,  3,  3, x);
-	d = mk_md4_detail_round_2(d, a, b, c,  7,  5, x);
-	c = mk_md4_detail_round_2(c, d, a, b, 11,  9, x);
-	b = mk_md4_detail_round_2(b, c, d, a, 15, 13, x);
-
-	a = mk_md4_detail_round_3(a, b, c, d,  0,  3, x);
-	d = mk_md4_detail_round_3(d, a, b, c,  8,  9, x);
-	c = mk_md4_detail_round_3(c, d, a, b,  4, 11, x);
-	b = mk_md4_detail_round_3(b, c, d, a, 12, 15, x);
-
-	a = mk_md4_detail_round_3(a, b, c, d,  2,  3, x);
-	d = mk_md4_detail_round_3(d, a, b, c, 10,  9, x);
-	c = mk_md4_detail_round_3(c, d, a, b,  6, 11, x);
-	b = mk_md4_detail_round_3(b, c, d, a, 14, 15, x);
-
-	a = mk_md4_detail_round_3(a, b, c, d,  1,  3, x);
-	d = mk_md4_detail_round_3(d, a, b, c,  9,  9, x);
-	c = mk_md4_detail_round_3(c, d, a, b,  5, 11, x);
-	b = mk_md4_detail_round_3(b, c, d, a, 13, 15, x);
-
-	a = mk_md4_detail_round_3(a, b, c, d,  3,  3, x);
-	d = mk_md4_detail_round_3(d, a, b, c, 11,  9, x);
-	c = mk_md4_detail_round_3(c, d, a, b,  7, 11, x);
-	b = mk_md4_detail_round_3(b, c, d, a, 15, 15, x);
-
-	a += aa;
-	b += bb;
-	c += cc;
-	d += dd;
-
-	self->m_abcd[0] = a;
-	self->m_abcd[1] = b;
-	self->m_abcd[2] = c;
-	self->m_abcd[3] = d;
+	for(i = 0; i != 4; ++i)
+	{
+		mk_uint32_add(&self->m_state[i], &self->m_state[i], &h[i]);
+	}
 }
 
 
 void mk_md4_init(struct mk_md4_state_s* self)
 {
+	static struct mk_uint32_s const mk_md4_detail_init[] =
+	{
+		mk_uint32_c(0x67452301),
+		mk_uint32_c(0xefcdab89),
+		mk_uint32_c(0x98badcfe),
+		mk_uint32_c(0x10325476),
+	};
+
 	mk_assert(self);
 
-	self->m_abcd[0] = (uint32_t)0x67452301;
-	self->m_abcd[1] = (uint32_t)0xefcdab89;
-	self->m_abcd[2] = (uint32_t)0x98badcfe;
-	self->m_abcd[3] = (uint32_t)0x10325476;
-	self->m_len = 0;
+	self->m_state[0] = mk_md4_detail_init[0];
+	self->m_state[1] = mk_md4_detail_init[1];
+	self->m_state[2] = mk_md4_detail_init[2];
+	self->m_state[3] = mk_md4_detail_init[3];
+	mk_uint64_zero(&self->m_len);
 }
 
-void mk_md4_append(struct mk_md4_state_s* self, void const* data, size_t len)
+void mk_md4_append(struct mk_md4_state_s* self, void const* msg, size_t msg_len_bytes)
 {
 	unsigned char const* input;
 	size_t remaining;
-	unsigned idx;
-	unsigned capacity;
-	unsigned to_copy;
-	int buffer_full;
+	int idx;
+	int capacity;
+	struct mk_uint64_s len;
 	size_t blocks;
 	size_t i;
 
 	mk_assert(self);
 
-	if(len == 0)
-	{
-		return;
-	}
+	input = (unsigned char const*)msg;
+	remaining = msg_len_bytes;
 
-	input = (unsigned char const*)data;
-	remaining = len;
+	idx = mk_uint64_to_int(&self->m_len) % 64;
+	capacity = 64 - idx;
+	mk_uint64_from_sizet(&len, msg_len_bytes);
+	mk_uint64_add(&self->m_len, &self->m_len, &len);
 
-	idx = self->m_len % mk_md4_detail_block_size;
-	if(idx != 0)
+	if(remaining >= (size_t)capacity)
 	{
-		capacity = mk_md4_detail_block_size - idx;
-		to_copy = remaining < capacity ? (unsigned)remaining : capacity;
-		memcpy(self->m_block.m_bytes + idx, input, to_copy);
-		input += to_copy;
-		remaining -= to_copy;
-		buffer_full = to_copy == capacity;
-		if(buffer_full)
+		if(idx != 0)
 		{
-			mk_md4_detail_process_block(self, self->m_block.m_words);
+			memcpy(self->m_block + idx, input, capacity);
+			mk_md4_detail_process_block(self, self->m_block);
+			input += capacity;
+			remaining -= capacity;
 		}
-	}
-
-	blocks = remaining / mk_md4_detail_block_size;
-#if MK_ENDIAN == MK_ENDIAN_LITTLE
-	if((((uintptr_t)input) % mk_alignof(uint32_t)) == 0)
-	{
+		blocks = remaining / 64;
 		for(i = 0; i != blocks; ++i)
 		{
 			mk_md4_detail_process_block(self, input);
-			input += mk_md4_detail_block_size;
+			input += 64;
 		}
+		remaining -= blocks * 64;
+		idx = 0;
 	}
-	else
-#endif
-	{
-		for(i = 0; i != blocks; ++i)
-		{
-			memcpy(self->m_block.m_bytes, input, mk_md4_detail_block_size);
-			mk_md4_detail_process_block(self, self->m_block.m_words);
-			input += mk_md4_detail_block_size;
-		}
-	}
-	remaining -= blocks * mk_md4_detail_block_size;
-
-	mk_assert(remaining < mk_md4_detail_block_size);
-	if(remaining != 0)
-	{
-		memcpy(self->m_block.m_bytes, input, remaining);
-	}
-
-	self->m_len += len;
+	memcpy(self->m_block + idx, input, remaining);
 }
 
 void mk_md4_finish(struct mk_md4_state_s* self, void* digest)
 {
-	#define s_mandatory_padding_len (1 + sizeof(uint64_t))
-	#define s_worst_case_buff_len (mk_md4_detail_block_size + s_mandatory_padding_len - 1)
+	#define s_mandatory_padding_len (1 + sizeof(struct mk_uint64_s))
 
-	unsigned idx;
-	unsigned capacity;
-	unsigned padding_len;
-	unsigned char buff[s_worst_case_buff_len];
-	uint64_t len;
+	static unsigned char const mk_md4_detail_padding[64] =
+	{
+		0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	};
+
+	unsigned char* output;
+	int idx;
+	int capacity;
+	int zeros_len;
+	struct mk_uint64_s len;
+	unsigned char buff[sizeof(struct mk_uint64_s)];
+	int i;
 
 	mk_assert(self);
 	mk_assert(digest);
 
-	idx = self->m_len % mk_md4_detail_block_size;
-	capacity = mk_md4_detail_block_size - idx;
-	padding_len =
+	output = (unsigned char*)digest;
+	idx = mk_uint64_to_int(&self->m_len) % 64;
+	capacity = 64 - idx;
+	zeros_len =
 		(capacity >= s_mandatory_padding_len) ?
 		(capacity - s_mandatory_padding_len) :
-		(capacity + mk_md4_detail_block_size - s_mandatory_padding_len);
+		(capacity - s_mandatory_padding_len + 64);
 
-	buff[0] = (unsigned char)(1u << 7);
-	memset(buff + 1, 0, padding_len);
-	len = self->m_len * 8;
-#if MK_ENDIAN == MK_ENDIAN_LITTLE
-	memcpy(buff + 1 + padding_len, &len, sizeof(uint64_t));
-#else
-	buff[1 + padding_len + 0] = (unsigned char)((len >> (8 * 0)) & 0xff);
-	buff[1 + padding_len + 1] = (unsigned char)((len >> (8 * 1)) & 0xff);
-	buff[1 + padding_len + 2] = (unsigned char)((len >> (8 * 2)) & 0xff);
-	buff[1 + padding_len + 3] = (unsigned char)((len >> (8 * 3)) & 0xff);
-	buff[1 + padding_len + 4] = (unsigned char)((len >> (8 * 4)) & 0xff);
-	buff[1 + padding_len + 5] = (unsigned char)((len >> (8 * 5)) & 0xff);
-	buff[1 + padding_len + 6] = (unsigned char)((len >> (8 * 6)) & 0xff);
-	buff[1 + padding_len + 7] = (unsigned char)((len >> (8 * 7)) & 0xff);
-#endif
-	mk_md4_append(self, buff, padding_len + s_mandatory_padding_len);
-	mk_assert(self->m_len % mk_md4_detail_block_size == 0);
+	mk_uint64_shl(&len, &self->m_len, 3);
+	mk_uint64_to_buff_le(&len, &buff);
 
-#if MK_ENDIAN == MK_ENDIAN_LITTLE
-	memcpy(digest, self->m_abcd, 16);
-#else
-	((unsigned char*)digest)[ 0] = (unsigned char)((self->m_abcd[0] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[ 1] = (unsigned char)((self->m_abcd[0] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[ 2] = (unsigned char)((self->m_abcd[0] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[ 3] = (unsigned char)((self->m_abcd[0] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[ 4] = (unsigned char)((self->m_abcd[1] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[ 5] = (unsigned char)((self->m_abcd[1] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[ 6] = (unsigned char)((self->m_abcd[1] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[ 7] = (unsigned char)((self->m_abcd[1] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[ 8] = (unsigned char)((self->m_abcd[2] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[ 9] = (unsigned char)((self->m_abcd[2] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[10] = (unsigned char)((self->m_abcd[2] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[11] = (unsigned char)((self->m_abcd[2] >> (8 * 3)) & 0xff);
-	((unsigned char*)digest)[12] = (unsigned char)((self->m_abcd[3] >> (8 * 0)) & 0xff);
-	((unsigned char*)digest)[13] = (unsigned char)((self->m_abcd[3] >> (8 * 1)) & 0xff);
-	((unsigned char*)digest)[14] = (unsigned char)((self->m_abcd[3] >> (8 * 2)) & 0xff);
-	((unsigned char*)digest)[15] = (unsigned char)((self->m_abcd[3] >> (8 * 3)) & 0xff);
-#endif
+	mk_md4_append(self, mk_md4_detail_padding, 1 + zeros_len);
+	mk_md4_append(self, buff, sizeof(struct mk_uint64_s));
+
+	for(i = 0; i != 4; ++i)
+	{
+		mk_uint32_to_buff_le(&self->m_state[i], output + i * sizeof(struct mk_uint32_s));
+	}
 
 	#undef s_mandatory_padding_len
-	#undef s_worst_case_buff_len
 }
-
-
-#undef mk_md4_detail_block_size
