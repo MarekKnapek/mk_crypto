@@ -10,5 +10,3 @@
 #include "../../mk_int/src/exact/mk_uint_32.c"
 #include "../../mk_int/src/exact/mk_uint_64.c"
 #include "../../mk_int/src/exact/mk_uint_128.c"
-
-#include "../../mk_int/src/utils/maybe_initialize.c"
