@@ -19,7 +19,7 @@ struct alg_descr_s
 	char const* m_name;
 	int m_name_len;
 	int m_digest_len_bytes;
-	size_t m_offset;
+	int m_offset;
 	void(*m_init)(void* state);
 	void(*m_append_bytes)(void* state, void const* msg, size_t msg_len_bytes);
 	void(*m_finish)(void* state, void* digest);
