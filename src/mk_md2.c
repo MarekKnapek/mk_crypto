@@ -78,8 +78,8 @@ void mk_md2_append(struct mk_md2_state_s* self, void const* msg, size_t msg_len_
 {
 	unsigned char const* input;
 	size_t remaining;
-	unsigned idx;
-	unsigned capacity;
+	int idx;
+	int capacity;
 	size_t blocks;
 	size_t i;
 
@@ -92,7 +92,7 @@ void mk_md2_append(struct mk_md2_state_s* self, void const* msg, size_t msg_len_
 	capacity = 16 - idx;
 	self->m_idx = (self->m_idx + remaining) & 0xf;
 
-	if(remaining >= capacity)
+	if(remaining >= (size_t)capacity)
 	{
 		if(idx != 0)
 		{
