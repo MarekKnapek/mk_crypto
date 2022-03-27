@@ -227,17 +227,14 @@ static mk_inline void mk_md5_detail_process_block(struct mk_md5_state_s* self, u
 	mk_md5_detail_round_1(d, a, b, c, msg,  1, 12,  2);
 	mk_md5_detail_round_1(c, d, a, b, msg,  2, 17,  3);
 	mk_md5_detail_round_1(b, c, d, a, msg,  3, 22,  4);
-
 	mk_md5_detail_round_1(a, b, c, d, msg,  4,  7,  5);
 	mk_md5_detail_round_1(d, a, b, c, msg,  5, 12,  6);
 	mk_md5_detail_round_1(c, d, a, b, msg,  6, 17,  7);
 	mk_md5_detail_round_1(b, c, d, a, msg,  7, 22,  8);
-
 	mk_md5_detail_round_1(a, b, c, d, msg,  8,  7,  9);
 	mk_md5_detail_round_1(d, a, b, c, msg,  9, 12, 10);
 	mk_md5_detail_round_1(c, d, a, b, msg, 10, 17, 11);
 	mk_md5_detail_round_1(b, c, d, a, msg, 11, 22, 12);
-
 	mk_md5_detail_round_1(a, b, c, d, msg, 12,  7, 13);
 	mk_md5_detail_round_1(d, a, b, c, msg, 13, 12, 14);
 	mk_md5_detail_round_1(c, d, a, b, msg, 14, 17, 15);
@@ -247,17 +244,14 @@ static mk_inline void mk_md5_detail_process_block(struct mk_md5_state_s* self, u
 	mk_md5_detail_round_2(d, a, b, c, msg,  6,  9, 18);
 	mk_md5_detail_round_2(c, d, a, b, msg, 11, 14, 19);
 	mk_md5_detail_round_2(b, c, d, a, msg,  0, 20, 20);
-
 	mk_md5_detail_round_2(a, b, c, d, msg,  5,  5, 21);
 	mk_md5_detail_round_2(d, a, b, c, msg, 10,  9, 22);
 	mk_md5_detail_round_2(c, d, a, b, msg, 15, 14, 23);
 	mk_md5_detail_round_2(b, c, d, a, msg,  4, 20, 24);
-
 	mk_md5_detail_round_2(a, b, c, d, msg,  9,  5, 25);
 	mk_md5_detail_round_2(d, a, b, c, msg, 14,  9, 26);
 	mk_md5_detail_round_2(c, d, a, b, msg,  3, 14, 27);
 	mk_md5_detail_round_2(b, c, d, a, msg,  8, 20, 28);
-
 	mk_md5_detail_round_2(a, b, c, d, msg, 13,  5, 29);
 	mk_md5_detail_round_2(d, a, b, c, msg,  2,  9, 30);
 	mk_md5_detail_round_2(c, d, a, b, msg,  7, 14, 31);
@@ -267,17 +261,14 @@ static mk_inline void mk_md5_detail_process_block(struct mk_md5_state_s* self, u
 	mk_md5_detail_round_3(d, a, b, c, msg,  8, 11, 34);
 	mk_md5_detail_round_3(c, d, a, b, msg, 11, 16, 35);
 	mk_md5_detail_round_3(b, c, d, a, msg, 14, 23, 36);
-
 	mk_md5_detail_round_3(a, b, c, d, msg,  1,  4, 37);
 	mk_md5_detail_round_3(d, a, b, c, msg,  4, 11, 38);
 	mk_md5_detail_round_3(c, d, a, b, msg,  7, 16, 39);
 	mk_md5_detail_round_3(b, c, d, a, msg, 10, 23, 40);
-
 	mk_md5_detail_round_3(a, b, c, d, msg, 13,  4, 41);
 	mk_md5_detail_round_3(d, a, b, c, msg,  0, 11, 42);
 	mk_md5_detail_round_3(c, d, a, b, msg,  3, 16, 43);
 	mk_md5_detail_round_3(b, c, d, a, msg,  6, 23, 44);
-
 	mk_md5_detail_round_3(a, b, c, d, msg,  9,  4, 45);
 	mk_md5_detail_round_3(d, a, b, c, msg, 12, 11, 46);
 	mk_md5_detail_round_3(c, d, a, b, msg, 15, 16, 47);
@@ -287,17 +278,14 @@ static mk_inline void mk_md5_detail_process_block(struct mk_md5_state_s* self, u
 	mk_md5_detail_round_4(d, a, b, c, msg,  7, 10, 50);
 	mk_md5_detail_round_4(c, d, a, b, msg, 14, 15, 51);
 	mk_md5_detail_round_4(b, c, d, a, msg,  5, 21, 52);
-
 	mk_md5_detail_round_4(a, b, c, d, msg, 12,  6, 53);
 	mk_md5_detail_round_4(d, a, b, c, msg,  3, 10, 54);
 	mk_md5_detail_round_4(c, d, a, b, msg, 10, 15, 55);
 	mk_md5_detail_round_4(b, c, d, a, msg,  1, 21, 56);
-
 	mk_md5_detail_round_4(a, b, c, d, msg,  8,  6, 57);
 	mk_md5_detail_round_4(d, a, b, c, msg, 15, 10, 58);
 	mk_md5_detail_round_4(c, d, a, b, msg,  6, 15, 59);
 	mk_md5_detail_round_4(b, c, d, a, msg, 13, 21, 60);
-
 	mk_md5_detail_round_4(a, b, c, d, msg,  4,  6, 61);
 	mk_md5_detail_round_4(d, a, b, c, msg, 11, 10, 62);
 	mk_md5_detail_round_4(c, d, a, b, msg,  2, 15, 63);
