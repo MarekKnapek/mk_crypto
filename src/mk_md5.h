@@ -2,8 +2,10 @@
 #define mk_include_guard_md5
 
 
+#include "../../mk_int/src/exact/mk_uint_32.h"
+#include "../../mk_int/src/exact/mk_uint_64.h"
+
 #include <stddef.h> /* size_t */
-#include <stdint.h> /* uint32_t, uint64_t */ /* C99 */
 
 
 #ifdef __cplusplus
@@ -15,27 +17,14 @@
 
 struct mk_md5_state_s
 {
-	uint32_t m_abcd[4];
-	uint64_t m_len;
-	union
-	{
-		unsigned char m_bytes[16 * sizeof(uint32_t)];
-		uint32_t m_words[16];
-	} m_block;
-};
-
-struct mk_md5_digest_s
-{
-	union
-	{
-		unsigned char m_bytes[4 * sizeof(uint32_t)];
-		uint32_t m_words[4];
-	} m_data; /* 4 32bit words, 16 bytes, 128 bits */
+	struct mk_uint32_s m_state[4];
+	struct mk_uint64_s m_len;
+	unsigned char m_block[64];
 };
 
 
 mk_extern_c void mk_md5_init(struct mk_md5_state_s* self);
-mk_extern_c void mk_md5_append(struct mk_md5_state_s* self, void const* data, size_t len);
+mk_extern_c void mk_md5_append(struct mk_md5_state_s* self, void const* msg, size_t msg_len_bytes);
 mk_extern_c void mk_md5_finish(struct mk_md5_state_s* self, void* digest);
 
 
