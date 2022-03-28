@@ -103,8 +103,8 @@ static mk_inline int mk_hash_file(int argc, char const* const* argv)
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 	for(i = 0; i != alg_count; ++i)
 	{
-			offset = s_alg_descrs[i].m_offset;
-			hash_state = (unsigned char*)&hash_states + offset;
+		offset = s_alg_descrs[i].m_offset;
+		hash_state = (unsigned char*)&hash_states + offset;
 		s_alg_descrs[i].m_init(hash_state);
 	}
 
