@@ -300,7 +300,7 @@ static mk_inline void mk_md5_detail_process_block(struct mk_md5_state_s* self, u
 
 void mk_md5_init(struct mk_md5_state_s* self)
 {
-	static struct mk_uint32_s const mk_md4_detail_init[] =
+	static struct mk_uint32_s const mk_md5_detail_init[] =
 	{
 		mk_uint32_c(0x67452301),
 		mk_uint32_c(0xefcdab89),
@@ -310,10 +310,10 @@ void mk_md5_init(struct mk_md5_state_s* self)
 
 	mk_assert(self);
 
-	self->m_state[0] = mk_md4_detail_init[0];
-	self->m_state[1] = mk_md4_detail_init[1];
-	self->m_state[2] = mk_md4_detail_init[2];
-	self->m_state[3] = mk_md4_detail_init[3];
+	self->m_state[0] = mk_md5_detail_init[0];
+	self->m_state[1] = mk_md5_detail_init[1];
+	self->m_state[2] = mk_md5_detail_init[2];
+	self->m_state[3] = mk_md5_detail_init[3];
 	mk_uint64_zero(&self->m_len);
 }
 

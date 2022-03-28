@@ -17,14 +17,14 @@
 
 struct mk_sha1_state_s
 {
-	struct mk_uint32_s m_abcde[5];
+	struct mk_uint32_s m_state[5];
 	struct mk_uint64_s m_len;
-	struct mk_uint32_s m_block[16];
+	unsigned char m_block[64];
 };
 
 
 mk_extern_c void mk_sha1_init(struct mk_sha1_state_s* self);
-mk_extern_c void mk_sha1_append(struct mk_sha1_state_s* self, void const* data, size_t len);
+mk_extern_c void mk_sha1_append(struct mk_sha1_state_s* self, void const* msg, size_t msg_len_bytes);
 mk_extern_c void mk_sha1_finish(struct mk_sha1_state_s* self, void* digest);
 
 
