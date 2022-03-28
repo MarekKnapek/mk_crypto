@@ -28,7 +28,7 @@ static mk_inline void mk_md2_fuzz_basic(unsigned char const* data, size_t size)
 	mk_md2_append(&mk_md2_state, data, size);
 	mk_md2_finish(&mk_md2_state, &mk_md2_digest);
 
-	test(memcmp(&mk_md2_digest, &mk_win_md2_digest, 16) == 0);
+	test(memcmp(&mk_md2_digest, &mk_win_md2_digest, sizeof(mk_win_md2_digest)) == 0);
 }
 
 static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, size_t size)
@@ -58,7 +58,7 @@ static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, size_t size
 		{
 			mk_win_md2_finish(&mk_win_md2_state, &mk_win_md2_digest);
 			mk_md2_finish(&mk_md2_state, &mk_md2_digest);
-			test(memcmp(&mk_md2_digest, &mk_win_md2_digest, 16) == 0);
+			test(memcmp(&mk_md2_digest, &mk_win_md2_digest, sizeof(mk_win_md2_digest)) == 0);
 			return;
 		}
 		part_len = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
@@ -68,7 +68,7 @@ static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, size_t size
 		{
 			mk_win_md2_finish(&mk_win_md2_state, &mk_win_md2_digest);
 			mk_md2_finish(&mk_md2_state, &mk_md2_digest);
-			test(memcmp(&mk_md2_digest, &mk_win_md2_digest, 16) == 0);
+			test(memcmp(&mk_md2_digest, &mk_win_md2_digest, sizeof(mk_win_md2_digest)) == 0);
 			return;
 		}
 		mk_win_md2_append(&mk_win_md2_state, data, part_len);
@@ -78,7 +78,7 @@ static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, size_t size
 	}
 	mk_win_md2_finish(&mk_win_md2_state, &mk_win_md2_digest);
 	mk_md2_finish(&mk_md2_state, &mk_md2_digest);
-	test(memcmp(&mk_md2_digest, &mk_win_md2_digest, 16) == 0);
+	test(memcmp(&mk_md2_digest, &mk_win_md2_digest, sizeof(mk_win_md2_digest)) == 0);
 }
 
 

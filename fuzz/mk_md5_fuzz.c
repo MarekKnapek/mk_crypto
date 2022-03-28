@@ -28,7 +28,7 @@ static mk_inline void mk_md5_fuzz_basic(unsigned char const* data, size_t size)
 	mk_md5_append(&mk_md5_state, data, size);
 	mk_md5_finish(&mk_md5_state, &mk_md5_digest);
 
-	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, 16) == 0);
+	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
 }
 
 static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, size_t size)
@@ -58,7 +58,7 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, size_t size
 		{
 			mk_win_md5_finish(&mk_win_md5_state, &mk_win_md5_digest);
 			mk_md5_finish(&mk_md5_state, &mk_md5_digest);
-			test(memcmp(&mk_md5_digest, &mk_win_md5_digest, 16) == 0);
+			test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
 			return;
 		}
 		part_len = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
@@ -68,7 +68,7 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, size_t size
 		{
 			mk_win_md5_finish(&mk_win_md5_state, &mk_win_md5_digest);
 			mk_md5_finish(&mk_md5_state, &mk_md5_digest);
-			test(memcmp(&mk_md5_digest, &mk_win_md5_digest, 16) == 0);
+			test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
 			return;
 		}
 		mk_win_md5_append(&mk_win_md5_state, data, part_len);
@@ -78,7 +78,7 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, size_t size
 	}
 	mk_win_md5_finish(&mk_win_md5_state, &mk_win_md5_digest);
 	mk_md5_finish(&mk_md5_state, &mk_md5_digest);
-	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, 16) == 0);
+	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
 }
 
 
