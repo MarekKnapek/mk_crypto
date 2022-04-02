@@ -2,7 +2,12 @@
 #include "../../../src/mk_md4.h"
 #include "../../../src/mk_md5.h"
 #include "../../../src/mk_sha1.h"
-#include "../../../src/mk_sha2.h"
+#include "../../../src/mk_sha2_224.h"
+#include "../../../src/mk_sha2_256.h"
+#include "../../../src/mk_sha2_384.h"
+#include "../../../src/mk_sha2_512.h"
+#include "../../../src/mk_sha2_512224.h"
+#include "../../../src/mk_sha2_512256.h"
 #include "../../../utils/mk_inline.h"
 
 #include <stddef.h> /* size_t offsetof */
@@ -31,12 +36,12 @@ struct hash_states_s
 	struct mk_md4_state_s m_state_md4;
 	struct mk_md5_state_s m_state_md5;
 	struct mk_sha1_state_s m_state_sha1;
-	struct mk_sha2_256_224_state_s m_state_sha2_224;
+	struct mk_sha2_224_state_s m_state_sha2_224;
 	struct mk_sha2_256_state_s m_state_sha2_256;
-	struct mk_sha2_512_384_state_s m_state_sha2_384;
+	struct mk_sha2_384_state_s m_state_sha2_384;
 	struct mk_sha2_512_state_s m_state_sha2_512;
-	struct mk_sha2_512_224_state_s m_state_sha2_512_224;
-	struct mk_sha2_512_256_state_s m_state_sha2_512_256;
+	struct mk_sha2_512224_state_s m_state_sha2_512224;
+	struct mk_sha2_512256_state_s m_state_sha2_512256;
 };
 
 
@@ -53,16 +58,16 @@ static char const s_alg_name_09[] = "SHA-512/256";
 
 static struct alg_descr_s const s_alg_descrs[] =
 {
-	{s_alg_name_00, sizeof(s_alg_name_00) - 1, 16, offsetof(struct hash_states_s, m_state_md2),          (void(*)(void*))&mk_md2_init,          (void(*)(void*, void const*, size_t))&mk_md2_append,          (void(*)(void*, void*))&mk_md2_finish},
-	{s_alg_name_01, sizeof(s_alg_name_01) - 1, 16, offsetof(struct hash_states_s, m_state_md4),          (void(*)(void*))&mk_md4_init,          (void(*)(void*, void const*, size_t))&mk_md4_append,          (void(*)(void*, void*))&mk_md4_finish},
-	{s_alg_name_02, sizeof(s_alg_name_02) - 1, 16, offsetof(struct hash_states_s, m_state_md5),          (void(*)(void*))&mk_md5_init,          (void(*)(void*, void const*, size_t))&mk_md5_append,          (void(*)(void*, void*))&mk_md5_finish},
-	{s_alg_name_03, sizeof(s_alg_name_03) - 1, 20, offsetof(struct hash_states_s, m_state_sha1),         (void(*)(void*))&mk_sha1_init,         (void(*)(void*, void const*, size_t))&mk_sha1_append,         (void(*)(void*, void*))&mk_sha1_finish},
-	{s_alg_name_04, sizeof(s_alg_name_04) - 1, 28, offsetof(struct hash_states_s, m_state_sha2_224),     (void(*)(void*))&mk_sha2_256_224_init, (void(*)(void*, void const*, size_t))&mk_sha2_256_224_append, (void(*)(void*, void*))&mk_sha2_256_224_finish},
-	{s_alg_name_05, sizeof(s_alg_name_05) - 1, 32, offsetof(struct hash_states_s, m_state_sha2_256),     (void(*)(void*))&mk_sha2_256_init,     (void(*)(void*, void const*, size_t))&mk_sha2_256_append,     (void(*)(void*, void*))&mk_sha2_256_finish},
-	{s_alg_name_06, sizeof(s_alg_name_06) - 1, 48, offsetof(struct hash_states_s, m_state_sha2_384),     (void(*)(void*))&mk_sha2_512_384_init, (void(*)(void*, void const*, size_t))&mk_sha2_512_384_append, (void(*)(void*, void*))&mk_sha2_512_384_finish},
-	{s_alg_name_07, sizeof(s_alg_name_07) - 1, 64, offsetof(struct hash_states_s, m_state_sha2_512),     (void(*)(void*))&mk_sha2_512_init,     (void(*)(void*, void const*, size_t))&mk_sha2_512_append,     (void(*)(void*, void*))&mk_sha2_512_finish},
-	{s_alg_name_08, sizeof(s_alg_name_08) - 1, 28, offsetof(struct hash_states_s, m_state_sha2_512_224), (void(*)(void*))&mk_sha2_512_224_init, (void(*)(void*, void const*, size_t))&mk_sha2_512_224_append, (void(*)(void*, void*))&mk_sha2_512_224_finish},
-	{s_alg_name_09, sizeof(s_alg_name_09) - 1, 32, offsetof(struct hash_states_s, m_state_sha2_512_256), (void(*)(void*))&mk_sha2_512_256_init, (void(*)(void*, void const*, size_t))&mk_sha2_512_256_append, (void(*)(void*, void*))&mk_sha2_512_256_finish},
+	{s_alg_name_00, sizeof(s_alg_name_00) - 1, 16, offsetof(struct hash_states_s, m_state_md2),         (void(*)(void*))&mk_md2_init,         (void(*)(void*, void const*, size_t))&mk_md2_append,         (void(*)(void*, void*))&mk_md2_finish},
+	{s_alg_name_01, sizeof(s_alg_name_01) - 1, 16, offsetof(struct hash_states_s, m_state_md4),         (void(*)(void*))&mk_md4_init,         (void(*)(void*, void const*, size_t))&mk_md4_append,         (void(*)(void*, void*))&mk_md4_finish},
+	{s_alg_name_02, sizeof(s_alg_name_02) - 1, 16, offsetof(struct hash_states_s, m_state_md5),         (void(*)(void*))&mk_md5_init,         (void(*)(void*, void const*, size_t))&mk_md5_append,         (void(*)(void*, void*))&mk_md5_finish},
+	{s_alg_name_03, sizeof(s_alg_name_03) - 1, 20, offsetof(struct hash_states_s, m_state_sha1),        (void(*)(void*))&mk_sha1_init,        (void(*)(void*, void const*, size_t))&mk_sha1_append,        (void(*)(void*, void*))&mk_sha1_finish},
+	{s_alg_name_04, sizeof(s_alg_name_04) - 1, 28, offsetof(struct hash_states_s, m_state_sha2_224),    (void(*)(void*))&mk_sha2_224_init,    (void(*)(void*, void const*, size_t))&mk_sha2_224_append,    (void(*)(void*, void*))&mk_sha2_224_finish},
+	{s_alg_name_05, sizeof(s_alg_name_05) - 1, 32, offsetof(struct hash_states_s, m_state_sha2_256),    (void(*)(void*))&mk_sha2_256_init,    (void(*)(void*, void const*, size_t))&mk_sha2_256_append,    (void(*)(void*, void*))&mk_sha2_256_finish},
+	{s_alg_name_06, sizeof(s_alg_name_06) - 1, 48, offsetof(struct hash_states_s, m_state_sha2_384),    (void(*)(void*))&mk_sha2_384_init,    (void(*)(void*, void const*, size_t))&mk_sha2_384_append,    (void(*)(void*, void*))&mk_sha2_384_finish},
+	{s_alg_name_07, sizeof(s_alg_name_07) - 1, 64, offsetof(struct hash_states_s, m_state_sha2_512),    (void(*)(void*))&mk_sha2_512_init,    (void(*)(void*, void const*, size_t))&mk_sha2_512_append,    (void(*)(void*, void*))&mk_sha2_512_finish},
+	{s_alg_name_08, sizeof(s_alg_name_08) - 1, 28, offsetof(struct hash_states_s, m_state_sha2_512224), (void(*)(void*))&mk_sha2_512224_init, (void(*)(void*, void const*, size_t))&mk_sha2_512224_append, (void(*)(void*, void*))&mk_sha2_512224_finish},
+	{s_alg_name_09, sizeof(s_alg_name_09) - 1, 32, offsetof(struct hash_states_s, m_state_sha2_512256), (void(*)(void*))&mk_sha2_512256_init, (void(*)(void*, void const*, size_t))&mk_sha2_512256_append, (void(*)(void*, void*))&mk_sha2_512256_finish},
 };
 
 
@@ -172,7 +177,15 @@ int main(int argc, char const* const* argv)
 #include "../../../src/mk_md4.c"
 #include "../../../src/mk_md5.c"
 #include "../../../src/mk_sha1.c"
-#include "../../../src/mk_sha2.c"
+#include "../../../src/mk_sha2_224.c"
+#include "../../../src/mk_sha2_256.c"
+#include "../../../src/mk_sha2_384.c"
+#include "../../../src/mk_sha2_512.c"
+#include "../../../src/mk_sha2_512224.c"
+#include "../../../src/mk_sha2_512256.c"
+
+#include "../../../src/mk_sha2_detail_256.c"
+#include "../../../src/mk_sha2_detail_512.c"
 
 #include "../../../../mk_int/src/base/mk_uint_base_char.c"
 #include "../../../../mk_int/src/base/mk_uint_base_short.c"
