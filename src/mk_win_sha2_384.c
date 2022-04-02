@@ -1,9 +1,9 @@
-#include "mk_win_md4.h"
+#include "mk_win_sha2_384.h"
 
 #include "../utils/mk_assert.h"
 
 
-void mk_win_md4_init(struct mk_win_md4_state_s* self)
+void mk_win_sha2_384_init(struct mk_win_sha2_384_state_s* self)
 {
 	HCRYPTPROV csp;
 	HCRYPTHASH hash;
@@ -12,17 +12,17 @@ void mk_win_md4_init(struct mk_win_md4_state_s* self)
 
 	mk_assert(self);
 
-	csp_created = CryptAcquireContextW(&csp, NULL, MS_DEF_PROV_W, PROV_RSA_FULL, CRYPT_SILENT);
+	csp_created = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_SILENT);
 	mk_assert(csp_created != FALSE);
 
-	hash_created = CryptCreateHash(csp, CALG_MD4, 0, 0, &hash);
+	hash_created = CryptCreateHash(csp, CALG_SHA_384, 0, 0, &hash);
 	mk_assert(hash_created != FALSE);
 
 	self->m_csp = csp;
 	self->m_hash = hash;
 }
 
-void mk_win_md4_append(struct mk_win_md4_state_s* self, void const* msg, size_t msg_len_bytes)
+void mk_win_sha2_384_append(struct mk_win_sha2_384_state_s* self, void const* msg, size_t msg_len_bytes)
 {
 	BOOL hashed;
 
@@ -33,7 +33,7 @@ void mk_win_md4_append(struct mk_win_md4_state_s* self, void const* msg, size_t 
 	mk_assert(hashed != FALSE);
 }
 
-void mk_win_md4_finish(struct mk_win_md4_state_s* self, void* digest)
+void mk_win_sha2_384_finish(struct mk_win_sha2_384_state_s* self, void* digest)
 {
 	DWORD digest_len;
 	BOOL got_hash;
@@ -43,10 +43,10 @@ void mk_win_md4_finish(struct mk_win_md4_state_s* self, void* digest)
 	mk_assert(self);
 	mk_assert(digest);
 
-	digest_len = 16;
+	digest_len = 48;
 	got_hash = CryptGetHashParam(self->m_hash, HP_HASHVAL, (BYTE*)digest, &digest_len, 0);
 	mk_assert(got_hash != FALSE);
-	mk_assert(digest_len == 16);
+	mk_assert(digest_len == 48);
 
 	hash_freed = CryptDestroyHash(self->m_hash);
 	mk_assert(hash_freed != FALSE);
