@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mk_crypto", "mk_crypto\mk_c
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mk_hash_file", "mk_hash_file\mk_hash_file.vcxproj", "{B4352DA2-52ED-43A3-9289-B019F37A2BC2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mk_win_hash_file", "mk_win_hash_file\mk_win_hash_file.vcxproj", "{795EE925-EC39-41B5-AF3D-70B5EFF061C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{B4352DA2-52ED-43A3-9289-B019F37A2BC2}.Release|x64.Build.0 = Release|x64
 		{B4352DA2-52ED-43A3-9289-B019F37A2BC2}.Release|x86.ActiveCfg = Release|Win32
 		{B4352DA2-52ED-43A3-9289-B019F37A2BC2}.Release|x86.Build.0 = Release|Win32
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Debug|x64.ActiveCfg = Debug|x64
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Debug|x64.Build.0 = Debug|x64
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Debug|x86.ActiveCfg = Debug|Win32
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Debug|x86.Build.0 = Debug|Win32
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Release|x64.ActiveCfg = Release|x64
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Release|x64.Build.0 = Release|x64
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Release|x86.ActiveCfg = Release|Win32
+		{795EE925-EC39-41B5-AF3D-70B5EFF061C5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
