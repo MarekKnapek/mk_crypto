@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <stddef.h> /* NULL */
+#include <stddef.h> /* NULL size_t */
+#include <stdio.h> /* fseek SEEK_END ftell rewind fclose fread feof */
 #include <string.h> /* memcpy */
-#include <stdio.h> /* fclose fread feof */
 
 #include "../../../utils/mk_assert.h"
 #include "../../../utils/mk_inline.h"
@@ -72,6 +72,7 @@ struct thread_param_s
 {
 	HANDLE m_finish_evnt;
 	int m_ret;
+	void* m_callback_context;
 	TCHAR const* m_file_name;
 	struct digests_s* m_digests;
 };
@@ -139,18 +140,22 @@ static mk_inline int mk_get_file_name(TCHAR* file_name, int file_name_len)
 	return 0;
 }
 
-static mk_inline int mk_hash_file(TCHAR const* file_name, struct digests_s* digests)
+static mk_inline int mk_hash_file(TCHAR const* file_name, struct digests_s* digests, void(*callback)(void*, size_t, long), void* callback_context)
 {
 	int alg_count;
 	int i;
 	void* hash_state;
 	struct hash_states_s hash_states;
 	FILE* file;
+	long file_len;
+	size_t read;
+	size_t read_total;
 	unsigned char buff[1024];
 	void* digest;
 
 	mk_assert(file_name);
 	mk_assert(digests);
+	mk_assert(callback);
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 	for(i = 0; i != alg_count; ++i)
@@ -162,14 +167,22 @@ static mk_inline int mk_hash_file(TCHAR const* file_name, struct digests_s* dige
 	file = _tfopen(file_name, TEXT("rb"));
 	mk_check(file);
 
+	mk_check(fseek(file, 0, SEEK_END) == 0);
+	file_len = ftell(file);
+	mk_check(file_len != -1);
+	rewind(file);
+
+	read_total = 0;
 	for(;;)
 	{
-		size_t read = fread(buff, 1, sizeof(buff), file);
+		read = fread(buff, 1, sizeof(buff), file);
 		if(read == 0)
 		{
 			mk_check(feof(file) != 0);
 			break;
 		}
+		read_total += read;
+		callback(callback_context, read_total, file_len);
 		for(i = 0; i != alg_count; ++i)
 		{
 			hash_state = (unsigned char*)&hash_states + s_alg_descrs[i].m_offset;
@@ -186,6 +199,7 @@ static mk_inline int mk_hash_file(TCHAR const* file_name, struct digests_s* dige
 		s_alg_descrs[i].m_finish(hash_state, digest);
 	}
 
+	callback(callback_context, 6, 1);
 	return 0;
 }
 
@@ -244,18 +258,122 @@ static mk_inline int mk_display(struct digests_s const* digests)
 	return 0;
 }
 
-unsigned __stdcall mk_hash_file_thread	(void* param)
+static void mk_callback(void* ctx, size_t total_read, long file_len)
+{
+	HWND* phwnd;
+	HWND hwnd;
+	LONG val;
+	size_t percent;
+
+	mk_assert(ctx);
+
+	phwnd = (HWND*)ctx;
+	val = InterlockedExchange((LONG*)phwnd, 0);
+	hwnd = *(HWND*)&val;
+	if(hwnd == NULL)
+	{
+		return;
+	}
+	val = InterlockedExchange((LONG*)phwnd, val);
+	mk_assert(val == 0);
+
+	percent = (size_t)(((double)total_read / (double)file_len) * 100.0 * 100.0);
+	PostMessage(hwnd, WM_USER + 42, 0, (LPARAM)percent);
+	return;
+}
+
+static unsigned __stdcall mk_hash_file_thread(void* param)
 {
 	struct thread_param_s* thread_param;
 
 	mk_assert(param);
 
 	thread_param = (struct thread_param_s*)param;
-	thread_param->m_ret = mk_hash_file(thread_param->m_file_name, thread_param->m_digests);
+	thread_param->m_ret = mk_hash_file(thread_param->m_file_name, thread_param->m_digests, &mk_callback, thread_param->m_callback_context);
 
 	mk_check(SetEvent(thread_param->m_finish_evnt) != 0);
 
 	return (unsigned)thread_param->m_ret;
+}
+
+static LRESULT CALLBACK mk_gui_wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	TCHAR buff[8];
+
+	if(msg == WM_DESTROY)
+	{
+		PostQuitMessage(0);
+	}
+	else if(msg == WM_USER + 42)
+	{
+		if(lparam == 6 * 100 * 100)
+		{
+			PostMessage(hwnd, WM_CLOSE, 0, 0);
+		}
+		else
+		{
+			_sntprintf(buff, sizeof(buff) / sizeof(buff[0]), TEXT("%.2f %%"), ((double)(size_t)lparam) / 100.0);
+			SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)buff);
+		}
+	}
+
+	return DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+static mk_inline int mk_gui_create(HINSTANCE inst, HWND* out)
+{
+	WNDCLASS wc;
+	ATOM atom;
+	HWND hwnd;
+
+	mk_assert(inst);
+	mk_assert(out);
+
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = &mk_gui_wnd_proc;
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = inst;
+	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = TEXT("mk_win_hash_file");
+
+	atom = RegisterClass(&wc);
+	mk_check(atom != 0);
+
+	hwnd = CreateWindow((LPCTSTR)(size_t)atom, TEXT("mk win hash file, progress..."), WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, inst, NULL);
+	mk_check(hwnd != NULL);
+
+	*out = hwnd;
+	return 0;
+}
+
+static mk_inline int mk_gui_run(void)
+{
+	MSG msg;
+	BOOL got_msg;
+	BOOL translated;
+	LRESULT dispatched;
+
+	for(;;)
+	{
+		got_msg = GetMessage(&msg, NULL, 0, 0);
+		if(got_msg == 0)
+		{
+			mk_check(msg.message == WM_QUIT);
+			break;
+		}
+		translated = TranslateMessage(&msg);
+		(void)translated;
+		dispatched = DispatchMessage(&msg);
+		(void)dispatched;
+	}
+
+	/* TODO: Unregister window class. */
+
+	return 0;
 }
 
 
@@ -266,6 +384,9 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 
 	struct thread_param_s thread_param;
 	unsigned tid;
+	DWORD waited;
+	HWND h;
+	HWND hwnd;
 
 	(void)inst;
 	(void)prev_inst;
@@ -279,8 +400,18 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 
 	thread_param.m_finish_evnt = CreateEvent(NULL, TRUE, FALSE, NULL);
 	mk_check(thread_param.m_finish_evnt != NULL);
+	thread_param.m_callback_context = &hwnd;
 	mk_check(_beginthreadex(NULL, 0, &mk_hash_file_thread, &thread_param, 0, &tid) != 0);
-	mk_check(WaitForSingleObject(thread_param.m_finish_evnt, INFINITE) == WAIT_OBJECT_0);
+	waited = WaitForSingleObject(thread_param.m_finish_evnt, 200);
+	mk_check(waited == WAIT_OBJECT_0 || waited == WAIT_TIMEOUT);
+	if(waited == WAIT_TIMEOUT)
+	{
+		hwnd = NULL;
+		mk_try(mk_gui_create(inst, &h));
+		mk_check(InterlockedExchange((LONG*)&hwnd, *(LONG*)&h) == 0);
+		mk_try(mk_gui_run());
+		mk_check(WaitForSingleObject(thread_param.m_finish_evnt, INFINITE) == WAIT_OBJECT_0);
+	}
 	mk_check(CloseHandle(thread_param.m_finish_evnt) != 0);
 
 	mk_try(mk_display(&digests));
