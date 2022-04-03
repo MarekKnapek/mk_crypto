@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stddef.h> /* NULL */
 #include <string.h> /* memcpy */
-#include <stdio.h> /* fopen fclose fread feof */
+#include <stdio.h> /* fclose fread feof */
 
 #include "../../../utils/mk_assert.h"
 #include "../../../utils/mk_inline.h"
@@ -20,11 +20,12 @@
 #pragma warning(disable:4668) /* warning C4668: 'xxx' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif' */
 #include <windows.h>
 #pragma warning(pop)
-#include <tchar.h>
+#include <tchar.h> /* _tfopen _tWinMain */
 
 
 #define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
+
 
 struct hash_states_s
 {
@@ -201,9 +202,9 @@ static mk_inline int mk_display(struct digests_s const* digests)
 	int alg_count;
 	int longest_name;
 	int i;
-	int j;
-	TCHAR msg[1024];
 	TCHAR* ptr;
+	TCHAR msg[1024];
+	int j;
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 	longest_name = 0;
