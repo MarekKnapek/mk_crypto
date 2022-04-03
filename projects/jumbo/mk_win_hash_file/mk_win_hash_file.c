@@ -21,6 +21,7 @@
 #include <windows.h>
 #pragma warning(pop)
 #include <tchar.h> /* _tfopen _tWinMain */
+#include <process.h>
 
 
 #define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
@@ -65,6 +66,14 @@ struct digests_s
 	unsigned char m_sha2_512[64];
 	unsigned char m_sha2_512224[28];
 	unsigned char m_sha2_512256[32];
+};
+
+struct thread_param_s
+{
+	HANDLE m_finish_evnt;
+	int m_ret;
+	TCHAR const* m_file_name;
+	struct digests_s* m_digests;
 };
 
 
@@ -235,19 +244,45 @@ static mk_inline int mk_display(struct digests_s const* digests)
 	return 0;
 }
 
+unsigned __stdcall mk_hash_file_thread	(void* param)
+{
+	struct thread_param_s* thread_param;
+
+	mk_assert(param);
+
+	thread_param = (struct thread_param_s*)param;
+	thread_param->m_ret = mk_hash_file(thread_param->m_file_name, thread_param->m_digests);
+
+	mk_check(SetEvent(thread_param->m_finish_evnt) != 0);
+
+	return (unsigned)thread_param->m_ret;
+}
+
 
 int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int cmd_show)
 {
 	TCHAR file_name[1 * 1024];
 	struct digests_s digests;
 
+	struct thread_param_s thread_param;
+	unsigned tid;
+
 	(void)inst;
 	(void)prev_inst;
 	(void)cmd_line;
 	(void)cmd_show;
 
+	thread_param.m_file_name = file_name;
+	thread_param.m_digests = &digests;
+
 	mk_try(mk_get_file_name(file_name, sizeof(file_name) / sizeof(file_name[0])));
-	mk_try(mk_hash_file(file_name, &digests));
+
+	thread_param.m_finish_evnt = CreateEvent(NULL, TRUE, FALSE, NULL);
+	mk_check(thread_param.m_finish_evnt != NULL);
+	mk_check(_beginthreadex(NULL, 0, &mk_hash_file_thread, &thread_param, 0, &tid) != 0);
+	mk_check(WaitForSingleObject(thread_param.m_finish_evnt, INFINITE) == WAIT_OBJECT_0);
+	mk_check(CloseHandle(thread_param.m_finish_evnt) != 0);
+
 	mk_try(mk_display(&digests));
 
 	return 0;
