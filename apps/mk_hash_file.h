@@ -30,7 +30,7 @@ mk_extern_c mk_hash_file_handle mk_hash_file_create(char const* file_name);
 mk_extern_c int mk_hash_file_step(mk_hash_file_handle hash_file);
 mk_extern_c int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress);
 mk_extern_c int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result);
-mk_extern_c int mk_hash_file_free(mk_hash_file_handle hash_file);
+mk_extern_c int mk_hash_file_destroy(mk_hash_file_handle hash_file);
 
 
 #undef mk_extern_c

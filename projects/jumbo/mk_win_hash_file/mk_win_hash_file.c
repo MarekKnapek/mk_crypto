@@ -319,7 +319,7 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 
 	mk_try(mk_display(digests));
 
-	mk_try(mk_hash_file_free(hash_file));
+	mk_try(mk_hash_file_destroy(hash_file));
 
 #if defined(UNICODE)
 	free(ptr);

@@ -298,7 +298,7 @@ int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_d
 	return 0;
 }
 
-int mk_hash_file_free(mk_hash_file_handle hash_file)
+int mk_hash_file_destroy(mk_hash_file_handle hash_file)
 {
 	struct mk_hash_file_s* self;
 	
