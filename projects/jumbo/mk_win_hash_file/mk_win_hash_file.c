@@ -211,7 +211,7 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 	hwnd = CreateWindow(wc.lpszClassName, TEXT("mk win hash file, progress..."), WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 300, 30, 0, 0, inst, NULL);
 	mk_check(hwnd != 0);
 
-	prev_time = GetTickCount();
+	prev_time = 0;
 	posted = PostMessage(hwnd, WM_NULL, 0, 0);
 	(void)posted;
 	for(;;)
@@ -232,21 +232,21 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 		}
 		else
 		{
-			step = mk_hash_file_step(hash_file);
-			mk_check(step == 0 || step == 1);
-			if(step == 1)
-			{
-				sent = SendMessage(hwnd, WM_CLOSE, 0, 0);
-				(void)sent;
-			}
 			curr_time = GetTickCount();
-			if(curr_time - prev_time >= 100)
+			if(curr_time - prev_time >= 200)
 			{
 				mk_try(mk_hash_file_get_progress(hash_file, &progress));
 				_stprintf(text, TEXT("%.2f %%"), (float)progress / 100.0f);
 				sent = SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)text);
 				(void)sent;
 				prev_time = curr_time;
+			}
+			step = mk_hash_file_step(hash_file);
+			mk_check(step == 0 || step == 1);
+			if(step == 1)
+			{
+				posted = PostMessage(hwnd, WM_CLOSE, 0, 0);
+				(void)posted;
 			}
 		}
 	}

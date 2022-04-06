@@ -49,9 +49,10 @@ struct alg_descr_s
 
 enum mk_hash_file_state_e
 {
+	mk_hash_file_state_e_open,
 	mk_hash_file_state_e_init,
-	mk_hash_file_state_e_file_open,
-	mk_hash_file_state_e_file_read,
+	mk_hash_file_state_e_read,
+	mk_hash_file_state_e_append,
 	mk_hash_file_state_e_finish,
 	mk_hash_file_state_e_done,
 };
@@ -61,8 +62,11 @@ struct mk_hash_file_s
 	enum mk_hash_file_state_e m_state;
 	char const* m_file_name;
 	FILE* m_file;
-	long m_file_len;
+	unsigned char m_buff[512];
+	int m_buff_len;
 	long m_read;
+	int m_cur_alg;
+	long m_steps_total;
 	struct hash_states_s m_hash_states;
 	struct mk_hash_file_digests_s m_digests;
 };
@@ -87,117 +91,137 @@ static struct alg_descr_s const s_alg_descrs[] =
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
-static mk_inline int mk_hash_file_step_init(struct mk_hash_file_s* self)
+static mk_inline int mk_hash_file_step_open(struct mk_hash_file_s* self)
 {
+	long file_len;
 	int alg_count;
-	int i;
-	void* hash_state;
+	long chunk_count;
 
 	mk_assert(self);
-	mk_assert(self->m_state == mk_hash_file_state_e_init);
-
-	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
-	for(i = 0; i != alg_count; ++i)
-	{
-		hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[i].m_offset;
-		s_alg_descrs[i].m_init(hash_state);
-	}
-
-	self->m_state = mk_hash_file_state_e_file_open;
-	return 0;
-}
-
-static mk_inline int mk_hash_file_step_file_open(struct mk_hash_file_s* self)
-{
-	mk_assert(self);
-	mk_assert(self->m_state == mk_hash_file_state_e_file_open);
+	mk_assert(self->m_state == mk_hash_file_state_e_open);
 	mk_assert(self->m_file_name);
 
 	self->m_file = fopen(self->m_file_name, "rb");
 	mk_check(self->m_file);
 
 	mk_check(fseek(self->m_file, 0, SEEK_END) == 0);
-	self->m_file_len = ftell(self->m_file);
-	mk_check(self->m_file_len != -1);
+	file_len = ftell(self->m_file);
+	mk_check(file_len != -1);
 	rewind(self->m_file);
 
-	self->m_state = mk_hash_file_state_e_file_read;
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	chunk_count = (file_len + (int)sizeof(self->m_buff) - 1) / (int)sizeof(self->m_buff);
+	self->m_steps_total = alg_count + chunk_count * (1 + alg_count) + alg_count;
+
+	self->m_cur_alg = 0;
+	self->m_state = mk_hash_file_state_e_init;
 	return 0;
 }
 
-static mk_inline int mk_hash_file_step_file_read(struct mk_hash_file_s* self)
+static mk_inline int mk_hash_file_step_init(struct mk_hash_file_s* self)
 {
-	size_t read;
-	unsigned char buff[1 * 1024];
-	int alg_count;
-	int i;
 	void* hash_state;
+	int alg_count;
 
 	mk_assert(self);
-	mk_assert(self->m_state == mk_hash_file_state_e_file_read);
+	mk_assert(self->m_state == mk_hash_file_state_e_init);
 
-	read = fread(buff, 1, sizeof(buff), self->m_file);
-	if(read == 0)
+	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
+	s_alg_descrs[self->m_cur_alg].m_init(hash_state);
+	++self->m_cur_alg;
+
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	if(self->m_cur_alg == alg_count)
+	{
+		self->m_state = mk_hash_file_state_e_read;
+	}
+	return 0;
+}
+
+static mk_inline int mk_hash_file_step_read(struct mk_hash_file_s* self)
+{
+	mk_assert(self);
+	mk_assert(self->m_state == mk_hash_file_state_e_read);
+
+	self->m_buff_len = (int)fread(self->m_buff, 1, sizeof(self->m_buff), self->m_file);
+	if(self->m_buff_len == 0)
 	{
 		mk_check(feof(self->m_file) != 0);
 		mk_check(fclose(self->m_file) == 0);
 		self->m_file = NULL;
+		self->m_cur_alg = 0;
 		self->m_state = mk_hash_file_state_e_finish;
 		return 0;
 	}
-	self->m_read += (long)read;
-	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
-	for(i = 0; i != alg_count; ++i)
-	{
-		hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[i].m_offset;
-		s_alg_descrs[i].m_append(hash_state, buff, read);
-	}
+	self->m_read += self->m_buff_len;
 
+	self->m_cur_alg = 0;
+	self->m_state = mk_hash_file_state_e_append;
+	return 0;
+}
+
+static mk_inline int mk_hash_file_step_append(struct mk_hash_file_s* self)
+{
+	void* hash_state;
+	int alg_count;
+
+	mk_assert(self);
+	mk_assert(self->m_state == mk_hash_file_state_e_append);
+
+	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
+	s_alg_descrs[self->m_cur_alg].m_append(hash_state, self->m_buff, self->m_buff_len);
+	++self->m_cur_alg;
+
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	if(self->m_cur_alg == alg_count)
+	{
+		self->m_state = mk_hash_file_state_e_read;
+	}
 	return 0;
 }
 
 static mk_inline int mk_hash_file_step_finish(struct mk_hash_file_s* self)
 {
-	int alg_count;
-	int i;
 	void* hash_state;
 	void* digest;
+	int alg_count;
 
 	mk_assert(self);
 	mk_assert(self->m_state == mk_hash_file_state_e_finish);
 
-	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
-	for(i = 0; i != alg_count; ++i)
-	{
-		hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[i].m_offset;
-		digest = (unsigned char*)&self->m_digests + s_alg_descrs[i].m_digest_offset;
-		s_alg_descrs[i].m_finish(hash_state, digest);
-	}
+	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
+	digest = (unsigned char*)&self->m_digests + s_alg_descrs[self->m_cur_alg].m_digest_offset;
+	s_alg_descrs[self->m_cur_alg].m_finish(hash_state, digest);
+	++self->m_cur_alg;
 
-	self->m_state = mk_hash_file_state_e_done;
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	if(self->m_cur_alg == alg_count)
+	{
+		self->m_state = mk_hash_file_state_e_done;
+	}
 	return 0;
 }
 
 
 mk_hash_file_handle mk_hash_file_create(char const* file_name)
 {
-	struct mk_hash_file_s* hash_file;
+	struct mk_hash_file_s* self;
 
 	mk_assert(file_name);
 
-	hash_file = malloc(sizeof(struct mk_hash_file_s));
-	if(!hash_file)
+	self = malloc(sizeof(struct mk_hash_file_s));
+	if(!self)
 	{
 		return NULL;
 	}
 
-	hash_file->m_state = mk_hash_file_state_e_init;
-	hash_file->m_file_name = file_name;
-	hash_file->m_file = NULL;
-	hash_file->m_file_len = 0;
-	hash_file->m_read = 0;
+	self->m_state = mk_hash_file_state_e_open;
+	self->m_file_name = file_name;
+	self->m_file = NULL;
+	self->m_read = 0;
+	self->m_steps_total = 0;
 
-	return hash_file;
+	return self;
 }
 
 int mk_hash_file_step(mk_hash_file_handle hash_file)
@@ -207,15 +231,16 @@ int mk_hash_file_step(mk_hash_file_handle hash_file)
 	mk_assert(hash_file);
 
 	self = (struct mk_hash_file_s*)hash_file;
-	mk_assert(self->m_state >= mk_hash_file_state_e_init && self->m_state <= mk_hash_file_state_e_done);
+	mk_assert(self->m_state >= mk_hash_file_state_e_open && self->m_state <= mk_hash_file_state_e_done);
 
 	switch(self->m_state)
 	{
-		case mk_hash_file_state_e_init:      mk_try(mk_hash_file_step_init(self));      break;
-		case mk_hash_file_state_e_file_open: mk_try(mk_hash_file_step_file_open(self)); break;
-		case mk_hash_file_state_e_file_read: mk_try(mk_hash_file_step_file_read(self)); break;
-		case mk_hash_file_state_e_finish:    mk_try(mk_hash_file_step_finish(self));    break;
-		case mk_hash_file_state_e_done:      return 1;                                  break;
+		case mk_hash_file_state_e_open:   return mk_hash_file_step_open(self);   break;
+		case mk_hash_file_state_e_init:   return mk_hash_file_step_init(self);   break;
+		case mk_hash_file_state_e_read:   return mk_hash_file_step_read(self);   break;
+		case mk_hash_file_state_e_append: return mk_hash_file_step_append(self); break;
+		case mk_hash_file_state_e_finish: return mk_hash_file_step_finish(self); break;
+		case mk_hash_file_state_e_done:   return 1;                              break;
 	};
 
 	return 0;
@@ -223,20 +248,39 @@ int mk_hash_file_step(mk_hash_file_handle hash_file)
 
 int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress)
 {
-	struct mk_hash_file_s* self;
+	struct mk_hash_file_s const* self;
+	int alg_count;
+	int chunk_count;
+	long steps;
 
 	mk_assert(hash_file);
 	mk_assert(progress);
 
-	self = (struct mk_hash_file_s*)hash_file;
-	if(self->m_file_len == 0)
+	self = (struct mk_hash_file_s const*)hash_file;
+
+	if(self->m_steps_total == 0)
 	{
 		*progress = 0;
 		return 0;
 	}
 
-	*progress = (int)(((self->m_read / 1024) * 100 * 100) / (self->m_file_len / 1024));
+	#define mk_max(a, b) ((a) < (b) ? (b) : (a))
+	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	chunk_count = (self->m_read + (int)sizeof(self->m_buff) - 1) / (int)sizeof(self->m_buff);
+	steps = 0;
+	mk_assert(self->m_state >= mk_hash_file_state_e_init && self->m_state <= mk_hash_file_state_e_done);
+	switch(self->m_state)
+	{
+		case mk_hash_file_state_e_open: mk_assert(0); break;
+		case mk_hash_file_state_e_init: steps = self->m_cur_alg; break;
+		case mk_hash_file_state_e_read: steps = alg_count + chunk_count * (1 + alg_count); break;
+		case mk_hash_file_state_e_append: steps = alg_count + mk_max(0, chunk_count - 1) * (1 + alg_count) + 1 + self->m_cur_alg; break;
+		case mk_hash_file_state_e_finish: steps = alg_count + chunk_count * (1 + alg_count) + self->m_cur_alg; break;
+		case mk_hash_file_state_e_done: steps = self->m_steps_total; break;
+	};
+	#undef mk_max
 
+	*progress = (int)((steps * 100 * 100) / self->m_steps_total);
 	return 0;
 }
 
@@ -251,7 +295,6 @@ int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_d
 	mk_assert(self->m_state == mk_hash_file_state_e_done);
 
 	*result = &self->m_digests;
-
 	return 0;
 }
 
