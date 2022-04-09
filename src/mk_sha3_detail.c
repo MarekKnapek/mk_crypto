@@ -457,6 +457,7 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	mk_sha3_detail_pad(state, idx, block, block_len_bits, domain);
 
 	output = (unsigned char*)digest;
+	output[(digest_len_bits - 1) / CHAR_BIT] = 0;
 	remaining_bits = digest_len_bits;
 	to_copy_bits = remaining_bits < (size_t)block_len_bits ? (int)remaining_bits : block_len_bits;
 	mk_sha3_detail_memcpy_bits(output, 0, state, 0, to_copy_bits);
