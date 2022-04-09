@@ -17,6 +17,12 @@
 #endif
 
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized" /* warning: 'xxx' may be used uninitialized in this function */
+#endif
+
+
 static mk_inline int mk_sha3_detail_string_bit_get(void const* str, int byte_idx, int bit_idx)
 {
 	unsigned char const* input;
@@ -479,6 +485,11 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 		mk_sha3_detail_memcpy_bits(output, 0, state, 0, (int)remaining_bits);
 	}
 }
+
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 
 #if defined(_MSC_VER)
