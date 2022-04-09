@@ -82,20 +82,20 @@ struct mk_hash_file_s
 
 static struct alg_descr_s const s_alg_descrs[] =
 {
-	{16, offsetof(struct hash_states_s, m_state_md2),         offsetof(struct mk_hash_file_digests_s, m_md2),         (init_t)&mk_md2_init,         (append_t)&mk_md2_append,         (finish_t)&mk_md2_finish},
-	{16, offsetof(struct hash_states_s, m_state_md4),         offsetof(struct mk_hash_file_digests_s, m_md4),         (init_t)&mk_md4_init,         (append_t)&mk_md4_append,         (finish_t)&mk_md4_finish},
-	{16, offsetof(struct hash_states_s, m_state_md5),         offsetof(struct mk_hash_file_digests_s, m_md5),         (init_t)&mk_md5_init,         (append_t)&mk_md5_append,         (finish_t)&mk_md5_finish},
-	{20, offsetof(struct hash_states_s, m_state_sha1),        offsetof(struct mk_hash_file_digests_s, m_sha1),        (init_t)&mk_sha1_init,        (append_t)&mk_sha1_append,        (finish_t)&mk_sha1_finish},
-	{28, offsetof(struct hash_states_s, m_state_sha2_224),    offsetof(struct mk_hash_file_digests_s, m_sha2_224),    (init_t)&mk_sha2_224_init,    (append_t)&mk_sha2_224_append,    (finish_t)&mk_sha2_224_finish},
-	{32, offsetof(struct hash_states_s, m_state_sha2_256),    offsetof(struct mk_hash_file_digests_s, m_sha2_256),    (init_t)&mk_sha2_256_init,    (append_t)&mk_sha2_256_append,    (finish_t)&mk_sha2_256_finish},
-	{48, offsetof(struct hash_states_s, m_state_sha2_384),    offsetof(struct mk_hash_file_digests_s, m_sha2_384),    (init_t)&mk_sha2_384_init,    (append_t)&mk_sha2_384_append,    (finish_t)&mk_sha2_384_finish},
-	{64, offsetof(struct hash_states_s, m_state_sha2_512),    offsetof(struct mk_hash_file_digests_s, m_sha2_512),    (init_t)&mk_sha2_512_init,    (append_t)&mk_sha2_512_append,    (finish_t)&mk_sha2_512_finish},
-	{28, offsetof(struct hash_states_s, m_state_sha2_512224), offsetof(struct mk_hash_file_digests_s, m_sha2_512224), (init_t)&mk_sha2_512224_init, (append_t)&mk_sha2_512224_append, (finish_t)&mk_sha2_512224_finish},
-	{32, offsetof(struct hash_states_s, m_state_sha2_512256), offsetof(struct mk_hash_file_digests_s, m_sha2_512256), (init_t)&mk_sha2_512256_init, (append_t)&mk_sha2_512256_append, (finish_t)&mk_sha2_512256_finish},
-	{28, offsetof(struct hash_states_s, m_state_sha3_224),    offsetof(struct mk_hash_file_digests_s, m_sha3_224),    (init_t)&mk_sha3_224_init,    (append_t)&mk_sha3_224_append,    (finish_t)&mk_sha3_224_finish},
-	{32, offsetof(struct hash_states_s, m_state_sha3_256),    offsetof(struct mk_hash_file_digests_s, m_sha3_256),    (init_t)&mk_sha3_256_init,    (append_t)&mk_sha3_256_append,    (finish_t)&mk_sha3_256_finish},
-	{48, offsetof(struct hash_states_s, m_state_sha3_384),    offsetof(struct mk_hash_file_digests_s, m_sha3_384),    (init_t)&mk_sha3_384_init,    (append_t)&mk_sha3_384_append,    (finish_t)&mk_sha3_384_finish},
-	{64, offsetof(struct hash_states_s, m_state_sha3_512),    offsetof(struct mk_hash_file_digests_s, m_sha3_512),    (init_t)&mk_sha3_512_init,    (append_t)&mk_sha3_512_append,    (finish_t)&mk_sha3_512_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md2),         offsetof(struct hash_states_s, m_state_md2),         offsetof(struct mk_hash_file_digests_s, m_md2),         (init_t)&mk_md2_init,         (append_t)&mk_md2_append,         (finish_t)&mk_md2_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md4),         offsetof(struct hash_states_s, m_state_md4),         offsetof(struct mk_hash_file_digests_s, m_md4),         (init_t)&mk_md4_init,         (append_t)&mk_md4_append,         (finish_t)&mk_md4_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md5),         offsetof(struct hash_states_s, m_state_md5),         offsetof(struct mk_hash_file_digests_s, m_md5),         (init_t)&mk_md5_init,         (append_t)&mk_md5_append,         (finish_t)&mk_md5_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha1),        offsetof(struct hash_states_s, m_state_sha1),        offsetof(struct mk_hash_file_digests_s, m_sha1),        (init_t)&mk_sha1_init,        (append_t)&mk_sha1_append,        (finish_t)&mk_sha1_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_224),    offsetof(struct hash_states_s, m_state_sha2_224),    offsetof(struct mk_hash_file_digests_s, m_sha2_224),    (init_t)&mk_sha2_224_init,    (append_t)&mk_sha2_224_append,    (finish_t)&mk_sha2_224_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_256),    offsetof(struct hash_states_s, m_state_sha2_256),    offsetof(struct mk_hash_file_digests_s, m_sha2_256),    (init_t)&mk_sha2_256_init,    (append_t)&mk_sha2_256_append,    (finish_t)&mk_sha2_256_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_384),    offsetof(struct hash_states_s, m_state_sha2_384),    offsetof(struct mk_hash_file_digests_s, m_sha2_384),    (init_t)&mk_sha2_384_init,    (append_t)&mk_sha2_384_append,    (finish_t)&mk_sha2_384_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512),    offsetof(struct hash_states_s, m_state_sha2_512),    offsetof(struct mk_hash_file_digests_s, m_sha2_512),    (init_t)&mk_sha2_512_init,    (append_t)&mk_sha2_512_append,    (finish_t)&mk_sha2_512_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512224), offsetof(struct hash_states_s, m_state_sha2_512224), offsetof(struct mk_hash_file_digests_s, m_sha2_512224), (init_t)&mk_sha2_512224_init, (append_t)&mk_sha2_512224_append, (finish_t)&mk_sha2_512224_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512256), offsetof(struct hash_states_s, m_state_sha2_512256), offsetof(struct mk_hash_file_digests_s, m_sha2_512256), (init_t)&mk_sha2_512256_init, (append_t)&mk_sha2_512256_append, (finish_t)&mk_sha2_512256_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_224),    offsetof(struct hash_states_s, m_state_sha3_224),    offsetof(struct mk_hash_file_digests_s, m_sha3_224),    (init_t)&mk_sha3_224_init,    (append_t)&mk_sha3_224_append,    (finish_t)&mk_sha3_224_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_256),    offsetof(struct hash_states_s, m_state_sha3_256),    offsetof(struct mk_hash_file_digests_s, m_sha3_256),    (init_t)&mk_sha3_256_init,    (append_t)&mk_sha3_256_append,    (finish_t)&mk_sha3_256_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_384),    offsetof(struct hash_states_s, m_state_sha3_384),    offsetof(struct mk_hash_file_digests_s, m_sha3_384),    (init_t)&mk_sha3_384_init,    (append_t)&mk_sha3_384_append,    (finish_t)&mk_sha3_384_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_512),    offsetof(struct hash_states_s, m_state_sha3_512),    offsetof(struct mk_hash_file_digests_s, m_sha3_512),    (init_t)&mk_sha3_512_init,    (append_t)&mk_sha3_512_append,    (finish_t)&mk_sha3_512_finish},
 };
 
 
