@@ -441,7 +441,6 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	unsigned char* output;
 	int remaining_bits;
 	int to_copy_bits;
-	int output_idx;
 	int blocks;
 	int i;
 
@@ -461,7 +460,6 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	mk_sha3_detail_memcpy_bits(output, 0, state, 0, to_copy_bits);
 	remaining_bits -= to_copy_bits;
 	output += to_copy_bits / CHAR_BIT;
-	output_idx = to_copy_bits % CHAR_BIT;
 
 	blocks = remaining_bits / block_len_bits;
 	for(i = 0; i != blocks; ++i)
