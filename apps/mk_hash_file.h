@@ -23,6 +23,10 @@ struct mk_hash_file_digests_s
 	unsigned char m_sha2_512[64];
 	unsigned char m_sha2_512224[28];
 	unsigned char m_sha2_512256[32];
+	unsigned char m_sha3_224[28];
+	unsigned char m_sha3_256[32];
+	unsigned char m_sha3_384[48];
+	unsigned char m_sha3_512[64];
 };
 
 

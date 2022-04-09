@@ -13,7 +13,6 @@
 #pragma warning(pop)
 #include <commdlg.h> /* open file dialog */
 #include <tchar.h> /* _tfopen _tWinMain */
-#include <process.h>
 
 
 #if !defined(UNICODE)
@@ -56,6 +55,10 @@ static TCHAR const s_alg_name_06[] = TEXT("SHA-384");
 static TCHAR const s_alg_name_07[] = TEXT("SHA-512");
 static TCHAR const s_alg_name_08[] = TEXT("SHA-512/224");
 static TCHAR const s_alg_name_09[] = TEXT("SHA-512/256");
+static TCHAR const s_alg_name_10[] = TEXT("SHA3-224");
+static TCHAR const s_alg_name_11[] = TEXT("SHA3-256");
+static TCHAR const s_alg_name_12[] = TEXT("SHA3-384");
+static TCHAR const s_alg_name_13[] = TEXT("SHA3-512");
 
 static struct algorithm_description_s s_algorithm_descriptions[] =
 {
@@ -69,6 +72,10 @@ static struct algorithm_description_s s_algorithm_descriptions[] =
 	{s_alg_name_07, sizeof(s_alg_name_07) / sizeof(s_alg_name_07[0]) - 1, 64, offsetof(struct mk_hash_file_digests_s, m_sha2_512)},
 	{s_alg_name_08, sizeof(s_alg_name_08) / sizeof(s_alg_name_08[0]) - 1, 28, offsetof(struct mk_hash_file_digests_s, m_sha2_512224)},
 	{s_alg_name_09, sizeof(s_alg_name_09) / sizeof(s_alg_name_09[0]) - 1, 32, offsetof(struct mk_hash_file_digests_s, m_sha2_512256)},
+	{s_alg_name_10, sizeof(s_alg_name_10) / sizeof(s_alg_name_10[0]) - 1, 28, offsetof(struct mk_hash_file_digests_s, m_sha3_224)},
+ 	{s_alg_name_11, sizeof(s_alg_name_11) / sizeof(s_alg_name_11[0]) - 1, 32, offsetof(struct mk_hash_file_digests_s, m_sha3_256)},
+ 	{s_alg_name_12, sizeof(s_alg_name_12) / sizeof(s_alg_name_12[0]) - 1, 48, offsetof(struct mk_hash_file_digests_s, m_sha3_384)},
+ 	{s_alg_name_13, sizeof(s_alg_name_13) / sizeof(s_alg_name_13[0]) - 1, 64, offsetof(struct mk_hash_file_digests_s, m_sha3_512)},
 };
 
 
@@ -84,7 +91,7 @@ static mk_inline int mk_get_file_name(TCHAR* file_name, int file_name_len)
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = 0;
 	ofn.hInstance = 0;
-	ofn.lpstrFilter = TEXT("All files (*.*)\0*.*\0");
+	ofn.lpstrFilter = TEXT("All Files (*.*)\0*.*\0");
 	ofn.lpstrCustomFilter = NULL;
 	ofn.nMaxCustFilter = 0;
 	ofn.nFilterIndex = 0;
@@ -131,7 +138,7 @@ static mk_inline int mk_display(struct mk_hash_file_digests_s const* digests)
 	int longest_name;
 	int i;
 	TCHAR* ptr;
-	TCHAR msg[1024];
+	TCHAR msg[1126];
 	int j;
 
 	alg_count = sizeof(s_algorithm_descriptions) / sizeof(s_algorithm_descriptions[0]);
@@ -156,6 +163,7 @@ static mk_inline int mk_display(struct mk_hash_file_digests_s const* digests)
 		*ptr = TEXT('\n');
 		++ptr;
 	}
+	--ptr;
 	*ptr = TEXT('\0');
 
 	MessageBox(0, msg, TEXT("mk hash file"), MB_OK | MB_ICONINFORMATION);
@@ -345,3 +353,8 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 #include "../../../src/mk_sha2_512256.c"
 #include "../../../src/mk_sha2_detail_256.c"
 #include "../../../src/mk_sha2_detail_512.c"
+#include "../../../src/mk_sha3_224.c"
+#include "../../../src/mk_sha3_256.c"
+#include "../../../src/mk_sha3_384.c"
+#include "../../../src/mk_sha3_512.c"
+#include "../../../src/mk_sha3_detail.c"

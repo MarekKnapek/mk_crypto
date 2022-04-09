@@ -43,6 +43,11 @@
     <ClCompile Include="..\..\..\src\mk_sha2_512256.c" />
     <ClCompile Include="..\..\..\src\mk_sha2_detail_256.c" />
     <ClCompile Include="..\..\..\src\mk_sha2_detail_512.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_224.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_256.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_384.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_512.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_detail.c" />
     <ClCompile Include="..\..\..\src\mk_win_md2.c" />
     <ClCompile Include="..\..\..\src\mk_win_md4.c" />
     <ClCompile Include="..\..\..\src\mk_win_md5.c" />
@@ -74,6 +79,11 @@
     <ClInclude Include="..\..\..\src\mk_sha2_512256.h" />
     <ClInclude Include="..\..\..\src\mk_sha2_detail_256.h" />
     <ClInclude Include="..\..\..\src\mk_sha2_detail_512.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_224.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_256.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_384.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_512.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_detail.h" />
     <ClInclude Include="..\..\..\src\mk_win_md2.h" />
     <ClInclude Include="..\..\..\src\mk_win_md4.h" />
     <ClInclude Include="..\..\..\src\mk_win_md5.h" />
