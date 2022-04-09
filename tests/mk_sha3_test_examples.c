@@ -7,6 +7,8 @@
 #include "../src/mk_sha3_256.h"
 #include "../src/mk_sha3_384.h"
 #include "../src/mk_sha3_512.h"
+#include "../src/mk_sha3_shake128.h"
+#include "../src/mk_sha3_shake256.h"
 
 #include <stddef.h> /* size_t offsetof */
 #include <string.h> /* memcmp */
@@ -152,6 +154,22 @@ static mk_inline void mk_string_hex_to_bytes(void const* in, int len, void* out)
 	}
 }
 
+static mk_inline void mk_sha3_shake128_finish_4096(struct mk_sha3_shake128_state_s* self, void* digest)
+{
+	mk_assert(self);
+	mk_assert(digest);
+
+	mk_sha3_shake128_finish(self, digest, 4096);
+}
+
+static mk_inline void mk_sha3_shake256_finish_4096(struct mk_sha3_shake256_state_s* self, void* digest)
+{
+	mk_assert(self);
+	mk_assert(digest);
+
+	mk_sha3_shake256_finish(self, digest, 4096);
+}
+
 
 int mk_sha3_test_examples(void)
 {
@@ -192,10 +210,12 @@ int mk_sha3_test_examples(void)
 
 	static struct alg_descr_s const s_alg_descrs[] =
 	{
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_224), 28, (alg_init_t)&mk_sha3_224_init, (alg_append_t)&mk_sha3_224_append_bits, (alg_finish_t)mk_sha3_224_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_256), 32, (alg_init_t)&mk_sha3_256_init, (alg_append_t)&mk_sha3_256_append_bits, (alg_finish_t)mk_sha3_256_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_384), 48, (alg_init_t)&mk_sha3_384_init, (alg_append_t)&mk_sha3_384_append_bits, (alg_finish_t)mk_sha3_384_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_512), 64, (alg_init_t)&mk_sha3_512_init, (alg_append_t)&mk_sha3_512_append_bits, (alg_finish_t)mk_sha3_512_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_224),            28, (alg_init_t)&mk_sha3_224_init,      (alg_append_t)&mk_sha3_224_append_bits,      (alg_finish_t)mk_sha3_224_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_256),            32, (alg_init_t)&mk_sha3_256_init,      (alg_append_t)&mk_sha3_256_append_bits,      (alg_finish_t)mk_sha3_256_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_384),            48, (alg_init_t)&mk_sha3_384_init,      (alg_append_t)&mk_sha3_384_append_bits,      (alg_finish_t)mk_sha3_384_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_512),            64, (alg_init_t)&mk_sha3_512_init,      (alg_append_t)&mk_sha3_512_append_bits,      (alg_finish_t)mk_sha3_512_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake128_4096), 512, (alg_init_t)&mk_sha3_shake128_init, (alg_append_t)&mk_sha3_shake128_append_bits, (alg_finish_t)mk_sha3_shake128_finish_4096},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake256_4096), 512, (alg_init_t)&mk_sha3_shake256_init, (alg_append_t)&mk_sha3_shake256_append_bits, (alg_finish_t)mk_sha3_shake256_finish_4096},
 	};
 
 	union alg_states_u
@@ -204,6 +224,8 @@ int mk_sha3_test_examples(void)
 		struct mk_sha3_256_state_s m_256;
 		struct mk_sha3_384_state_s m_384;
 		struct mk_sha3_512_state_s m_512;
+		struct mk_sha3_shake128_state_s m_shake128;
+		struct mk_sha3_shake256_state_s m_shake256;
 	};
 
 
@@ -213,9 +235,9 @@ int mk_sha3_test_examples(void)
 	int algs;
 	int j;
 	char const* digest_baseline_str_hex;
-	unsigned char digest_baseline[64];
+	unsigned char digest_baseline[512];
 	union alg_states_u alg_state;
-	unsigned char digest_computed[64];
+	unsigned char digest_computed[512];
 	int compared;
 
 	msgs = sizeof(s_msgs_and_digests) / sizeof(s_msgs_and_digests[0]);

@@ -439,13 +439,13 @@ void mk_sha3_detail_append_bits(struct mk_uint64_s state[5][5], int* idx, unsign
 	*idx += (int)remaining;
 }
 
-void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, enum mk_sha3_detail_domain_e domain, void* digest, int digest_len_bits)
+void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, enum mk_sha3_detail_domain_e domain, void* digest, size_t digest_len_bits)
 {
 	unsigned char* output;
-	int remaining_bits;
+	size_t remaining_bits;
 	int to_copy_bits;
-	int blocks;
-	int i;
+	size_t blocks;
+	size_t i;
 
 	mk_assert(state);
 	mk_assert(idx);
@@ -453,13 +453,12 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	mk_assert(block_len_bits >= 0);
 	mk_assert(domain >= mk_sha3_detail_domain_e_sha3 && domain <= mk_sha3_detail_domain_e_rawshake);
 	mk_assert(digest);
-	mk_assert(digest_len_bits >= 0);
 
 	mk_sha3_detail_pad(state, idx, block, block_len_bits, domain);
 
 	output = (unsigned char*)digest;
 	remaining_bits = digest_len_bits;
-	to_copy_bits = remaining_bits < block_len_bits ? remaining_bits : block_len_bits;
+	to_copy_bits = remaining_bits < (size_t)block_len_bits ? (int)remaining_bits : block_len_bits;
 	mk_sha3_detail_memcpy_bits(output, 0, state, 0, to_copy_bits);
 	remaining_bits -= to_copy_bits;
 	output += to_copy_bits / CHAR_BIT;
@@ -476,7 +475,7 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	if(remaining_bits != 0)
 	{
 		mk_sha3_detail_keccak_f(state);
-		mk_sha3_detail_memcpy_bits(output, 0, state, 0, remaining_bits);
+		mk_sha3_detail_memcpy_bits(output, 0, state, 0, (int)remaining_bits);
 	}
 }
 

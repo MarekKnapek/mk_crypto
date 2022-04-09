@@ -35,6 +35,8 @@ int main(void)
 #include "../../../src/mk_sha3_256.c"
 #include "../../../src/mk_sha3_384.c"
 #include "../../../src/mk_sha3_512.c"
+#include "../../../src/mk_sha3_shake128.c"
+#include "../../../src/mk_sha3_shake256.c"
 
 #include "../../../src/mk_sha3_detail.c"
 

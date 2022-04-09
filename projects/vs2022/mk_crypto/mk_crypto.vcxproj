@@ -48,6 +48,8 @@
     <ClCompile Include="..\..\..\src\mk_sha3_384.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_512.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_detail.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_shake128.c" />
+    <ClCompile Include="..\..\..\src\mk_sha3_shake256.c" />
     <ClCompile Include="..\..\..\src\mk_win_md2.c" />
     <ClCompile Include="..\..\..\src\mk_win_md4.c" />
     <ClCompile Include="..\..\..\src\mk_win_md5.c" />
@@ -84,6 +86,8 @@
     <ClInclude Include="..\..\..\src\mk_sha3_384.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_512.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_detail.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_shake128.h" />
+    <ClInclude Include="..\..\..\src\mk_sha3_shake256.h" />
     <ClInclude Include="..\..\..\src\mk_win_md2.h" />
     <ClInclude Include="..\..\..\src\mk_win_md4.h" />
     <ClInclude Include="..\..\..\src\mk_win_md5.h" />
