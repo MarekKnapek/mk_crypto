@@ -432,8 +432,8 @@ void mk_sha3_detail_append_bits(struct mk_uint64_s state[5][5], int* idx, unsign
 		}
 		*idx = 0;
 	}
-	mk_sha3_detail_memcpy_bits(block, *idx, input, input_idx, remaining);
-	*idx += remaining;
+	mk_sha3_detail_memcpy_bits(block, *idx, input, input_idx, (int)remaining);
+	*idx += (int)remaining;
 }
 
 void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, enum mk_sha3_detail_domain_e domain, void* digest, int digest_len_bits)
