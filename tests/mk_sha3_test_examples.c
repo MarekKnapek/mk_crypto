@@ -320,12 +320,12 @@ int mk_sha3_test_examples(void)
 	msgs = sizeof(s_msgs_and_digests) / sizeof(s_msgs_and_digests[0]);
 	for(i = 0; i != msgs; ++i)
 	{
-		mk_string_bin_to_bytes(s_msgs_and_digests[i].m_msg_str_bin, s_msgs_and_digests[i].m_msg_len, msg_bytes);
+		mk_string_bin_to_bytes(s_msgs_and_digests[i].m_msg_str_bin, s_msgs_and_digests[i].m_msg_len, &msg_bytes);
 		algs = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 		for(j = 0; j != algs; ++j)
 		{
 			digest_baseline_str_hex = *(char const**)((char*)&s_msgs_and_digests[i] + s_alg_descrs[j].m_digest_offset);
-			mk_string_hex_to_bytes(digest_baseline_str_hex, s_alg_descrs[j].m_digest_len * 2, digest_baseline);
+			mk_string_hex_to_bytes(digest_baseline_str_hex, s_alg_descrs[j].m_digest_len * 2, &digest_baseline);
 			s_alg_descrs[j].m_init(&alg_state);
 			s_alg_descrs[j].m_append(&alg_state, &msg_bytes, s_msgs_and_digests[i].m_msg_len);
 			s_alg_descrs[j].m_finish(&alg_state, &digest_computed);
