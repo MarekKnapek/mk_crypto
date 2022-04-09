@@ -12,6 +12,12 @@
 #include <string.h> /* memcmp */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4820) /* warning C4820: 'xxx': 'xxx' bytes padding added after data member 'xxx' */
+#endif
+
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Woverlength-strings" /* warning: string length 'xxx' is greater than the length '509' ISO C90 compilers are required to support */
@@ -114,15 +120,14 @@ static mk_inline int mk_hex_symbol_to_int(char const hs)
 	{
 		if(hs == s_hex_alphabet_lc[i])
 		{
-			return i;
+			break;
 		}
 		if(hs == s_hex_alphabet_uc[i])
 		{
-			return i;
+			break;
 		}
 	}
-	mk_assert(0);
-	return -1;
+	return i;
 }
 
 static mk_inline void mk_string_hex_to_bytes(void const* in, int len, void* out)
@@ -241,4 +246,9 @@ int mk_sha3_test_examples(void)
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
+#endif
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
 #endif
