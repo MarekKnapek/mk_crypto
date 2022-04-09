@@ -95,9 +95,7 @@
     <ClInclude Include="..\..\..\src\mk_win_sha2_256.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha2_384.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha2_512.h" />
-    <ClInclude Include="..\..\..\utils\mk_align.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
-    <ClInclude Include="..\..\..\utils\mk_endian.h" />
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
