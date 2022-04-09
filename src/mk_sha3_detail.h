@@ -23,7 +23,7 @@ enum mk_sha3_detail_domain_e
 
 void mk_sha3_detail_init(struct mk_uint64_s state[5][5], int* idx);
 void mk_sha3_detail_append_bits(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, void const* msg, size_t msg_len_bits);
-void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, enum mk_sha3_detail_domain_e domain, void* digest, size_t digest_len_bytes);
+void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned char* block, int block_len_bits, enum mk_sha3_detail_domain_e domain, void* digest, size_t digest_len_bits);
 
 
 #if defined(__GNUC__)
