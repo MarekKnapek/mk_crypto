@@ -7,18 +7,25 @@
 #include <stdio.h> /* fseek SEEK_END ftell rewind fclose fread feof */
 #include <string.h> /* memcpy */
 
+
+#if defined(_MSC_VER)
 #pragma warning(push)
 #pragma warning(disable:4668) /* warning C4668: 'xxx' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif' */
+#endif
 #include <windows.h>
+#if defined(_MSC_VER)
 #pragma warning(pop)
+#endif
 #include <commdlg.h> /* open file dialog */
 #include <tchar.h> /* _tfopen _tWinMain */
 
 
 #if !defined(UNICODE)
+#if !defined(TEXT)
 typedef char* LPTSTR;
 typedef char const* LPCTSTR;
 #define TEXT(x) x
+#endif
 #define _tWinMain WinMain
 #endif
 
