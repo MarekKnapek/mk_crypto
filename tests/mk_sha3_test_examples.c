@@ -12,6 +12,12 @@
 #include <string.h> /* memcmp */
 
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverlength-strings" /* warning: string length 'xxx' is greater than the length '509' ISO C90 compilers are required to support */
+#endif
+
+
 /* https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values */
 
 
@@ -231,3 +237,8 @@ int mk_sha3_test_examples(void)
 
 #undef mk_check
 #undef mk_try
+
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif

@@ -153,7 +153,7 @@ static mk_inline void mk_sha3_detail_rho(struct mk_uint64_s state[5][5])
 	}
 }
 
-static mk_inline void mk_sha3_detail_pi(struct mk_uint64_s const in[5][5], struct mk_uint64_s out[5][5])
+static mk_inline void mk_sha3_detail_pi(struct mk_uint64_s in[5][5], struct mk_uint64_s out[5][5])
 {
 	int x;
 	int y;
@@ -175,7 +175,7 @@ static mk_inline void mk_sha3_detail_pi(struct mk_uint64_s const in[5][5], struc
 	}
 }
 
-static mk_inline void mk_sha3_detail_chi(struct mk_uint64_s const in[5][5], struct mk_uint64_s out[5][5])
+static mk_inline void mk_sha3_detail_chi(struct mk_uint64_s in[5][5], struct mk_uint64_s out[5][5])
 {
 	int y;
 	int x;
