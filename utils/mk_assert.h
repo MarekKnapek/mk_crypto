@@ -5,7 +5,11 @@
 #ifdef NDEBUG
 
 
+#if defined(_MSC_VER)
 #define mk_assert(x) __assume(x)
+#elif defined (__GNUC__)
+#define mk_assert(x) do{ if(!(x)){ __builtin_unreachable(); } }while(0)
+#endif
 
 
 #else

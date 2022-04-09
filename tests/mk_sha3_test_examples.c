@@ -330,7 +330,6 @@ int mk_sha3_test_examples(void)
 			s_alg_descrs[j].m_append(&alg_state, &msg_bytes, s_msgs_and_digests[i].m_msg_len);
 			s_alg_descrs[j].m_finish(&alg_state, &digest_computed);
 			compared = memcmp(&digest_computed, &digest_baseline, s_alg_descrs[j].m_digest_len);
-			mk_assert(compared == 0);
 			mk_check(compared == 0);
 		}
 	}
@@ -342,7 +341,6 @@ int mk_sha3_test_examples(void)
 		mk_sha3_shake128_init(&alg_state.m_shake128);
 		mk_sha3_shake128_finish(&alg_state.m_shake128, &digest_computed, 4096 - i);
 		compared = memcmp(&digest_computed, &digest_baseline, s_digests_and_lens[i].m_len / 2);
-		mk_assert(compared == 0);
 		mk_check(compared == 0);
 	}
 
