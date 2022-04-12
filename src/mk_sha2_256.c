@@ -10,6 +10,12 @@
 #include <stddef.h> /* size_t */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
+#endif
+
+
 void mk_sha2_256_init(struct mk_sha2_256_state_s* self)
 {
 	static struct mk_uint32_s const mk_sha2_256_detail_init[] =
@@ -51,3 +57,8 @@ void mk_sha2_256_finish(struct mk_sha2_256_state_s* self, void* digest)
 
 	mk_sha2_detail_256_finish(self->m_state, &self->m_len, self->m_block, digest);
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif

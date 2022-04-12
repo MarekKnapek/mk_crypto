@@ -10,6 +10,12 @@
 #include <stddef.h> /* size_t */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
+#endif
+
+
 void mk_sha3_384_init(struct mk_sha3_384_state_s* self)
 {
 	mk_assert(self);
@@ -38,3 +44,8 @@ void mk_sha3_384_finish(struct mk_sha3_384_state_s* self, void* digest)
 
 	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, digest, 384);
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
