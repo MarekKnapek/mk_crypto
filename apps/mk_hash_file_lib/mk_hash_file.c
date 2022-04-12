@@ -5,23 +5,23 @@
 #pragma warning(disable:4464) /* warning C4464: relative include path contains '..' */
 #endif
 
-#include "../src/mk_md2.h"
-#include "../src/mk_md4.h"
-#include "../src/mk_md5.h"
-#include "../src/mk_sha1.h"
-#include "../src/mk_sha2_224.h"
-#include "../src/mk_sha2_256.h"
-#include "../src/mk_sha2_384.h"
-#include "../src/mk_sha2_512.h"
-#include "../src/mk_sha2_512224.h"
-#include "../src/mk_sha2_512256.h"
-#include "../src/mk_sha3_224.h"
-#include "../src/mk_sha3_256.h"
-#include "../src/mk_sha3_384.h"
-#include "../src/mk_sha3_512.h"
+#include "../../src/mk_md2.h"
+#include "../../src/mk_md4.h"
+#include "../../src/mk_md5.h"
+#include "../../src/mk_sha1.h"
+#include "../../src/mk_sha2_224.h"
+#include "../../src/mk_sha2_256.h"
+#include "../../src/mk_sha2_384.h"
+#include "../../src/mk_sha2_512.h"
+#include "../../src/mk_sha2_512224.h"
+#include "../../src/mk_sha2_512256.h"
+#include "../../src/mk_sha3_224.h"
+#include "../../src/mk_sha3_256.h"
+#include "../../src/mk_sha3_384.h"
+#include "../../src/mk_sha3_512.h"
 
-#include "../utils/mk_assert.h"
-#include "../utils/mk_inline.h"
+#include "../../utils/mk_assert.h"
+#include "../../utils/mk_inline.h"
 
 #if defined(_MSC_VER)
 #pragma warning(pop)

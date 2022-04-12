@@ -1,4 +1,4 @@
-#include "../../../apps/mk_hash_file.h"
+#include "../../../apps/mk_hash_file_lib/mk_hash_file.h"
 
 #include "../../../utils/mk_assert.h"
 #include "../../../utils/mk_inline.h"
@@ -344,7 +344,7 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 }
 
 
-#include "../../../apps/mk_hash_file.c"
+#include "../../../apps/mk_hash_file_lib/mk_hash_file.c"
 
 #include "../../../libs/mk_int.c"
 
