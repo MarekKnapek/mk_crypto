@@ -13,7 +13,7 @@
 #pragma warning(disable:4701) /* warning C4701: potentially uninitialized local variable 'xxx' used */
 #pragma warning(disable:4710)/* warning C4710: 'xxx': function not inlined */
 #pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
-#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified6 */
+#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified */
 #endif
 
 
