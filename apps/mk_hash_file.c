@@ -1,5 +1,10 @@
 #include "mk_hash_file.h"
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4464) /* warning C4464: relative include path contains '..' */
+#endif
+
 #include "../src/mk_md2.h"
 #include "../src/mk_md4.h"
 #include "../src/mk_md5.h"
@@ -18,9 +23,23 @@
 #include "../utils/mk_assert.h"
 #include "../utils/mk_inline.h"
 
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+
 #include <stddef.h> /* NULL size_t */
 #include <stdio.h> /* fopen fseek SEEK_END ftell rewind fread feof fclose */
 #include <stdlib.h> /* malloc free */
+
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4820) /* warning C4820: 'xxx': 'xxx' bytes padding added after data member 'xxx' */
+#endif
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic" /* warning: comma at end of enumerator list [-Wpedantic] */
+#endif
 
 
 struct hash_states_s
@@ -99,8 +118,22 @@ static struct alg_descr_s const s_alg_descrs[] =
 };
 
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+
+
 #define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
+
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
+#endif
 
 
 static mk_inline int mk_hash_file_step_open(struct mk_hash_file_s* self)
@@ -327,6 +360,11 @@ int mk_hash_file_destroy(mk_hash_file_handle hash_file)
 
 	return 0;
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 
 #undef mk_check
