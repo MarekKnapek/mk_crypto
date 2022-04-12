@@ -9,6 +9,8 @@
 #define mk_assert(x) __assume(x)
 #elif defined (__GNUC__)
 #define mk_assert(x) do{ if(!(x)){ __builtin_unreachable(); } }while(0)
+#else
+#define mk_assert(x) ((void)0)
 #endif
 
 
