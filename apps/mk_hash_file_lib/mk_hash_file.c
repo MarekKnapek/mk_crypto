@@ -254,7 +254,7 @@ mk_hash_file_handle mk_hash_file_create(char const* file_name)
 
 	mk_assert(file_name);
 
-	self = malloc(sizeof(struct mk_hash_file_s));
+	self = (struct mk_hash_file_s*)malloc(sizeof(struct mk_hash_file_s));
 	if(!self)
 	{
 		return NULL;

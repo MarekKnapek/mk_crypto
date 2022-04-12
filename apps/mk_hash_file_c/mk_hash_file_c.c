@@ -118,7 +118,7 @@ static mk_inline int mk_hash_file_c_make_text(struct mk_hash_file_digests_s cons
 		string_len += s_alg_descrs[i].m_digest_len * 2;
 	}
 
-	string = malloc(string_len);
+	string = (char*)malloc(string_len);
 	mk_check(string);
 
 	ptr = string;
