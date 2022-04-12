@@ -245,5 +245,8 @@
     <ClInclude Include="..\..\..\src\mk_sha3_shake256.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\utils\mk_setup.h">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

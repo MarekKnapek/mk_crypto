@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\..\src\mk_win_sha2_512.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
+    <ClInclude Include="..\..\..\utils\mk_setup.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
