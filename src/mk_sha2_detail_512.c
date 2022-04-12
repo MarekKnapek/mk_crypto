@@ -34,6 +34,12 @@ static struct mk_uint64_s const mk_sha2_detail_512_table[80] =
 };
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified */
+#endif
+
+
 static mk_inline void mk_sha2_detail_512_ch(struct mk_uint64_s* out, struct mk_uint64_s const* x, struct mk_uint64_s const* y, struct mk_uint64_s const* z)
 {
 	struct mk_uint64_s tmp1;
@@ -328,3 +334,8 @@ void mk_sha2_detail_512_finish(struct mk_uint64_s state[8], struct mk_uint128_s*
 
 	#undef s_mandatory_padding_len
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif

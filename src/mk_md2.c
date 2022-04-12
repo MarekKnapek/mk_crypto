@@ -6,6 +6,12 @@
 #include <string.h> /* memcpy memset */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified */
+#endif
+
+
 static unsigned char const s_mk_md2_detail_table[256] =
 {
 	 41,  46,  67, 201, 162, 216, 124,   1,  61,  54,  84, 161, 236, 240,   6,  19,
@@ -134,3 +140,8 @@ void mk_md2_finish(struct mk_md2_state_s* self, void* digest)
 
 	memcpy(digest, self->m_state, 16);
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif

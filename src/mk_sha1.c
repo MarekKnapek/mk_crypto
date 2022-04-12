@@ -10,6 +10,12 @@
 #include <string.h> /* memcpy */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified */
+#endif
+
+
 static mk_inline void mk_sha1_detail_ch(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
 {
 	struct mk_uint32_s tmp1;
@@ -293,3 +299,8 @@ void mk_sha1_finish(struct mk_sha1_state_s* self, void* digest)
 
 	#undef s_mandatory_padding_len
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif

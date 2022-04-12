@@ -10,6 +10,12 @@
 #include <string.h> /* memcpy */
 
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:5045) /* warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified */
+#endif
+
+
 static struct mk_uint32_s const mk_md5_detail_table[64] =
 {
 	mk_uint32_c(0xd76aa478), mk_uint32_c(0xe8c7b756), mk_uint32_c(0x242070db), mk_uint32_c(0xc1bdceee),
@@ -401,3 +407,8 @@ void mk_md5_finish(struct mk_md5_state_s* self, void* digest)
 
 	#undef s_mandatory_padding_len
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
