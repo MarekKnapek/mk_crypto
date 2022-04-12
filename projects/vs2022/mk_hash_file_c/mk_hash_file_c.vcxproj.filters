@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="apps">
+      <UniqueIdentifier>{66ab6714-dd3c-44e6-8caf-1b09108fe75d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apps\mk_hash_file_lib">
+      <UniqueIdentifier>{22439102-5bff-4c71-a7b5-73d3039435f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apps\mk_hash_file_c">
+      <UniqueIdentifier>{7c4199e0-6ac4-4738-99bf-fddde5df5af6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\apps\mk_hash_file_lib\mk_hash_file.c">
+      <Filter>apps\mk_hash_file_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\apps\mk_hash_file_c\mk_hash_file_c.c">
+      <Filter>apps\mk_hash_file_c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\apps\all.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\apps\mk_hash_file_lib\mk_hash_file.h">
+      <Filter>apps\mk_hash_file_lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
