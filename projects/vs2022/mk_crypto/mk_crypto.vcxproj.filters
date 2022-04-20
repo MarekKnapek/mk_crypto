@@ -129,6 +129,9 @@
     <ClCompile Include="..\..\..\src\mk_sha3_shake256.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_aes.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\utils\mk_setup.h">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_aes.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

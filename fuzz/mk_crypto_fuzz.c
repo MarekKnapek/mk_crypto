@@ -9,6 +9,8 @@
 #include "mk_sha2_512224_fuzz.h"
 #include "mk_sha2_512256_fuzz.h"
 
+#include "../src/mk_aes.h"
+
 #include <stddef.h> /* size_t */
 
 
@@ -24,6 +26,8 @@ int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 	mk_sha2_512_fuzz(data, size);
 	mk_sha2_512224_fuzz(data, size);
 	mk_sha2_512256_fuzz(data, size);
+
+	mk_aes_test();
 
 	return 0;
 }
