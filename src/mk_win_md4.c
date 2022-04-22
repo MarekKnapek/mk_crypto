@@ -12,7 +12,7 @@ void mk_win_md4_init(struct mk_win_md4_state_s* self)
 
 	mk_assert(self);
 
-	csp_created = CryptAcquireContextW(&csp, NULL, MS_DEF_PROV_W, PROV_RSA_FULL, CRYPT_SILENT);
+	csp_created = CryptAcquireContextW(&csp, NULL, MS_DEF_PROV_W, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT | CRYPT_SILENT);
 	mk_assert(csp_created != FALSE);
 
 	hash_created = CryptCreateHash(csp, CALG_MD4, 0, 0, &hash);

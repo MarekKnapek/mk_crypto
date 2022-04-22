@@ -12,7 +12,7 @@ void mk_win_sha2_256_init(struct mk_win_sha2_256_state_s* self)
 
 	mk_assert(self);
 
-	csp_created = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_SILENT);
+	csp_created = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_VERIFYCONTEXT | CRYPT_SILENT);
 	mk_assert(csp_created != FALSE);
 
 	hash_created = CryptCreateHash(csp, CALG_SHA_256, 0, 0, &hash);
