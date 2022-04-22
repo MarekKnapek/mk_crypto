@@ -3,7 +3,7 @@
 #include "../utils/mk_assert.h"
 #include "../utils/mk_inline.h"
 
-#include <string.h> /* memcpy */
+#include <string.h> /* memcpy memmove */
 
 
 #define mk_aes_config_small 1
@@ -269,84 +269,74 @@ static mk_inline void mk_aes_detail_add_round_key(unsigned char state[16], unsig
 
 #elif mk_aes_config == mk_aes_config_fast
 
-static mk_inline void mk_aes_detail_key_expansion_128(int nr, unsigned char round_keys[2 * 16])
+static mk_inline void mk_aes_detail_key_expansion_128(int i, unsigned char round_keys[(4 + 1) * 4])
 {
 	unsigned char temp[4];
 
 	mk_assert(round_keys);
 
-	temp[0] = round_keys[16 - 1 * 4 + 0];
-	temp[1] = round_keys[16 - 1 * 4 + 1];
-	temp[2] = round_keys[16 - 1 * 4 + 2];
-	temp[3] = round_keys[16 - 1 * 4 + 3];
-	mk_aes_detail_rot_word(temp);
-	mk_aes_detail_sub_word(temp);
-	mk_aes_detail_xor_word(temp, mk_aes_detail_rcon[nr]);
-
-	round_keys[16 + 0 * 4 + 0] = round_keys[0 + 0 * 4 + 0] ^ temp[0];
-	round_keys[16 + 0 * 4 + 1] = round_keys[0 + 0 * 4 + 1] ^ temp[1];
-	round_keys[16 + 0 * 4 + 2] = round_keys[0 + 0 * 4 + 2] ^ temp[2];
-	round_keys[16 + 0 * 4 + 3] = round_keys[0 + 0 * 4 + 3] ^ temp[3];
-
-	round_keys[16 + 1 * 4 + 0] = round_keys[0 + 1 * 4 + 0] ^ round_keys[16 - 1 * 4 + 1 * 4 + 0];
-	round_keys[16 + 1 * 4 + 1] = round_keys[0 + 1 * 4 + 1] ^ round_keys[16 - 1 * 4 + 1 * 4 + 1];
-	round_keys[16 + 1 * 4 + 2] = round_keys[0 + 1 * 4 + 2] ^ round_keys[16 - 1 * 4 + 1 * 4 + 2];
-	round_keys[16 + 1 * 4 + 3] = round_keys[0 + 1 * 4 + 3] ^ round_keys[16 - 1 * 4 + 1 * 4 + 3];
-
-	round_keys[16 + 2 * 4 + 0] = round_keys[0 + 2 * 4 + 0] ^ round_keys[16 - 1 * 4 + 2 * 4 + 0];
-	round_keys[16 + 2 * 4 + 1] = round_keys[0 + 2 * 4 + 1] ^ round_keys[16 - 1 * 4 + 2 * 4 + 1];
-	round_keys[16 + 2 * 4 + 2] = round_keys[0 + 2 * 4 + 2] ^ round_keys[16 - 1 * 4 + 2 * 4 + 2];
-	round_keys[16 + 2 * 4 + 3] = round_keys[0 + 2 * 4 + 3] ^ round_keys[16 - 1 * 4 + 2 * 4 + 3];
-
-	round_keys[16 + 3 * 4 + 0] = round_keys[0 + 3 * 4 + 0] ^ round_keys[16 - 1 * 4 + 3 * 4 + 0];
-	round_keys[16 + 3 * 4 + 1] = round_keys[0 + 3 * 4 + 1] ^ round_keys[16 - 1 * 4 + 3 * 4 + 1];
-	round_keys[16 + 3 * 4 + 2] = round_keys[0 + 3 * 4 + 2] ^ round_keys[16 - 1 * 4 + 3 * 4 + 2];
-	round_keys[16 + 3 * 4 + 3] = round_keys[0 + 3 * 4 + 3] ^ round_keys[16 - 1 * 4 + 3 * 4 + 3];
+	temp[0] = round_keys[(4 - 1) * 4 + 0];
+	temp[1] = round_keys[(4 - 1) * 4 + 1];
+	temp[2] = round_keys[(4 - 1) * 4 + 2];
+	temp[3] = round_keys[(4 - 1) * 4 + 3];
+	if(i % 4 == 0)
+	{
+		mk_aes_detail_rot_word(temp);
+		mk_aes_detail_sub_word(temp);
+		mk_aes_detail_xor_word(temp, mk_aes_detail_rcon[i / 4 - 1]);
+	}
+	round_keys[4 * 4 + 0] = round_keys[(4 - 4) * 4 + 0] ^ temp[0];
+	round_keys[4 * 4 + 1] = round_keys[(4 - 4) * 4 + 1] ^ temp[1];
+	round_keys[4 * 4 + 2] = round_keys[(4 - 4) * 4 + 2] ^ temp[2];
+	round_keys[4 * 4 + 3] = round_keys[(4 - 4) * 4 + 3] ^ temp[3];
 }
 
-static mk_inline void mk_aes_detail_key_expansion_192(int nr, unsigned char round_keys[2 * 24])
+static mk_inline void mk_aes_detail_key_expansion_192(int i, unsigned char round_keys[(6 + 1) * 4])
 {
 	unsigned char temp[4];
 
 	mk_assert(round_keys);
 
-	temp[0] = round_keys[24 - 1 * 4 + 0];
-	temp[1] = round_keys[24 - 1 * 4 + 1];
-	temp[2] = round_keys[24 - 1 * 4 + 2];
-	temp[3] = round_keys[24 - 1 * 4 + 3];
-	mk_aes_detail_rot_word(temp);
-	mk_aes_detail_sub_word(temp);
-	mk_aes_detail_xor_word(temp, mk_aes_detail_rcon[nr]);
+	temp[0] = round_keys[(6 - 1) * 4 + 0];
+	temp[1] = round_keys[(6 - 1) * 4 + 1];
+	temp[2] = round_keys[(6 - 1) * 4 + 2];
+	temp[3] = round_keys[(6 - 1) * 4 + 3];
+	if(i % 6 == 0)
+	{
+		mk_aes_detail_rot_word(temp);
+		mk_aes_detail_sub_word(temp);
+		mk_aes_detail_xor_word(temp, mk_aes_detail_rcon[i / 6 - 1]);
+	}
+	round_keys[6 * 4 + 0] = round_keys[(6 - 6) * 4 + 0] ^ temp[0];
+	round_keys[6 * 4 + 1] = round_keys[(6 - 6) * 4 + 1] ^ temp[1];
+	round_keys[6 * 4 + 2] = round_keys[(6 - 6) * 4 + 2] ^ temp[2];
+	round_keys[6 * 4 + 3] = round_keys[(6 - 6) * 4 + 3] ^ temp[3];
+}
 
-	round_keys[24 + 0 * 4 + 0] = round_keys[0 + 0 * 4 + 0] ^ temp[0];
-	round_keys[24 + 0 * 4 + 1] = round_keys[0 + 0 * 4 + 1] ^ temp[1];
-	round_keys[24 + 0 * 4 + 2] = round_keys[0 + 0 * 4 + 2] ^ temp[2];
-	round_keys[24 + 0 * 4 + 3] = round_keys[0 + 0 * 4 + 3] ^ temp[3];
+static mk_inline void mk_aes_detail_key_expansion_256(int i, unsigned char round_keys[(8 + 1) * 4])
+{
+	unsigned char temp[4];
 
-	round_keys[24 + 1 * 4 + 0] = round_keys[0 + 1 * 4 + 0] ^ round_keys[24 - 1 * 4 + 1 * 4 + 0];
-	round_keys[24 + 1 * 4 + 1] = round_keys[0 + 1 * 4 + 1] ^ round_keys[24 - 1 * 4 + 1 * 4 + 1];
-	round_keys[24 + 1 * 4 + 2] = round_keys[0 + 1 * 4 + 2] ^ round_keys[24 - 1 * 4 + 1 * 4 + 2];
-	round_keys[24 + 1 * 4 + 3] = round_keys[0 + 1 * 4 + 3] ^ round_keys[24 - 1 * 4 + 1 * 4 + 3];
+	mk_assert(round_keys);
 
-	round_keys[24 + 2 * 4 + 0] = round_keys[0 + 2 * 4 + 0] ^ round_keys[24 - 1 * 4 + 2 * 4 + 0];
-	round_keys[24 + 2 * 4 + 1] = round_keys[0 + 2 * 4 + 1] ^ round_keys[24 - 1 * 4 + 2 * 4 + 1];
-	round_keys[24 + 2 * 4 + 2] = round_keys[0 + 2 * 4 + 2] ^ round_keys[24 - 1 * 4 + 2 * 4 + 2];
-	round_keys[24 + 2 * 4 + 3] = round_keys[0 + 2 * 4 + 3] ^ round_keys[24 - 1 * 4 + 2 * 4 + 3];
-
-	round_keys[24 + 3 * 4 + 0] = round_keys[0 + 3 * 4 + 0] ^ round_keys[24 - 1 * 4 + 3 * 4 + 0];
-	round_keys[24 + 3 * 4 + 1] = round_keys[0 + 3 * 4 + 1] ^ round_keys[24 - 1 * 4 + 3 * 4 + 1];
-	round_keys[24 + 3 * 4 + 2] = round_keys[0 + 3 * 4 + 2] ^ round_keys[24 - 1 * 4 + 3 * 4 + 2];
-	round_keys[24 + 3 * 4 + 3] = round_keys[0 + 3 * 4 + 3] ^ round_keys[24 - 1 * 4 + 3 * 4 + 3];
-
-	round_keys[24 + 4 * 4 + 0] = round_keys[0 + 4 * 4 + 0] ^ round_keys[24 - 1 * 4 + 4 * 4 + 0];
-	round_keys[24 + 4 * 4 + 1] = round_keys[0 + 4 * 4 + 1] ^ round_keys[24 - 1 * 4 + 4 * 4 + 1];
-	round_keys[24 + 4 * 4 + 2] = round_keys[0 + 4 * 4 + 2] ^ round_keys[24 - 1 * 4 + 4 * 4 + 2];
-	round_keys[24 + 4 * 4 + 3] = round_keys[0 + 4 * 4 + 3] ^ round_keys[24 - 1 * 4 + 4 * 4 + 3];
-
-	round_keys[24 + 5 * 4 + 0] = round_keys[0 + 5 * 4 + 0] ^ round_keys[24 - 1 * 4 + 5 * 4 + 0];
-	round_keys[24 + 5 * 4 + 1] = round_keys[0 + 5 * 4 + 1] ^ round_keys[24 - 1 * 4 + 5 * 4 + 1];
-	round_keys[24 + 5 * 4 + 2] = round_keys[0 + 5 * 4 + 2] ^ round_keys[24 - 1 * 4 + 5 * 4 + 2];
-	round_keys[24 + 5 * 4 + 3] = round_keys[0 + 5 * 4 + 3] ^ round_keys[24 - 1 * 4 + 5 * 4 + 3];
+	temp[0] = round_keys[(8 - 1) * 4 + 0];
+	temp[1] = round_keys[(8 - 1) * 4 + 1];
+	temp[2] = round_keys[(8 - 1) * 4 + 2];
+	temp[3] = round_keys[(8 - 1) * 4 + 3];
+	if(i % 8 == 0)
+	{
+		mk_aes_detail_rot_word(temp);
+		mk_aes_detail_sub_word(temp);
+		mk_aes_detail_xor_word(temp, mk_aes_detail_rcon[i / 8 - 1]);
+	}
+	else if(i % 4 == 0)
+	{
+		mk_aes_detail_sub_word(temp);
+	}
+	round_keys[8 * 4 + 0] = round_keys[(8 - 8) * 4 + 0] ^ temp[0];
+	round_keys[8 * 4 + 1] = round_keys[(8 - 8) * 4 + 1] ^ temp[1];
+	round_keys[8 * 4 + 2] = round_keys[(8 - 8) * 4 + 2] ^ temp[2];
+	round_keys[8 * 4 + 3] = round_keys[(8 - 8) * 4 + 3] ^ temp[3];
 }
 
 #endif
@@ -362,8 +352,9 @@ static mk_inline void mk_aes_detail_encrypt_block(enum mk_aes_key_len_e key_len,
 static mk_inline void mk_aes_detail_encrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
-	unsigned char round_keys[2 * 16];
+	unsigned char round_keys[(4 + 4) * 4];
 	int i;
+	int r;
 
 	mk_assert(input);
 	mk_assert(key);
@@ -371,27 +362,38 @@ static mk_inline void mk_aes_detail_encrypt_block_128(unsigned char const input[
 
 	memcpy(state, input, 16);
 	memcpy(round_keys, key, 16);
-	mk_aes_detail_add_round_key(state, key);
-	for(i = 0; i != 9; ++i)
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 4);
+
+	i = 4;
+	for(r = 0; r != 10 - 1; ++r)
 	{
 		mk_aes_detail_sub_bytes(state);
 		mk_aes_detail_shift_rows(state);
 		mk_aes_detail_mix_columns(state);
-		mk_aes_detail_key_expansion_128(i, round_keys);
-		mk_aes_detail_add_round_key(state, round_keys + 16);
-		memcpy(round_keys + 0, round_keys + 16, 16);
+		mk_aes_detail_key_expansion_128(i + 0, round_keys + 0 * 4);
+		mk_aes_detail_key_expansion_128(i + 1, round_keys + 1 * 4);
+		mk_aes_detail_key_expansion_128(i + 2, round_keys + 2 * 4);
+		mk_aes_detail_key_expansion_128(i + 3, round_keys + 3 * 4);
+		mk_aes_detail_add_round_key(state, round_keys + 4 * 4);
+		memcpy(round_keys + 0 * 4, round_keys + 4 * 4, 4 * 4);
+		i += 4;
 	}
 	mk_aes_detail_sub_bytes(state);
 	mk_aes_detail_shift_rows(state);
-	mk_aes_detail_key_expansion_128(9, round_keys);
-	mk_aes_detail_add_round_key(state, round_keys + 16);
+	mk_aes_detail_key_expansion_128(i + 0, round_keys + 0 * 4);
+	mk_aes_detail_key_expansion_128(i + 1, round_keys + 1 * 4);
+	mk_aes_detail_key_expansion_128(i + 2, round_keys + 2 * 4);
+	mk_aes_detail_key_expansion_128(i + 3, round_keys + 3 * 4);
+	mk_aes_detail_add_round_key(state, round_keys + 4 * 4);
+
 	memcpy(output, state, 16);
 }
 
 static mk_inline void mk_aes_detail_decrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
-	unsigned char round_keys[11 * 16];
+	unsigned char round_keys[(10 + 1) * 16];
+	int r;
 	int i;
 
 	mk_assert(input);
@@ -400,28 +402,113 @@ static mk_inline void mk_aes_detail_decrypt_block_128(unsigned char const input[
 
 	memcpy(state, input, 16);
 	memcpy(round_keys, key, 16);
-	for(i = 0; i != 10; ++i)
+	i = 4;
+	for(r = 0; r != 10; ++r)
 	{
-		mk_aes_detail_key_expansion_128(i, round_keys + i * 16);
+		mk_aes_detail_key_expansion_128(i + 0, round_keys + r * 16 + 0 * 4);
+		mk_aes_detail_key_expansion_128(i + 1, round_keys + r * 16 + 1 * 4);
+		mk_aes_detail_key_expansion_128(i + 2, round_keys + r * 16 + 2 * 4);
+		mk_aes_detail_key_expansion_128(i + 3, round_keys + r * 16 + 3 * 4);
+		i += 4;
 	}
 	mk_aes_detail_add_round_key(state, round_keys + 10 * 16);
-	for(i = 0; i != 9; ++i)
+	for(r = 0; r != 10 - 1; ++r)
 	{
 		mk_aes_detail_inv_shift_rows(state);
 		mk_aes_detail_inv_sub_bytes(state);
-		mk_aes_detail_add_round_key(state, round_keys + (9 - i) * 16);
+		mk_aes_detail_add_round_key(state, round_keys + (10 - 1 - r) * 16);
 		mk_aes_detail_inv_mix_columns(state);
 	}
 	mk_aes_detail_inv_shift_rows(state);
 	mk_aes_detail_inv_sub_bytes(state);
-	mk_aes_detail_add_round_key(state, round_keys + 0);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 16);
+	memcpy(output, state, 16);
+}
+
+static mk_inline void mk_aes_detail_decrypt2_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
+{
+	unsigned char state[16];
+	unsigned char round_keys[(10 + 1) * 16];
+	int r;
+
+	mk_assert(input);
+	mk_assert(key);
+	mk_assert(output);
+
+	memcpy(state, input, 16);
+	memcpy(round_keys, key, 16);
+	for(r = 0; r != 10; ++r)
+	{
+		mk_aes_detail_key_expansion_128(r, round_keys + r * 16);
+	}
+	mk_aes_detail_add_round_key(state, round_keys + 10 * 16);
+	for(r = 0; r != 10 - 1; ++r)
+	{
+		mk_aes_detail_inv_shift_rows(state);
+		mk_aes_detail_inv_sub_bytes(state);
+		mk_aes_detail_add_round_key(state, round_keys + (10 - 1 - r) * 16);
+		mk_aes_detail_inv_mix_columns(state);
+	}
+	mk_aes_detail_inv_shift_rows(state);
+	mk_aes_detail_inv_sub_bytes(state);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 16);
 	memcpy(output, state, 16);
 }
 
 static mk_inline void mk_aes_detail_encrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
 {
 	unsigned char state[16];
-	unsigned char round_keys[2 * 24];
+	unsigned char round_keys[(6 + 4) * 4];
+	int i;
+	int r;
+
+	mk_assert(input);
+	mk_assert(key);
+	mk_assert(output);
+
+	memcpy(state, input, 16);
+	memcpy(round_keys, key, 24);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 4);
+
+	i = 6;
+	mk_aes_detail_sub_bytes(state);
+	mk_aes_detail_shift_rows(state);
+	mk_aes_detail_mix_columns(state);
+	mk_aes_detail_key_expansion_192(i + 0, round_keys + 0 * 4);
+	mk_aes_detail_key_expansion_192(i + 1, round_keys + 1 * 4);
+	mk_aes_detail_add_round_key(state, round_keys + 4 * 4);
+	memmove(round_keys + 0 * 4, round_keys + 2 * 4, 6 * 4);
+	i += 2;
+
+	for(r = 0; r != 12 - 1 - 1; ++r)
+	{
+		mk_aes_detail_sub_bytes(state);
+		mk_aes_detail_shift_rows(state);
+		mk_aes_detail_mix_columns(state);
+		mk_aes_detail_key_expansion_192(i + 0, round_keys + 0 * 4);
+		mk_aes_detail_key_expansion_192(i + 1, round_keys + 1 * 4);
+		mk_aes_detail_key_expansion_192(i + 2, round_keys + 2 * 4);
+		mk_aes_detail_key_expansion_192(i + 3, round_keys + 3 * 4);
+		mk_aes_detail_add_round_key(state, round_keys + 6 * 4);
+		memmove(round_keys + 0 * 4, round_keys + 4 * 4, 6 * 4);
+		i += 4;
+	}
+	mk_aes_detail_sub_bytes(state);
+	mk_aes_detail_shift_rows(state);
+	mk_aes_detail_key_expansion_192(i + 0, round_keys + 0 * 4);
+	mk_aes_detail_key_expansion_192(i + 1, round_keys + 1 * 4);
+	mk_aes_detail_key_expansion_192(i + 2, round_keys + 2 * 4);
+	mk_aes_detail_key_expansion_192(i + 3, round_keys + 3 * 4);
+	mk_aes_detail_add_round_key(state, round_keys + 6 * 4);
+
+	memcpy(output, state, 16);
+}
+
+static mk_inline void mk_aes_detail_decrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
+{
+	unsigned char state[16];
+	unsigned char round_keys[(12 + 1) * 16];
+	int r;
 	int i;
 
 	mk_assert(input);
@@ -430,106 +517,486 @@ static mk_inline void mk_aes_detail_encrypt_block_192(unsigned char const input[
 
 	memcpy(state, input, 16);
 	memcpy(round_keys, key, 24);
-	mk_aes_detail_add_round_key(state, key);
-	for(i = 0; i != 9; ++i)
+	i = 6;
+	mk_aes_detail_key_expansion_192(i + 0, round_keys + 0 * 4);
+	mk_aes_detail_key_expansion_192(i + 1, round_keys + 1 * 4);
+	i += 2;
+	for(r = 0; r != 12 - 1; ++r)
+	{
+		mk_aes_detail_key_expansion_192(i + 0, round_keys + 2 * 4 + r * 16 + 0 * 4);
+		mk_aes_detail_key_expansion_192(i + 1, round_keys + 2 * 4 + r * 16 + 1 * 4);
+		mk_aes_detail_key_expansion_192(i + 2, round_keys + 2 * 4 + r * 16 + 2 * 4);
+		mk_aes_detail_key_expansion_192(i + 3, round_keys + 2 * 4 + r * 16 + 3 * 4);
+		i += 4;
+	}
+	mk_aes_detail_add_round_key(state, round_keys + 12 * 16);
+	for(r = 0; r != 12 - 1; ++r)
+	{
+		mk_aes_detail_inv_shift_rows(state);
+		mk_aes_detail_inv_sub_bytes(state);
+		mk_aes_detail_add_round_key(state, round_keys + (12 - 1 - r) * 16);
+		mk_aes_detail_inv_mix_columns(state);
+	}
+	mk_aes_detail_inv_shift_rows(state);
+	mk_aes_detail_inv_sub_bytes(state);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 16);
+	memcpy(output, state, 16);
+}
+
+static mk_inline void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+{
+	unsigned char state[16];
+	unsigned char round_keys[(8 + 4) * 4];
+	int i;
+	int r;
+
+	mk_assert(input);
+	mk_assert(key);
+	mk_assert(output);
+
+	memcpy(state, input, 16);
+	memcpy(round_keys, key, 32);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 4);
+
+	mk_aes_detail_sub_bytes(state);
+	mk_aes_detail_shift_rows(state);
+	mk_aes_detail_mix_columns(state);
+	mk_aes_detail_add_round_key(state, round_keys + 4 * 4);
+
+	i = 8;
+	for(r = 0; r != 14 - 1 - 1; ++r)
 	{
 		mk_aes_detail_sub_bytes(state);
 		mk_aes_detail_shift_rows(state);
 		mk_aes_detail_mix_columns(state);
-		mk_aes_detail_key_expansion_192(i, round_keys);
-		mk_aes_detail_add_round_key(state, round_keys + 16);
-		memcpy(round_keys + 0, round_keys + 16, 16);
+		mk_aes_detail_key_expansion_256(i + 0, round_keys + 0 * 4);
+		mk_aes_detail_key_expansion_256(i + 1, round_keys + 1 * 4);
+		mk_aes_detail_key_expansion_256(i + 2, round_keys + 2 * 4);
+		mk_aes_detail_key_expansion_256(i + 3, round_keys + 3 * 4);
+		mk_aes_detail_add_round_key(state, round_keys + 8 * 4);
+		memmove(round_keys + 0 * 4, round_keys + 4 * 4, 8 * 4);
+		i += 4;
 	}
 	mk_aes_detail_sub_bytes(state);
 	mk_aes_detail_shift_rows(state);
-	mk_aes_detail_key_expansion_128(9, round_keys);
-	mk_aes_detail_add_round_key(state, round_keys + 16);
+	mk_aes_detail_key_expansion_256(i + 0, round_keys + 0 * 4);
+	mk_aes_detail_key_expansion_256(i + 1, round_keys + 1 * 4);
+	mk_aes_detail_key_expansion_256(i + 2, round_keys + 2 * 4);
+	mk_aes_detail_key_expansion_256(i + 3, round_keys + 3 * 4);
+	mk_aes_detail_add_round_key(state, round_keys + 8 * 4);
+
 	memcpy(output, state, 16);
 }
 
-#if 0
-static mk_inline void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+static mk_inline void mk_aes_detail_decrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
 {
-}
-#endif
-#endif
+	unsigned char state[16];
+	unsigned char round_keys[(14 + 1) * 16];
+	int r;
+	int i;
 
-#if 0
-void mk_aes_encrypt(enum mk_aes_key_len_e key_len, unsigned char const* clear_text, unsigned char const* key, unsigned char* cipher_text)
-{
-	mk_assert(key_len == mk_aes_key_len_e_128 || key_len == mk_aes_key_len_e_192 || key_len == mk_aes_key_len_e_256);
-	mk_assert(clear_text);
+	mk_assert(input);
 	mk_assert(key);
-	mk_assert(cipher_text);
+	mk_assert(output);
 
-	switch(key_len)
+	memcpy(state, input, 16);
+	memcpy(round_keys, key, 32);
+	i = 8;
+	for(r = 0; r != 14 - 1; ++r)
 	{
-		case mk_aes_key_len_e_128: mk_aes_encrypt_128(clear_text, key, cipher_text); break;
-		case mk_aes_key_len_e_192: mk_aes_encrypt_192(clear_text, key, cipher_text); break;
-		case mk_aes_key_len_e_256: mk_aes_encrypt_256(clear_text, key, cipher_text); break;
+		mk_aes_detail_key_expansion_256(i + 0, round_keys + r * 16 + 0 * 4);
+		mk_aes_detail_key_expansion_256(i + 1, round_keys + r * 16 + 1 * 4);
+		mk_aes_detail_key_expansion_256(i + 2, round_keys + r * 16 + 2 * 4);
+		mk_aes_detail_key_expansion_256(i + 3, round_keys + r * 16 + 3 * 4);
+		i += 4;
+	}
+	mk_aes_detail_add_round_key(state, round_keys + 14 * 16);
+	for(r = 0; r != 14 - 1; ++r)
+	{
+		mk_aes_detail_inv_shift_rows(state);
+		mk_aes_detail_inv_sub_bytes(state);
+		mk_aes_detail_add_round_key(state, round_keys + (14 - 1 - r) * 16);
+		mk_aes_detail_inv_mix_columns(state);
+	}
+	mk_aes_detail_inv_shift_rows(state);
+	mk_aes_detail_inv_sub_bytes(state);
+	mk_aes_detail_add_round_key(state, round_keys + 0 * 16);
+	memcpy(output, state, 16);
+}
+
+#endif
+
+static mk_inline void mk_aes_detail_mix(unsigned char iv[16], unsigned char const msg[16])
+{
+	int i;
+
+	mk_assert(iv);
+	mk_assert(msg);
+
+	for(i = 0; i != 16; ++i)
+	{
+		iv[i] ^= msg[i];
 	}
 }
 
-void mk_aes_encrypt_128(unsigned char const* clear_text, unsigned char const* key, unsigned char* cipher_text)
+static mk_inline void mk_aes_detail_mix_iv_before(enum mk_aes_operation_mode_e om, unsigned char iv[16], unsigned char const msg[16])
 {
-	mk_assert(clear_text);
-	mk_assert(key);
-	mk_assert(cipher_text);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(iv);
+	mk_assert(msg);
 
-#if mk_aes_config == mk_aes_config_small
-	mk_aes_detail_encrypt(mk_aes_key_len_e_128, clear_text, key, cipher_text);
-#elif mk_aes_config == mk_aes_config_fast
-	mk_aes_detail_encrypt_128(clear_text, key, cipher_text);
-#endif
+	switch(om)
+	{
+		case mk_aes_operation_mode_cbc: mk_aes_detail_mix(iv, msg); break;
+		case mk_aes_operation_mode_ecb: break;
+		case mk_aes_operation_mode_ofb: break;
+		case mk_aes_operation_mode_cfb: break;
+		case mk_aes_operation_mode_cts: break;
+	}
 }
 
-void mk_aes_encrypt_192(unsigned char const* clear_text, unsigned char const* key, unsigned char* cipher_text)
+static mk_inline void mk_aes_detail_mix_iv_after(enum mk_aes_operation_mode_e om, unsigned char iv[16], unsigned char const msg[16])
 {
-	mk_assert(clear_text);
-	mk_assert(key);
-	mk_assert(cipher_text);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(iv);
+	mk_assert(msg);
 
-#if mk_aes_config == mk_aes_config_small
-	mk_aes_detail_encrypt(mk_aes_key_len_e_192, clear_text, key, cipher_text);
-#elif mk_aes_config == mk_aes_config_fast
-	mk_aes_detail_encrypt_192(clear_text, key, cipher_text);
-#endif
+	switch(om)
+	{
+		case mk_aes_operation_mode_cbc: break;
+		case mk_aes_operation_mode_ecb: break;
+		case mk_aes_operation_mode_ofb: break;
+		case mk_aes_operation_mode_cfb: break;
+		case mk_aes_operation_mode_cts: break;
+	}
 }
 
-void mk_aes_encrypt_256(unsigned char const* clear_text, unsigned char const* key, unsigned char* cipher_text)
-{
-	mk_assert(clear_text);
-	mk_assert(key);
-	mk_assert(cipher_text);
 
-#if mk_aes_config == mk_aes_config_small
-	mk_aes_detail_encrypt(mk_aes_key_len_e_256, clear_text, key, cipher_text);
-#elif mk_aes_config == mk_aes_config_fast
-	mk_aes_detail_encrypt_256(clear_text, key, cipher_text);
-#endif
+void mk_aes_128_encrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 16);
 }
-#endif
+
+void mk_aes_128_encrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
+{
+	int i;
+
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+
+	for(i = 0; i != n; ++i)
+	{
+		#if mk_aes_config == mk_aes_config_small
+		#elif mk_aes_config == mk_aes_config_fast
+		mk_aes_detail_mix_iv_before(self->m_om, self->m_iv, msg);
+		mk_aes_detail_encrypt_block_128(msg, self->m_key, out);
+		mk_aes_detail_mix_iv_after(self->m_om, self->m_iv, msg);
+		#endif
+	}
+}
+
+void mk_aes_128_encrypt_finish(struct mk_aes_128_s* self, void const* msg, int msg_len, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(msg_len >= 0 && msg_len < 16);
+	mk_assert(out);
+}
+
+void mk_aes_128_decrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 16);
+}
+
+void mk_aes_128_decrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+}
+
+void mk_aes_128_decrypt_finish(struct mk_aes_128_s* self, void const* msg, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+}
+
+
+void mk_aes_192_encrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 24);
+}
+
+void mk_aes_192_encrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
+{
+	int i;
+
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+
+	for(i = 0; i != n; ++i)
+	{
+		#if mk_aes_config == mk_aes_config_small
+		#elif mk_aes_config == mk_aes_config_fast
+		mk_aes_detail_encrypt_block_192(msg, self->m_key, out);
+		#endif
+	}
+}
+
+void mk_aes_192_encrypt_finish(struct mk_aes_192_s* self, void const* msg, int msg_len, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(msg_len >= 0 && msg_len < 16);
+	mk_assert(out);
+}
+
+void mk_aes_192_decrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 24);
+}
+
+void mk_aes_192_decrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+}
+
+void mk_aes_192_decrypt_finish(struct mk_aes_192_s* self, void const* msg, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+}
+
+
+void mk_aes_256_encrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 32);
+}
+
+void mk_aes_256_encrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
+{
+	int i;
+
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+
+	for(i = 0; i != n; ++i)
+	{
+		#if mk_aes_config == mk_aes_config_small
+		#elif mk_aes_config == mk_aes_config_fast
+		mk_aes_detail_encrypt_block_256(msg, self->m_key, out);
+		#endif
+	}
+}
+
+void mk_aes_256_encrypt_finish(struct mk_aes_256_s* self, void const* msg, int msg_len, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(msg_len >= 0 && msg_len < 16);
+	mk_assert(out);
+}
+
+void mk_aes_256_decrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_om = om;
+	memcpy(self->m_iv, iv, 16);
+	memcpy(self->m_key, key, 32);
+}
+
+void mk_aes_256_decrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(n >= 0);
+	mk_assert(out);
+}
+
+void mk_aes_256_decrypt_finish(struct mk_aes_256_s* self, void const* msg, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+}
+
+
+void mk_aes_encrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(key_len == mk_aes_key_len_128 || key_len == mk_aes_key_len_192 || key_len == mk_aes_key_len_256);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_key_len = key_len;
+	switch(key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_encrypt_init(&self->m_aes_128, om, padding, iv, key); break;
+		case mk_aes_key_len_192: mk_aes_192_encrypt_init(&self->m_aes_192, om, padding, iv, key); break;
+		case mk_aes_key_len_256: mk_aes_256_encrypt_init(&self->m_aes_256, om, padding, iv, key); break;
+	}
+}
+
+void mk_aes_encrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+
+	switch(self->m_key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_encrypt_blocks(&self->m_aes_128, msg, n, out); break;
+		case mk_aes_key_len_192: mk_aes_192_encrypt_blocks(&self->m_aes_192, msg, n, out); break;
+		case mk_aes_key_len_256: mk_aes_256_encrypt_blocks(&self->m_aes_256, msg, n, out); break;
+	}
+}
+
+void mk_aes_encrypt_finish(struct mk_aes_s* self, void const* msg, int msg_len, void* out)
+{
+	mk_assert(self);
+	mk_assert((!msg && !msg_len) || msg);
+	mk_assert(msg_len >= 0 && msg_len <= 16);
+	mk_assert(out);
+
+	switch(self->m_key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_encrypt_finish(&self->m_aes_128, msg, msg_len, out); break;
+		case mk_aes_key_len_192: mk_aes_192_encrypt_finish(&self->m_aes_192, msg, msg_len, out); break;
+		case mk_aes_key_len_256: mk_aes_256_encrypt_finish(&self->m_aes_256, msg, msg_len, out); break;
+	}
+}
+
+void mk_aes_decrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+{
+	mk_assert(self);
+	mk_assert(key_len == mk_aes_key_len_128 || key_len == mk_aes_key_len_192 || key_len == mk_aes_key_len_256);
+	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
+	mk_assert(padding == mk_aes_padding_pkcs7);
+	mk_assert(iv);
+	mk_assert(key);
+
+	self->m_key_len = key_len;
+	switch(key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_decrypt_init(&self->m_aes_128, om, padding, iv, key); break;
+		case mk_aes_key_len_192: mk_aes_192_decrypt_init(&self->m_aes_192, om, padding, iv, key); break;
+		case mk_aes_key_len_256: mk_aes_256_decrypt_init(&self->m_aes_256, om, padding, iv, key); break;
+	}
+}
+
+void mk_aes_decrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+
+	switch(self->m_key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_decrypt_blocks(&self->m_aes_128, msg, n, out); break;
+		case mk_aes_key_len_192: mk_aes_192_decrypt_blocks(&self->m_aes_192, msg, n, out); break;
+		case mk_aes_key_len_256: mk_aes_256_decrypt_blocks(&self->m_aes_256, msg, n, out); break;
+	}
+}
+
+void mk_aes_decrypt_finish(struct mk_aes_s* self, void const* msg, void* out)
+{
+	mk_assert(self);
+	mk_assert(msg);
+	mk_assert(out);
+
+	switch(self->m_key_len)
+	{
+		case mk_aes_key_len_128: mk_aes_128_decrypt_finish(&self->m_aes_128, msg, out); break;
+		case mk_aes_key_len_192: mk_aes_192_decrypt_finish(&self->m_aes_192, msg, out); break;
+		case mk_aes_key_len_256: mk_aes_256_decrypt_finish(&self->m_aes_256, msg, out); break;
+	}
+}
+
+
+void mk_aes_encrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+{
+	struct mk_aes_s mk_aes;
+	int n;
+	int m;
+
+	n = msg_len / 16;
+	m = msg_len % 16;
+	mk_aes_encrypt_init(&mk_aes, key_len, om, padding, iv, key);
+	mk_aes_encrypt_blocks(&mk_aes, msg, n, out);
+	mk_aes_encrypt_finish(&mk_aes, (unsigned char*)msg + n * 16, m, (unsigned char*)out + n * 16);
+}
+
+void mk_aes_decrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+{
+	struct mk_aes_s mk_aes;
+	int n;
+
+	n = msg_len / 16;
+	mk_assert(msg_len % 16 == 0);
+	mk_aes_decrypt_init(&mk_aes, key_len, om, padding, iv, key);
+	mk_aes_decrypt_blocks(&mk_aes, msg, n - 1, out);
+	mk_aes_decrypt_finish(&mk_aes, (unsigned char*)msg + (n - 1) * 16, (unsigned char*)out + (n - 1) * 16);
+}
+
 
 #undef mk_aes_config_small
 #undef mk_aes_config_fast
-
-void mk_aes_test(void)
-{
-	{
-		unsigned char key[] = {0x8e, 0x73, 0xb0, 0xf7, 0xda, 0x0e, 0x64, 0x52, 0xc8, 0x10, 0xf3, 0x2b, 0x80, 0x90, 0x79, 0xe5, 0x62, 0xf8, 0xea, 0xd2, 0x52, 0x2c, 0x6b, 0x7b};
-		unsigned char keys[2*16];
-		memcpy(keys, key, 24);
-		for(int i = 0; i != 12; ++i)
-		{
-			mk_aes_detail_key_expansion_192(i, keys);
-			memcpy(keys, keys+24,24);
-		}
-	}
-	{
-		unsigned char msg[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
-		unsigned char key[] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17};
-		unsigned char out[16];
-		mk_aes_detail_encrypt_block_192(msg, key, out);
-		//mk_aes_detail_decrypt_block_192(out, key, out);
-	}
-}

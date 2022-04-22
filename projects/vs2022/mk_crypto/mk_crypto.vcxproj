@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\fuzz\mk_aes_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
@@ -51,6 +52,7 @@
     <ClCompile Include="..\..\..\src\mk_sha3_detail.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_shake128.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_shake256.c" />
+    <ClCompile Include="..\..\..\src\mk_win_aes.c" />
     <ClCompile Include="..\..\..\src\mk_win_md2.c" />
     <ClCompile Include="..\..\..\src\mk_win_md4.c" />
     <ClCompile Include="..\..\..\src\mk_win_md5.c" />
@@ -60,6 +62,7 @@
     <ClCompile Include="..\..\..\src\mk_win_sha2_512.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
@@ -90,6 +93,7 @@
     <ClInclude Include="..\..\..\src\mk_sha3_detail.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_shake256.h" />
+    <ClInclude Include="..\..\..\src\mk_win_aes.h" />
     <ClInclude Include="..\..\..\src\mk_win_md2.h" />
     <ClInclude Include="..\..\..\src\mk_win_md4.h" />
     <ClInclude Include="..\..\..\src\mk_win_md5.h" />

@@ -6,16 +6,29 @@
 #endif
 
 
+#include "../../../tests/mk_aes_test_examples.h"
 #include "../../../tests/mk_sha3_test_examples.h"
 
 #include <stdio.h> /* printf */
+
+
+#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
+#define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
+
+
+int test_all(void)
+{
+	mk_try(mk_sha3_test_examples());
+	mk_try(mk_aes_test_examples());
+	return 0;
+}
 
 
 int main(void)
 {
 	int tested;
 
-	tested = mk_sha3_test_examples();
+	tested = test_all();
 	if(tested == 0)
 	{
 		printf("Success!\n");
@@ -29,6 +42,11 @@ int main(void)
 }
 
 
+#undef mk_check
+#undef mk_try
+
+
+#include "../../../tests/mk_aes_test_examples.c"
 #include "../../../tests/mk_sha3_test_examples.c"
 
 #include "../../../src/mk_sha3_224.c"
