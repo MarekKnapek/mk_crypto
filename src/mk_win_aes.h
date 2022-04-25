@@ -2,8 +2,6 @@
 #define mk_include_guard_win_aes
 
 
-#include <stddef.h> /* size_t */
-
 #include <windows.h>
 #include <wincrypt.h>
 
@@ -51,8 +49,8 @@ mk_extern_c void mk_win_aes_decrypt_init(struct mk_win_aes_s* self, enum mk_win_
 mk_extern_c void mk_win_aes_decrypt_blocks(struct mk_win_aes_s* self, void const* msg, int n, void* out);
 mk_extern_c void mk_win_aes_decrypt_finish(struct mk_win_aes_s* self, void const* msg, void* out);
 
-mk_extern_c void mk_win_aes_encrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out);
-mk_extern_c void mk_win_aes_decrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out);
+mk_extern_c void mk_win_aes_encrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, int msg_len, void* out);
+mk_extern_c void mk_win_aes_decrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, int msg_len, void* out);
 
 
 #undef mk_extern_c

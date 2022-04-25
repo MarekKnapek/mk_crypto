@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\fuzz\mk_aes_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c" />
+    <ClCompile Include="..\..\..\fuzz\mk_crypt_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md5_fuzz.c" />
@@ -33,6 +34,8 @@
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512_fuzz.c" />
     <ClCompile Include="..\..\..\libs\mk_int.c" />
     <ClCompile Include="..\..\..\src\mk_aes.c" />
+    <ClCompile Include="..\..\..\src\mk_crypt.c" />
+    <ClCompile Include="..\..\..\src\mk_crypto.c" />
     <ClCompile Include="..\..\..\src\mk_md2.c" />
     <ClCompile Include="..\..\..\src\mk_md4.c" />
     <ClCompile Include="..\..\..\src\mk_md5.c" />
@@ -53,6 +56,8 @@
     <ClCompile Include="..\..\..\src\mk_sha3_shake128.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_shake256.c" />
     <ClCompile Include="..\..\..\src\mk_win_aes.c" />
+    <ClCompile Include="..\..\..\src\mk_win_crypto.c" />
+    <ClCompile Include="..\..\..\src\mk_win_cryptong.c" />
     <ClCompile Include="..\..\..\src\mk_win_md2.c" />
     <ClCompile Include="..\..\..\src\mk_win_md4.c" />
     <ClCompile Include="..\..\..\src\mk_win_md5.c" />
@@ -63,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
@@ -74,6 +80,7 @@
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512256_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512_fuzz.h" />
     <ClInclude Include="..\..\..\src\mk_aes.h" />
+    <ClInclude Include="..\..\..\src\mk_crypto.h" />
     <ClInclude Include="..\..\..\src\mk_md2.h" />
     <ClInclude Include="..\..\..\src\mk_md4.h" />
     <ClInclude Include="..\..\..\src\mk_md5.h" />
@@ -94,6 +101,8 @@
     <ClInclude Include="..\..\..\src\mk_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_shake256.h" />
     <ClInclude Include="..\..\..\src\mk_win_aes.h" />
+    <ClInclude Include="..\..\..\src\mk_win_crypto.h" />
+    <ClInclude Include="..\..\..\src\mk_win_cryptong.h" />
     <ClInclude Include="..\..\..\src\mk_win_md2.h" />
     <ClInclude Include="..\..\..\src\mk_win_md4.h" />
     <ClInclude Include="..\..\..\src\mk_win_md5.h" />
@@ -190,6 +199,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -209,6 +219,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -224,6 +235,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -243,6 +255,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

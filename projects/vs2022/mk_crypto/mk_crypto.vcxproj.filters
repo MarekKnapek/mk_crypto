@@ -138,6 +138,21 @@
     <ClCompile Include="..\..\..\fuzz\mk_aes_fuzz.c">
       <Filter>fuzz</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_crypto.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_crypt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_crypto.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_crypt_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_cryptong.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -265,6 +280,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h">
       <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_crypto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_crypto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_cryptong.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,13 @@
 #include <string.h> /* memcpy memmove */
 
 
+#if defined(mk_aes_jumbo) && mk_aes_jumbo == 1
+#define mk_jumbo static mk_inline
+#else
+#define mk_jumbo
+#endif
+
+
 #define mk_aes_config_small 1
 #define mk_aes_config_fast 2
 #if !defined(mk_aes_config)
@@ -671,8 +678,8 @@ static mk_inline void mk_aes_detail_mix_iv_after(enum mk_aes_operation_mode_e om
 	}
 }
 
-
-void mk_aes_128_encrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+#if 0
+mk_jumbo void mk_aes_128_encrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -685,27 +692,46 @@ void mk_aes_128_encrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 16);
 }
 
-void mk_aes_128_encrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_128_encrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
 {
 	int i;
 
 	mk_assert(self);
+	mk_assert(self->m_om == mk_aes_operation_mode_cbc || self->m_om == mk_aes_operation_mode_ecb || self->m_om == mk_aes_operation_mode_ofb || self->m_om == mk_aes_operation_mode_cfb || self->m_om == mk_aes_operation_mode_cts);
 	mk_assert(msg);
 	mk_assert(n >= 0);
 	mk_assert(out);
 
 	for(i = 0; i != n; ++i)
 	{
-		#if mk_aes_config == mk_aes_config_small
-		#elif mk_aes_config == mk_aes_config_fast
-		mk_aes_detail_mix_iv_before(self->m_om, self->m_iv, msg);
-		mk_aes_detail_encrypt_block_128(msg, self->m_key, out);
-		mk_aes_detail_mix_iv_after(self->m_om, self->m_iv, msg);
-		#endif
+		switch(self->m_om)
+		{
+			case mk_aes_operation_mode_cbc:
+			{
+			}
+			break;
+			case mk_aes_operation_mode_ecb:
+			{
+				mk_aes_detail_encrypt_block_128(msg, self->m_key, out);
+			}
+			break;
+			case mk_aes_operation_mode_ofb:
+			{
+			}
+			break;
+			case mk_aes_operation_mode_cfb:
+			{
+			}
+			break;
+			case mk_aes_operation_mode_cts:
+			{
+			}
+			break;
+		}
 	}
 }
 
-void mk_aes_128_encrypt_finish(struct mk_aes_128_s* self, void const* msg, int msg_len, void* out)
+mk_jumbo void mk_aes_128_encrypt_finish(struct mk_aes_128_s* self, void const* msg, int msg_len, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -713,7 +739,7 @@ void mk_aes_128_encrypt_finish(struct mk_aes_128_s* self, void const* msg, int m
 	mk_assert(out);
 }
 
-void mk_aes_128_decrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_128_decrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -726,7 +752,7 @@ void mk_aes_128_decrypt_init(struct mk_aes_128_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 16);
 }
 
-void mk_aes_128_decrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_128_decrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -734,7 +760,7 @@ void mk_aes_128_decrypt_blocks(struct mk_aes_128_s* self, void const* msg, int n
 	mk_assert(out);
 }
 
-void mk_aes_128_decrypt_finish(struct mk_aes_128_s* self, void const* msg, void* out)
+mk_jumbo void mk_aes_128_decrypt_finish(struct mk_aes_128_s* self, void const* msg, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -742,7 +768,7 @@ void mk_aes_128_decrypt_finish(struct mk_aes_128_s* self, void const* msg, void*
 }
 
 
-void mk_aes_192_encrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_192_encrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -755,7 +781,7 @@ void mk_aes_192_encrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 24);
 }
 
-void mk_aes_192_encrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_192_encrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
 {
 	int i;
 
@@ -773,7 +799,7 @@ void mk_aes_192_encrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n
 	}
 }
 
-void mk_aes_192_encrypt_finish(struct mk_aes_192_s* self, void const* msg, int msg_len, void* out)
+mk_jumbo void mk_aes_192_encrypt_finish(struct mk_aes_192_s* self, void const* msg, int msg_len, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -781,7 +807,7 @@ void mk_aes_192_encrypt_finish(struct mk_aes_192_s* self, void const* msg, int m
 	mk_assert(out);
 }
 
-void mk_aes_192_decrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_192_decrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -794,7 +820,7 @@ void mk_aes_192_decrypt_init(struct mk_aes_192_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 24);
 }
 
-void mk_aes_192_decrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_192_decrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -802,7 +828,7 @@ void mk_aes_192_decrypt_blocks(struct mk_aes_192_s* self, void const* msg, int n
 	mk_assert(out);
 }
 
-void mk_aes_192_decrypt_finish(struct mk_aes_192_s* self, void const* msg, void* out)
+mk_jumbo void mk_aes_192_decrypt_finish(struct mk_aes_192_s* self, void const* msg, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -810,7 +836,7 @@ void mk_aes_192_decrypt_finish(struct mk_aes_192_s* self, void const* msg, void*
 }
 
 
-void mk_aes_256_encrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_256_encrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -823,7 +849,7 @@ void mk_aes_256_encrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 32);
 }
 
-void mk_aes_256_encrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_256_encrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
 {
 	int i;
 
@@ -841,7 +867,7 @@ void mk_aes_256_encrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n
 	}
 }
 
-void mk_aes_256_encrypt_finish(struct mk_aes_256_s* self, void const* msg, int msg_len, void* out)
+mk_jumbo void mk_aes_256_encrypt_finish(struct mk_aes_256_s* self, void const* msg, int msg_len, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -849,7 +875,7 @@ void mk_aes_256_encrypt_finish(struct mk_aes_256_s* self, void const* msg, int m
 	mk_assert(out);
 }
 
-void mk_aes_256_decrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_256_decrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(om == mk_aes_operation_mode_cbc || om == mk_aes_operation_mode_ecb || om == mk_aes_operation_mode_ofb || om == mk_aes_operation_mode_cfb || om == mk_aes_operation_mode_cts);
@@ -862,7 +888,7 @@ void mk_aes_256_decrypt_init(struct mk_aes_256_s* self, enum mk_aes_operation_mo
 	memcpy(self->m_key, key, 32);
 }
 
-void mk_aes_256_decrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_256_decrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -870,7 +896,7 @@ void mk_aes_256_decrypt_blocks(struct mk_aes_256_s* self, void const* msg, int n
 	mk_assert(out);
 }
 
-void mk_aes_256_decrypt_finish(struct mk_aes_256_s* self, void const* msg, void* out)
+mk_jumbo void mk_aes_256_decrypt_finish(struct mk_aes_256_s* self, void const* msg, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -878,7 +904,7 @@ void mk_aes_256_decrypt_finish(struct mk_aes_256_s* self, void const* msg, void*
 }
 
 
-void mk_aes_encrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_encrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(key_len == mk_aes_key_len_128 || key_len == mk_aes_key_len_192 || key_len == mk_aes_key_len_256);
@@ -896,7 +922,7 @@ void mk_aes_encrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, e
 	}
 }
 
-void mk_aes_encrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_encrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -910,7 +936,7 @@ void mk_aes_encrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* 
 	}
 }
 
-void mk_aes_encrypt_finish(struct mk_aes_s* self, void const* msg, int msg_len, void* out)
+mk_jumbo void mk_aes_encrypt_finish(struct mk_aes_s* self, void const* msg, int msg_len, void* out)
 {
 	mk_assert(self);
 	mk_assert((!msg && !msg_len) || msg);
@@ -925,7 +951,7 @@ void mk_aes_encrypt_finish(struct mk_aes_s* self, void const* msg, int msg_len, 
 	}
 }
 
-void mk_aes_decrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
+mk_jumbo void mk_aes_decrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key)
 {
 	mk_assert(self);
 	mk_assert(key_len == mk_aes_key_len_128 || key_len == mk_aes_key_len_192 || key_len == mk_aes_key_len_256);
@@ -943,7 +969,7 @@ void mk_aes_decrypt_init(struct mk_aes_s* self, enum mk_aes_key_len_e key_len, e
 	}
 }
 
-void mk_aes_decrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
+mk_jumbo void mk_aes_decrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -957,7 +983,7 @@ void mk_aes_decrypt_blocks(struct mk_aes_s* self, void const* msg, int n, void* 
 	}
 }
 
-void mk_aes_decrypt_finish(struct mk_aes_s* self, void const* msg, void* out)
+mk_jumbo void mk_aes_decrypt_finish(struct mk_aes_s* self, void const* msg, void* out)
 {
 	mk_assert(self);
 	mk_assert(msg);
@@ -972,7 +998,7 @@ void mk_aes_decrypt_finish(struct mk_aes_s* self, void const* msg, void* out)
 }
 
 
-void mk_aes_encrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+mk_jumbo void mk_aes_encrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
 {
 	struct mk_aes_s mk_aes;
 	int n;
@@ -985,7 +1011,7 @@ void mk_aes_encrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mod
 	mk_aes_encrypt_finish(&mk_aes, (unsigned char*)msg + n * 16, m, (unsigned char*)out + n * 16);
 }
 
-void mk_aes_decrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+mk_jumbo void mk_aes_decrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mode_e om, enum mk_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
 {
 	struct mk_aes_s mk_aes;
 	int n;
@@ -996,7 +1022,8 @@ void mk_aes_decrypt_msg(enum mk_aes_key_len_e key_len, enum mk_aes_operation_mod
 	mk_aes_decrypt_blocks(&mk_aes, msg, n - 1, out);
 	mk_aes_decrypt_finish(&mk_aes, (unsigned char*)msg + (n - 1) * 16, (unsigned char*)out + (n - 1) * 16);
 }
-
+#endif
 
 #undef mk_aes_config_small
 #undef mk_aes_config_fast
+#undef mk_jumbo

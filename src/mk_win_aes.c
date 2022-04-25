@@ -635,7 +635,7 @@ void mk_win_aes_decrypt_finish(struct mk_win_aes_s* self, void const* msg, void*
 }
 
 
-void mk_win_aes_encrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+void mk_win_aes_encrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, int msg_len, void* out)
 {
 	struct mk_win_aes_s mk_win_aes;
 	int n;
@@ -648,7 +648,7 @@ void mk_win_aes_encrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_o
 	mk_win_aes_encrypt_finish(&mk_win_aes, (unsigned char*)msg + n * 16, m, (unsigned char*)out + n * 16);
 }
 
-void mk_win_aes_decrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, size_t msg_len, void* out)
+void mk_win_aes_decrypt_msg(enum mk_win_aes_key_len_e key_len, enum mk_win_aes_operation_mode_e om, enum mk_win_aes_padding_e padding, void const* iv, void const* key, void const* msg, int msg_len, void* out)
 {
 	struct mk_win_aes_s mk_win_aes;
 	int n;

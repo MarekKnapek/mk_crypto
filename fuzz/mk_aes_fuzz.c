@@ -16,6 +16,9 @@
 
 void mk_aes_fuzz(unsigned char const* data, size_t size)
 {
+	(void)data;
+	(void)size;
+#if 0
 	int direction;
 	enum mk_aes_key_len_e mk_key_len;
 	enum mk_win_aes_key_len_e win_key_len;
@@ -125,6 +128,7 @@ void mk_aes_fuzz(unsigned char const* data, size_t size)
 
 	free(win_out);
 	free(mk_out);
+#endif
 }
 
 
