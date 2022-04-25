@@ -82,7 +82,7 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 	msg = data;
 	msg_len = (int)size;
 	
-	out_len = ((msg_len + (16 - 1)) / 16 + 1) * 16;
+	out_len = (msg_len / 16 + 1) * 16;
 	out_mk = (unsigned char*)malloc(out_len);
 	out_win = (unsigned char*)malloc(out_len);
 	mk_assert(out_mk);
@@ -174,7 +174,7 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	msg = data;
 	msg_len = (int)size;
 	
-	out_len = ((msg_len + (16 - 1)) / 16 + 1) * 16;
+	out_len = (msg_len / 16 + 1) * 16;
 	out_mk = (unsigned char*)malloc(out_len);
 	out_winng = (unsigned char*)malloc(out_len);
 	mk_assert(out_mk);
