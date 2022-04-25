@@ -513,7 +513,7 @@ mk_jumbo void mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* 
 	int m;
 	unsigned char const* last_block_in;
 	unsigned char* last_block_out;
-	unsigned char padding[mk_crypt_block_len_max];
+	unsigned char last_block[mk_crypt_block_len_max];
 
 	mk_assert(crypt);
 	mk_assert_operation_mode(crypt->m_operation_mode);
@@ -524,7 +524,7 @@ mk_jumbo void mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* 
 	mk_assert(output || (!input && final == 0));
 
 	block_len = mk_crypt_block_get_len(crypt->m_algorithm);
-	mk_assert(final == 1 || input_len_bytes % block_len == 0);
+	mk_assert((final == 0 && input_len_bytes % block_len == 0) || (final == 1));
 	n = input_len_bytes / block_len;
 	m = input_len_bytes % block_len;
 	mk_crypt_operation_mode_encrypt(crypt->m_operation_mode, crypt->m_algorithm, n, crypt->m_iv, &crypt->m_key, input, output);
@@ -533,9 +533,9 @@ mk_jumbo void mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* 
 	{
 		last_block_in = (unsigned char const*)input + n * block_len;
 		last_block_out = (unsigned char*)output + n * block_len;
-		memcpy(padding, last_block_in, m);
-		memset(padding + m, block_len - m, block_len - m);
-		mk_crypt_operation_mode_encrypt(crypt->m_operation_mode, crypt->m_algorithm, 1, crypt->m_iv, &crypt->m_key, padding, last_block_out);
+		memcpy(last_block, last_block_in, m);
+		memset(last_block + m, block_len - m, block_len - m);
+		mk_crypt_operation_mode_encrypt(crypt->m_operation_mode, crypt->m_algorithm, 1, crypt->m_iv, &crypt->m_key, last_block, last_block_out);
 	}
 }
 
