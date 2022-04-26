@@ -63,6 +63,11 @@ static unsigned char const mk_aes_detail_inv_sbox[] =
 static unsigned char const mk_aes_detail_rcon[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36 };
 
 
+static mk_inline unsigned char mk_aes_detail_mul_1(unsigned char x)
+{
+	return x;
+}
+
 static mk_inline unsigned char mk_aes_detail_mul_2(unsigned char x)
 {
 	return (x << 1) ^ (((x >> 7) & 0x01) * 0x1b);
@@ -83,10 +88,10 @@ static mk_inline void mk_aes_detail_mix_columns(unsigned char state[16])
 	memcpy(orig, state, 16);
 	for(i = 0; i != 4; ++i)
 	{
-		state[i * 4 + 0] = mk_aes_detail_mul_2(orig[i * 4 + 0]) ^ mk_aes_detail_mul_3(orig[i * 4 + 1]) ^ orig[i * 4 + 2] ^ orig[i * 4 + 3];
-		state[i * 4 + 1] = orig[i * 4 + 0] ^ mk_aes_detail_mul_2(orig[i * 4 + 1]) ^ mk_aes_detail_mul_3(orig[i * 4 + 2]) ^ orig[i * 4 + 3];
-		state[i * 4 + 2] = orig[i * 4 + 0] ^ orig[i * 4 + 1] ^ mk_aes_detail_mul_2(orig[i * 4 + 2]) ^ mk_aes_detail_mul_3(orig[i * 4 + 3]);
-		state[i * 4 + 3] = mk_aes_detail_mul_3(orig[i * 4 + 0]) ^ orig[i * 4 + 1] ^ orig[i * 4 + 2] ^ mk_aes_detail_mul_2(orig[i * 4 + 3]);
+		state[i * 4 + 0] = mk_aes_detail_mul_2(orig[i * 4 + 0]) ^ mk_aes_detail_mul_3(orig[i * 4 + 1]) ^ mk_aes_detail_mul_1(orig[i * 4 + 2]) ^ mk_aes_detail_mul_1(orig[i * 4 + 3]);
+		state[i * 4 + 1] = mk_aes_detail_mul_1(orig[i * 4 + 0]) ^ mk_aes_detail_mul_2(orig[i * 4 + 1]) ^ mk_aes_detail_mul_3(orig[i * 4 + 2]) ^ mk_aes_detail_mul_1(orig[i * 4 + 3]);
+		state[i * 4 + 2] = mk_aes_detail_mul_1(orig[i * 4 + 0]) ^ mk_aes_detail_mul_1(orig[i * 4 + 1]) ^ mk_aes_detail_mul_2(orig[i * 4 + 2]) ^ mk_aes_detail_mul_3(orig[i * 4 + 3]);
+		state[i * 4 + 3] = mk_aes_detail_mul_3(orig[i * 4 + 0]) ^ mk_aes_detail_mul_1(orig[i * 4 + 1]) ^ mk_aes_detail_mul_1(orig[i * 4 + 2]) ^ mk_aes_detail_mul_2(orig[i * 4 + 3]);
 	}
 }
 
