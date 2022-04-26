@@ -293,5 +293,11 @@
     <ClInclude Include="..\..\..\src\mk_win_cryptong.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_1.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
