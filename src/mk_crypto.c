@@ -56,6 +56,13 @@ mk_jumbo void mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input
 	mk_crypt_encrypt((struct mk_crypt_s*)crypto, final, input, input_len_bytes, output);
 }
 
+mk_jumbo int mk_crypto_decrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output)
+{
+	mk_assert(crypto);
+
+	return mk_crypt_decrypt((struct mk_crypt_s*)crypto, final, input, input_len_bytes, output);
+}
+
 mk_jumbo void mk_crypto_destroy(mk_crypto_h crypto)
 {
 	mk_assert(crypto);

@@ -483,6 +483,185 @@ static mk_inline void mk_crypt_operation_mode_encrypt(enum mk_crypt_operation_mo
 
 /* concept of crypt operation mode encrypt blocks end */
 
+/* concept of crypt operation mode decrypt blocks */
+/* depends on crypt operation mode */
+/* depends on crypt algorithm */
+/* depends on crypt key */
+/* depends on crypt block */
+/* depends on crypt block decrypt */
+
+static mk_inline void mk_crypt_operation_mode_decrypt_cbc (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	unsigned char tmp[mk_crypt_block_len_max];
+	int i;
+
+	mk_assert(n >= 1);
+
+	block_len = mk_crypt_block_get_len(algorithm);
+	
+	mk_crypt_block_decrypt(algorithm, key, input, tmp);
+	mk_crypt_xor(iv, tmp, output, block_len);
+	for(i = 1; i != n; ++i)
+	{
+		memcpy(iv, input, block_len);
+		input += block_len;
+		output += block_len;
+		mk_crypt_block_decrypt(algorithm, key, input, tmp);
+		mk_crypt_xor(iv, tmp, output, block_len);
+	}
+	memcpy(iv, input, block_len);
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_cfb (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	unsigned char tmp[mk_crypt_block_len_max];
+	int i;
+	int j;
+	int k;
+
+	mk_assert(n >= 1);
+
+	block_len = mk_crypt_block_get_len(algorithm);
+
+	for(i = 0; i != n; ++i)
+	{
+		for(j = 0; j != block_len; ++j)
+		{
+			mk_crypt_block_encrypt(algorithm, key, iv, tmp);
+			output[j] = input[j] ^ tmp[0];
+			for(k = 0; k != block_len - 1; ++k)
+			{
+				iv[k] = iv[k + 1];
+			}
+			iv[block_len - 1] = input[j];
+		}
+		input += block_len;
+		output += block_len;
+	}
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_ctr (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	unsigned char tmp[mk_crypt_block_len_max];
+	unsigned char ctr[mk_crypt_block_len_max];
+	int i;
+
+	mk_assert(n >= 1);
+
+	block_len = mk_crypt_block_get_len(algorithm);
+	
+	mk_crypt_block_encrypt(algorithm, key, iv, tmp);
+	mk_crypt_xor(input, tmp, output, block_len);
+	memcpy(ctr, iv, block_len);
+	mk_crypt_inc(ctr, block_len);
+	for(i = 1; i != n; ++i)
+	{
+		mk_crypt_block_encrypt(algorithm, key, ctr, tmp);
+		input += block_len;
+		output += block_len;
+		mk_crypt_xor(input, tmp, output, block_len);
+		mk_crypt_inc(ctr, block_len);
+	}
+	memcpy(iv, ctr, block_len);
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_cts (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	/*TODO*/
+	(void)algorithm;
+	(void)n;
+	(void)key;
+	(void)iv;
+	(void)input;
+	(void)output;
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_ecb (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	int i;
+
+	mk_assert(n >= 1);
+	(void)iv;
+	
+	block_len = mk_crypt_block_get_len(algorithm);
+
+	for(i = 0; i != n; ++i)
+	{
+		mk_crypt_block_decrypt(algorithm, key, input, output);
+		input += block_len;
+		output += block_len;
+	}
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_ofb (enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	unsigned char tmp[mk_crypt_block_len_max];
+	int i;
+
+	mk_assert(n >= 1);
+
+	block_len = mk_crypt_block_get_len(algorithm);
+	
+	mk_crypt_block_encrypt(algorithm, key, iv, tmp);
+	mk_crypt_xor(input, tmp, output, block_len);
+	for(i = 1; i != n; ++i)
+	{
+		mk_crypt_block_encrypt(algorithm, key, tmp, tmp);
+		input += block_len;
+		output += block_len;
+		mk_crypt_xor(input, tmp, output, block_len);
+	}
+	memcpy(iv, tmp, block_len);
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt_pcbc(enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	unsigned char tmp[mk_crypt_block_len_max];
+	int i;
+
+	mk_assert(n >= 1);
+
+	block_len = mk_crypt_block_get_len(algorithm);
+	mk_crypt_xor(input, iv, tmp, block_len);
+	mk_crypt_block_encrypt(algorithm, key, tmp, output);
+	for(i = 1; i != n; ++i)
+	{
+		mk_crypt_xor(input, output, tmp, block_len);
+		input += block_len;
+		mk_crypt_xor(input, tmp, tmp, block_len);
+		output += block_len;
+		mk_crypt_block_encrypt(algorithm, key, tmp, output);
+	}
+	memcpy(iv, output, block_len);
+}
+
+static mk_inline void mk_crypt_operation_mode_decrypt(enum mk_crypt_operation_mode_e operation_mode, enum mk_crypt_algorithm_e algorithm, int n, unsigned char* iv, union mk_crypt_key_u const* key, unsigned char const* input, unsigned char* output)
+{
+	mk_assert(n >= 0);
+	mk_assert(key);
+	mk_assert(input);
+	mk_assert(output);
+
+	switch(operation_mode)
+	{
+		case mk_crypt_operation_mode_cbc:  mk_crypt_operation_mode_decrypt_cbc (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_cfb:  mk_crypt_operation_mode_decrypt_cfb (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_ctr:  mk_crypt_operation_mode_decrypt_ctr (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_cts:  mk_crypt_operation_mode_decrypt_cts (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_ecb:  mk_crypt_operation_mode_decrypt_ecb (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_ofb:  mk_crypt_operation_mode_decrypt_ofb (algorithm, n, iv, key, input, output); break;
+		case mk_crypt_operation_mode_pcbc: mk_crypt_operation_mode_decrypt_pcbc(algorithm, n, iv, key, input, output); break;
+	}
+}
+
+/* concept of crypt operation mode decrypt blocks end */
+
 
 struct mk_crypt_s
 {
@@ -536,6 +715,55 @@ mk_jumbo void mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* 
 		memcpy(last_block, last_block_in, m);
 		memset(last_block + m, block_len - m, block_len - m);
 		mk_crypt_operation_mode_encrypt(crypt->m_operation_mode, crypt->m_algorithm, 1, crypt->m_iv, &crypt->m_key, last_block, last_block_out);
+	}
+}
+
+mk_jumbo int mk_crypt_decrypt(struct mk_crypt_s* crypt, int final, void const* input, int input_len_bytes, void* output)
+{
+	enum mk_crypt_block_len_e block_len;
+	int n;
+	unsigned char* last_block_out;
+	int m;
+	int i;
+
+	mk_assert(crypt);
+	mk_assert_operation_mode(crypt->m_operation_mode);
+	mk_assert_algorithm(crypt->m_algorithm);
+	mk_assert(final == 0 || final == 1);
+	mk_assert((input) || (!input && input_len_bytes == 0));
+	mk_assert(input_len_bytes >= 0);
+	mk_assert((output) || (!output && !input));
+
+	if(input_len_bytes == 0)
+	{
+		return 0;
+	}
+
+	block_len = mk_crypt_block_get_len(crypt->m_algorithm);
+	mk_assert(input_len_bytes % block_len == 0);
+	n = input_len_bytes / block_len;
+	mk_crypt_operation_mode_decrypt(crypt->m_operation_mode, crypt->m_algorithm, n, crypt->m_iv, &crypt->m_key, input, output);
+
+	if(final == 0)
+	{
+		return input_len_bytes;
+	}
+	else
+	{
+		last_block_out = (unsigned char*)output + (n - 1) * block_len;
+		m = last_block_out[block_len - 1];
+		if(!(m <= block_len))
+		{
+			return -1;
+		}
+		for(i = 0; i != m - 1; ++i)
+		{
+			if(!(last_block_out[block_len - 1 - i] == m))
+			{
+				return -1;
+			}
+		}
+		return input_len_bytes - m;
 	}
 }
 

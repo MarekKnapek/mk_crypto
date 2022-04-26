@@ -189,6 +189,29 @@ mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, voi
 	mk_assert(data_len == out_len);
 }
 
+mk_jumbo int mk_win_crypto_decrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output)
+{
+	struct mk_win_crypto_s* win_crypto;
+	DWORD data_len;
+	BOOL encrypted;
+	DWORD out_len;
+
+	mk_assert(win_crypto_h);
+	mk_assert(final == 0 || final == 1);
+
+	win_crypto = (struct mk_win_crypto_s*)win_crypto_h;
+
+	if(input != output)
+	{
+		memcpy(output, input, input_len_bytes);
+	}
+	data_len = input_len_bytes;
+	out_len = (input_len_bytes / 16) * 16;
+	encrypted = CryptDecrypt(win_crypto->m_ck, 0, final == 0 ? FALSE : TRUE, 0, output, &data_len);
+	mk_assert(encrypted != 0);
+	return (int)data_len;
+}
+
 mk_jumbo void mk_win_crypto_destroy(mk_win_crypto_h win_crypto_h)
 {
 	struct mk_win_crypto_s* win_crypto;

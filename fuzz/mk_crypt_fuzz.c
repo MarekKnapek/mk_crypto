@@ -30,11 +30,17 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 	int blocks;
 	mk_crypto_h crypto_mk;
 	mk_win_crypto_h crypto_win;
+	mk_crypto_h cryptod_mk;
+	mk_win_crypto_h cryptod_win;
 	unsigned char const* msg;
 	int msg_len;
 	int out_len;
 	unsigned char* out_mk;
 	unsigned char* out_win;
+	int out_lend_mk;
+	int out_lend_win;
+	unsigned char* outd_mk;
+	unsigned char* outd_win;
 
 	mk_assert(data);
 
@@ -95,6 +101,10 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 	crypto_win = mk_win_crypto_create(om_win, alg_win, iv, key);
 	mk_assert(crypto_mk);
 	mk_assert(crypto_win);
+	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
+	cryptod_win = mk_win_crypto_create(om_win, alg_win, iv, key);
+	mk_assert(cryptod_mk);
+	mk_assert(cryptod_win);
 
 	good = 1;
 	for(i = 0; i != chunks; ++i)
@@ -124,8 +134,22 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 
 		mk_assert(memcmp(out_mk, out_win, blocks * 16) == 0);
 
+		outd_mk = malloc(blocks * 16);
+		mk_assert(outd_mk);
+		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk);
+		mk_assert(out_lend_mk == blocks * 16);
+		mk_assert(memcmp(outd_mk, data, blocks * 16) == 0);
+
+		outd_win = malloc(blocks * 16);
+		mk_assert(outd_win);
+		out_lend_win = mk_win_crypto_decrypt(cryptod_win, 0, out_win, blocks * 16, outd_win);
+		mk_assert(out_lend_mk == blocks * 16);
+		mk_assert(memcmp(outd_win, data, blocks * 16) == 0);
+
 		free(out_mk);
 		free(out_win);
+		free(outd_mk);
+		free(outd_win);
 
 		data += blocks * 16;
 		size -= blocks * 16;
@@ -134,6 +158,8 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 	{
 		mk_crypto_destroy(crypto_mk);
 		mk_win_crypto_destroy(crypto_win);
+		mk_crypto_destroy(cryptod_mk);
+		mk_win_crypto_destroy(cryptod_win);
 		return;
 	}
 
@@ -153,11 +179,27 @@ static mk_inline void mk_crypto_fuzz_1(unsigned char const* data, size_t size)
 
 	test(memcmp(out_mk, out_win, out_len) == 0);
 
+	outd_mk = malloc(out_len);
+	mk_assert(outd_mk);
+	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk);
+	mk_assert(out_lend_mk == msg_len);
+	mk_assert(memcmp(outd_mk, msg, msg_len) == 0);
+
+	outd_win = malloc(out_len);
+	mk_assert(outd_win);
+	out_lend_win = mk_win_crypto_decrypt(cryptod_win, 1, out_win, out_len, outd_win);
+	mk_assert(out_lend_win == msg_len);
+	mk_assert(memcmp(outd_win, msg, msg_len) == 0);
+
 	mk_crypto_destroy(crypto_mk);
 	mk_win_crypto_destroy(crypto_win);
+	mk_crypto_destroy(cryptod_mk);
+	mk_win_crypto_destroy(cryptod_win);
 
 	free(out_mk);
 	free(out_win);
+	free(outd_mk);
+	free(outd_win);
 }
 
 static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
@@ -175,11 +217,17 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	int blocks;
 	mk_crypto_h crypto_mk;
 	mk_win_cryptong_h crypto_winng;
+	mk_crypto_h cryptod_mk;
+	mk_win_cryptong_h cryptod_winng;
 	unsigned char const* msg;
 	int msg_len;
 	int out_len;
 	unsigned char* out_mk;
 	unsigned char* out_winng;
+	int out_lend_mk;
+	int out_lend_winng;
+	unsigned char* outd_mk;
+	unsigned char* outd_winng;
 
 	mk_assert(data);
 
@@ -240,6 +288,10 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	crypto_winng = mk_win_cryptong_create(om_winng, alg_winng, iv, key);
 	mk_assert(crypto_mk);
 	mk_assert(crypto_winng);
+	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
+	cryptod_winng = mk_win_cryptong_create(om_winng, alg_winng, iv, key);
+	mk_assert(cryptod_mk);
+	mk_assert(cryptod_winng);
 
 	good = 1;
 	for(i = 0; i != chunks; ++i)
@@ -269,8 +321,22 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 
 		mk_assert(memcmp(out_mk, out_winng, blocks * 16) == 0);
 
+		outd_mk = malloc(blocks * 16);
+		mk_assert(outd_mk);
+		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk);
+		mk_assert(out_lend_mk == blocks * 16);
+		mk_assert(memcmp(outd_mk, data, blocks * 16) == 0);
+
+		outd_winng = malloc(blocks * 16);
+		mk_assert(outd_winng);
+		out_lend_winng = mk_win_cryptong_decrypt(cryptod_winng, 0, out_winng, blocks * 16, outd_winng);
+		mk_assert(out_lend_mk == blocks * 16);
+		mk_assert(memcmp(outd_winng, data, blocks * 16) == 0);
+
 		free(out_mk);
 		free(out_winng);
+		free(outd_mk);
+		free(outd_winng);
 
 		data += blocks * 16;
 		size -= blocks * 16;
@@ -279,6 +345,8 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	{
 		mk_crypto_destroy(crypto_mk);
 		mk_win_cryptong_destroy(crypto_winng);
+		mk_crypto_destroy(cryptod_mk);
+		mk_win_cryptong_destroy(cryptod_winng);
 		return;
 	}
 
@@ -298,11 +366,27 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 
 	test(memcmp(out_mk, out_winng, out_len) == 0);
 
+	outd_mk = malloc(out_len);
+	mk_assert(outd_mk);
+	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk);
+	mk_assert(out_lend_mk == msg_len);
+	mk_assert(memcmp(outd_mk, msg, msg_len) == 0);
+
+	outd_winng = malloc(out_len);
+	mk_assert(outd_winng);
+	out_lend_winng = mk_win_cryptong_decrypt(cryptod_winng, 1, out_winng, out_len, outd_winng);
+	mk_assert(out_lend_winng == msg_len);
+	mk_assert(memcmp(outd_winng, msg, msg_len) == 0);
+
 	mk_crypto_destroy(crypto_mk);
 	mk_win_cryptong_destroy(crypto_winng);
+	mk_crypto_destroy(cryptod_mk);
+	mk_win_cryptong_destroy(cryptod_winng);
 
 	free(out_mk);
 	free(out_winng);
+	free(outd_mk);
+	free(outd_winng);
 }
 
 

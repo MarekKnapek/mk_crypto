@@ -187,6 +187,29 @@ mk_jumbo void mk_win_cryptong_encrypt(mk_win_cryptong_h win_cryptong_h, int fina
 	mk_assert(out_len == out_len_real);
 }
 
+mk_jumbo int mk_win_cryptong_decrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output)
+{
+	struct mk_win_cryptong_s* win_cryptong;
+	PUCHAR iv;
+	ULONG iv_len;
+	ULONG out_len;
+	ULONG out_len_real;
+	ULONG flags;
+	NTSTATUS encrypted;
+
+	mk_assert(win_cryptong_h);
+
+	win_cryptong = (struct mk_win_cryptong_s*)win_cryptong_h;
+
+	iv = win_cryptong->m_want_iv == 0 ? (PUCHAR)NULL : (PUCHAR)win_cryptong->m_iv;
+	iv_len = win_cryptong->m_want_iv == 0 ? (ULONG)0 : (ULONG)16;
+	out_len = (input_len_bytes / 16 + final) * 16;
+	flags = final == 0 ? (ULONG)0 : (ULONG)BCRYPT_BLOCK_PADDING;
+	encrypted = BCryptDecrypt(win_cryptong->m_key, (PUCHAR)input, input_len_bytes, NULL, iv, iv_len, (PUCHAR)output, out_len, &out_len_real, flags);
+	mk_assert(encrypted == STATUS_SUCCESS);
+	return (int)out_len_real;
+}
+
 mk_jumbo void mk_win_cryptong_destroy(mk_win_cryptong_h win_cryptong_h)
 {
 	struct mk_win_cryptong_s* win_cryptong;

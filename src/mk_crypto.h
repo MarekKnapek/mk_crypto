@@ -32,6 +32,7 @@ enum mk_crypto_algorithm_e
 
 mk_extern_c mk_crypto_h mk_crypto_create(enum mk_crypto_operation_mode_e operation_mode, enum mk_crypto_algorithm_e algorithm, void const* iv, void const* key);
 mk_extern_c void mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output);
+mk_extern_c int mk_crypto_decrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c void mk_crypto_destroy(mk_crypto_h crypto);
 
 

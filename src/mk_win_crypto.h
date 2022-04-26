@@ -28,6 +28,7 @@ enum mk_win_crypto_algorithm_e
 
 mk_extern_c mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_e operation_mode, enum mk_win_crypto_algorithm_e algorithm, void const* iv, void const* key);
 mk_extern_c void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output);
+mk_extern_c int mk_win_crypto_decrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c void mk_win_crypto_destroy(mk_win_crypto_h win_crypto_h);
 
 
