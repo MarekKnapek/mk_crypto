@@ -6,13 +6,6 @@
 #include <string.h> /* memcpy memmove */
 
 
-#if defined(mk_aes_jumbo) && mk_aes_jumbo == 1
-#define mk_jumbo static mk_inline
-#else
-#define mk_jumbo
-#endif
-
-
 #define mk_aes_config_small 1
 #define mk_aes_config_fast 2
 #if !defined(mk_aes_config)
@@ -361,7 +354,8 @@ static mk_inline void mk_aes_detail_encrypt_block(enum mk_aes_key_len_e key_len,
 
 #elif mk_aes_config == mk_aes_config_fast
 
-mk_jumbo void mk_aes_detail_encrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
+
+void mk_aes_detail_encrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(4 + 4) * 4];
@@ -401,7 +395,7 @@ mk_jumbo void mk_aes_detail_encrypt_block_128(unsigned char const input[16], uns
 	memcpy(output, state, 16);
 }
 
-mk_jumbo void mk_aes_detail_decrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
+void mk_aes_detail_decrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(10 + 1) * 16];
@@ -437,7 +431,7 @@ mk_jumbo void mk_aes_detail_decrypt_block_128(unsigned char const input[16], uns
 	memcpy(output, state, 16);
 }
 
-mk_jumbo void mk_aes_detail_encrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
+void mk_aes_detail_encrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(6 + 4) * 4];
@@ -486,7 +480,7 @@ mk_jumbo void mk_aes_detail_encrypt_block_192(unsigned char const input[16], uns
 	memcpy(output, state, 16);
 }
 
-mk_jumbo void mk_aes_detail_decrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
+void mk_aes_detail_decrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(12 + 1) * 16];
@@ -525,7 +519,7 @@ mk_jumbo void mk_aes_detail_decrypt_block_192(unsigned char const input[16], uns
 	memcpy(output, state, 16);
 }
 
-mk_jumbo void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(8 + 4) * 4];
@@ -570,7 +564,7 @@ mk_jumbo void mk_aes_detail_encrypt_block_256(unsigned char const input[16], uns
 	memcpy(output, state, 16);
 }
 
-mk_jumbo void mk_aes_detail_decrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+void mk_aes_detail_decrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(14 + 1) * 16];
@@ -611,4 +605,3 @@ mk_jumbo void mk_aes_detail_decrypt_block_256(unsigned char const input[16], uns
 
 #undef mk_aes_config_small
 #undef mk_aes_config_fast
-#undef mk_jumbo
