@@ -356,7 +356,7 @@ static mk_inline void mk_aes_detail_encrypt_block(enum mk_aes_key_len_e key_len,
 
 #elif mk_aes_config == mk_aes_config_fast
 
-static mk_inline void mk_aes_detail_encrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
+mk_jumbo void mk_aes_detail_encrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(4 + 4) * 4];
@@ -396,7 +396,7 @@ static mk_inline void mk_aes_detail_encrypt_block_128(unsigned char const input[
 	memcpy(output, state, 16);
 }
 
-static mk_inline void mk_aes_detail_decrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
+mk_jumbo void mk_aes_detail_decrypt_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(10 + 1) * 16];
@@ -432,37 +432,7 @@ static mk_inline void mk_aes_detail_decrypt_block_128(unsigned char const input[
 	memcpy(output, state, 16);
 }
 
-static mk_inline void mk_aes_detail_decrypt2_block_128(unsigned char const input[16], unsigned char const key[16], unsigned char output[16])
-{
-	unsigned char state[16];
-	unsigned char round_keys[(10 + 1) * 16];
-	int r;
-
-	mk_assert(input);
-	mk_assert(key);
-	mk_assert(output);
-
-	memcpy(state, input, 16);
-	memcpy(round_keys, key, 16);
-	for(r = 0; r != 10; ++r)
-	{
-		mk_aes_detail_key_expansion_128(r, round_keys + r * 16);
-	}
-	mk_aes_detail_add_round_key(state, round_keys + 10 * 16);
-	for(r = 0; r != 10 - 1; ++r)
-	{
-		mk_aes_detail_inv_shift_rows(state);
-		mk_aes_detail_inv_sub_bytes(state);
-		mk_aes_detail_add_round_key(state, round_keys + (10 - 1 - r) * 16);
-		mk_aes_detail_inv_mix_columns(state);
-	}
-	mk_aes_detail_inv_shift_rows(state);
-	mk_aes_detail_inv_sub_bytes(state);
-	mk_aes_detail_add_round_key(state, round_keys + 0 * 16);
-	memcpy(output, state, 16);
-}
-
-static mk_inline void mk_aes_detail_encrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
+mk_jumbo void mk_aes_detail_encrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(6 + 4) * 4];
@@ -511,7 +481,7 @@ static mk_inline void mk_aes_detail_encrypt_block_192(unsigned char const input[
 	memcpy(output, state, 16);
 }
 
-static mk_inline void mk_aes_detail_decrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
+mk_jumbo void mk_aes_detail_decrypt_block_192(unsigned char const input[16], unsigned char const key[24], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(12 + 1) * 16];
@@ -550,7 +520,7 @@ static mk_inline void mk_aes_detail_decrypt_block_192(unsigned char const input[
 	memcpy(output, state, 16);
 }
 
-static mk_inline void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+mk_jumbo void mk_aes_detail_encrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(8 + 4) * 4];
@@ -595,7 +565,7 @@ static mk_inline void mk_aes_detail_encrypt_block_256(unsigned char const input[
 	memcpy(output, state, 16);
 }
 
-static mk_inline void mk_aes_detail_decrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
+mk_jumbo void mk_aes_detail_decrypt_block_256(unsigned char const input[16], unsigned char const key[32], unsigned char output[16])
 {
 	unsigned char state[16];
 	unsigned char round_keys[(14 + 1) * 16];
