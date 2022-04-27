@@ -62,9 +62,9 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	key_len = 0;
 	switch(*data % 3)
 	{
-		case 0: alg_mk = mk_crypto_algorithm_aes128; alg_winng = mk_win_cryptong_algorithm_aes128; key_len = 16; break;
-		case 1: alg_mk = mk_crypto_algorithm_aes192; alg_winng = mk_win_cryptong_algorithm_aes192; key_len = 24; break;
-		case 2: alg_mk = mk_crypto_algorithm_aes256; alg_winng = mk_win_cryptong_algorithm_aes256; key_len = 32; break;
+		case 0: alg_mk = mk_crypto_block_cipher_aes128; alg_winng = mk_win_cryptong_algorithm_aes128; key_len = 16; break;
+		case 1: alg_mk = mk_crypto_block_cipher_aes192; alg_winng = mk_win_cryptong_algorithm_aes192; key_len = 24; break;
+		case 2: alg_mk = mk_crypto_block_cipher_aes256; alg_winng = mk_win_cryptong_algorithm_aes256; key_len = 32; break;
 	}
 	++data;
 	--size;

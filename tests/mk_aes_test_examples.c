@@ -53,10 +53,10 @@ static mk_inline int mk_aes_test_128(void const* msg_str, void const* key_str, v
 	mk_string_hex_to_bytes(key_str, 16 * 2, key);
 	mk_string_hex_to_bytes(out_str, 16 * 2, out);
 
-	mk_aes_detail_encrypt_block_128(msg, key, buff1);
+	mk_aes_encrypt_block_128(msg, key, buff1);
 	mk_check(memcmp(buff1, out, 16) == 0);
 
-	mk_aes_detail_decrypt_block_128(buff1, key, buff2);
+	mk_aes_decrypt_block_128(buff1, key, buff2);
 	mk_check(memcmp(buff2, msg, 16) == 0);
 
 	return 0;
@@ -74,10 +74,10 @@ static mk_inline int mk_aes_test_192(void const* msg_str, void const* key_str, v
 	mk_string_hex_to_bytes(key_str, 24 * 2, key);
 	mk_string_hex_to_bytes(out_str, 16 * 2, out);
 
-	mk_aes_detail_encrypt_block_192(msg, key, buff1);
+	mk_aes_encrypt_block_192(msg, key, buff1);
 	mk_check(memcmp(buff1, out, 16) == 0);
 
-	mk_aes_detail_decrypt_block_192(buff1, key, buff2);
+	mk_aes_decrypt_block_192(buff1, key, buff2);
 	mk_check(memcmp(buff2, msg, 16) == 0);
 
 	return 0;
@@ -95,10 +95,10 @@ static mk_inline int mk_aes_test_256(void const* msg_str, void const* key_str, v
 	mk_string_hex_to_bytes(key_str, 32 * 2, key);
 	mk_string_hex_to_bytes(out_str, 16 * 2, out);
 
-	mk_aes_detail_encrypt_block_256(msg, key, buff1);
+	mk_aes_encrypt_block_256(msg, key, buff1);
 	mk_check(memcmp(buff1, out, 16) == 0);
 
-	mk_aes_detail_decrypt_block_256(buff1, key, buff2);
+	mk_aes_decrypt_block_256(buff1, key, buff2);
 	mk_check(memcmp(buff2, msg, 16) == 0);
 
 	return 0;

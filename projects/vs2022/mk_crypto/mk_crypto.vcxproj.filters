@@ -13,6 +13,9 @@
     <Filter Include="libs">
       <UniqueIdentifier>{e74c4801-88bf-4a25-9b89-95b89f2ae4db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\operation_mode">
+      <UniqueIdentifier>{8cb76bae-3ffa-43c5-b87f-c8031980632a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\mk_md2.c">
@@ -152,6 +155,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\mk_win_cryptong.c">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_block_cipher.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_impl.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.c">
+      <Filter>src\operation_mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +319,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h">
       <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_block_cipher.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_impl.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_crypt.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
