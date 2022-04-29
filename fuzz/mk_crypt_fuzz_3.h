@@ -46,11 +46,12 @@ static mk_inline void mk_crypto_fuzz_3(unsigned char const* data, size_t size)
 		return;
 	}
 	om_mk = 0, om_tom = 0;
-	switch(*data % 3)
+	switch(*data % 4)
 	{
 		case 0: om_mk = mk_crypto_operation_mode_cbc; om_tom = mk_tom_crypto_operation_mode_cbc; break;
-		case 1: om_mk = mk_crypto_operation_mode_ecb; om_tom = mk_tom_crypto_operation_mode_ecb; break;
-		case 2: om_mk = mk_crypto_operation_mode_cfb; om_tom = mk_tom_crypto_operation_mode_cfb; break;
+		case 1: om_mk = mk_crypto_operation_mode_cfb; om_tom = mk_tom_crypto_operation_mode_cfb; break;
+		case 2: om_mk = mk_crypto_operation_mode_ecb; om_tom = mk_tom_crypto_operation_mode_ecb; break;
+		case 3: om_mk = mk_crypto_operation_mode_ofb; om_tom = mk_tom_crypto_operation_mode_ofb; break;
 	}
 	++data;
 	--size;

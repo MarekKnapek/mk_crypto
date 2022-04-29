@@ -5,6 +5,7 @@
 #include "mk_operation_mode_cbc.h"
 #include "mk_operation_mode_cfb.h"
 #include "mk_operation_mode_ecb.h"
+#include "mk_operation_mode_ofb.h"
 #include "../mk_block_cipher.h"
 
 
@@ -20,6 +21,7 @@ enum mk_operation_mode_e
 	mk_operation_mode_cbc,
 	mk_operation_mode_cfb,
 	mk_operation_mode_ecb,
+	mk_operation_mode_ofb,
 };
 
 struct mk_operation_mode_s
@@ -30,6 +32,7 @@ struct mk_operation_mode_s
 		struct mk_operation_mode_cbc_s m_cbc;
 		struct mk_operation_mode_cfb_s m_cfb;
 		struct mk_operation_mode_ecb_s m_ecb;
+		struct mk_operation_mode_ofb_s m_ofb;
 	};
 };
 

@@ -180,6 +180,9 @@
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_base.c">
       <Filter>src\operation_mode</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -354,6 +357,9 @@
       <Filter>fuzz</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_base.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.h">
       <Filter>src\operation_mode</Filter>
     </ClInclude>
   </ItemGroup>

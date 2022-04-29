@@ -9,7 +9,11 @@
 #include <stdlib.h> /* malloc free NULL */
 
 #include "../../libtomcrypt/src/headers/tomcrypt.h"
+#if defined(_M_IX86)
 #pragma comment(lib, "../../../../libtomcrypt/MSVC_Win32_Debug/tomcryptd.lib")
+#elif defined(_M_AMD64)
+#pragma comment(lib, "../../../../libtomcrypt/MSVC_x64_Debug/tomcryptd.lib")
+#endif
 
 
 union mk_tom_systemic_u
@@ -17,6 +21,7 @@ union mk_tom_systemic_u
 	symmetric_CBC m_cbc;
 	symmetric_CFB m_cfb;
 	symmetric_ECB m_ecb;
+	symmetric_OFB m_ofb;
 };
 
 
@@ -41,6 +46,7 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 		operation_mode == mk_tom_crypto_operation_mode_cbc ||
 		operation_mode == mk_tom_crypto_operation_mode_cfb ||
 		operation_mode == mk_tom_crypto_operation_mode_ecb ||
+		operation_mode == mk_tom_crypto_operation_mode_ofb ||
 		0
 	);
 	mk_assert
@@ -59,7 +65,7 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 	if(!tom_crypto)
 	{
 		return NULL;
-	}/**/memset(tom_crypto, 0, sizeof(*tom_crypto));/**/
+	}
 	tom_crypto->m_operation_mode = operation_mode;
 	tom_crypto->m_block_cipher = block_cipher;
 
@@ -78,6 +84,7 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 		case mk_tom_crypto_operation_mode_cbc: om_started = cbc_start(0, iv, key, key_len, num_rounds, &tom_crypto->m_systemic.m_cbc); break;
 		case mk_tom_crypto_operation_mode_cfb: om_started = cfb_start(0, iv, key, key_len, num_rounds, &tom_crypto->m_systemic.m_cfb); break;
 		case mk_tom_crypto_operation_mode_ecb: om_started = ecb_start(0,     key, key_len, num_rounds, &tom_crypto->m_systemic.m_ecb); break;
+		case mk_tom_crypto_operation_mode_ofb: om_started = ofb_start(0, iv, key, key_len, num_rounds, &tom_crypto->m_systemic.m_ofb); break;
 	}
 	if(!(om_started == CRYPT_OK))
 	{
@@ -108,6 +115,7 @@ void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* 
 		case mk_tom_crypto_operation_mode_cbc: encrypted = cbc_encrypt(input, output, n * 16, &tom_crypto->m_systemic.m_cbc); break;
 		case mk_tom_crypto_operation_mode_cfb: encrypted = cfb_encrypt(input, output, n * 16, &tom_crypto->m_systemic.m_cfb); break;
 		case mk_tom_crypto_operation_mode_ecb: encrypted = ecb_encrypt(input, output, n * 16, &tom_crypto->m_systemic.m_ecb); break;
+		case mk_tom_crypto_operation_mode_ofb: encrypted = ofb_encrypt(input, output, n * 16, &tom_crypto->m_systemic.m_ofb); break;
 	}
 	mk_assert(encrypted == CRYPT_OK);
 
@@ -137,6 +145,7 @@ int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* i
 		case mk_tom_crypto_operation_mode_cbc: decrypted = cbc_decrypt(input, output, input_len_bytes, &tom_crypto->m_systemic.m_cbc); break;
 		case mk_tom_crypto_operation_mode_cfb: decrypted = cfb_decrypt(input, output, input_len_bytes, &tom_crypto->m_systemic.m_cfb); break;
 		case mk_tom_crypto_operation_mode_ecb: decrypted = ecb_decrypt(input, output, input_len_bytes, &tom_crypto->m_systemic.m_ecb); break;
+		case mk_tom_crypto_operation_mode_ofb: decrypted = ofb_decrypt(input, output, input_len_bytes, &tom_crypto->m_systemic.m_ofb); break;
 	}
 	mk_assert(decrypted == CRYPT_OK);
 
@@ -168,6 +177,7 @@ void mk_tom_crypto_destroy(mk_tom_crypto_h tom_crypto_h)
 		case mk_tom_crypto_operation_mode_cbc: done = cbc_done(&tom_crypto->m_systemic.m_cbc); break;
 		case mk_tom_crypto_operation_mode_cfb: done = cfb_done(&tom_crypto->m_systemic.m_cfb); break;
 		case mk_tom_crypto_operation_mode_ecb: done = ecb_done(&tom_crypto->m_systemic.m_ecb); break;
+		case mk_tom_crypto_operation_mode_ofb: done = ofb_done(&tom_crypto->m_systemic.m_ofb); break;
 	}
 	mk_assert(done == CRYPT_OK);
 

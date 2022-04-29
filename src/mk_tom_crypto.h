@@ -16,6 +16,7 @@ enum mk_tom_crypto_operation_mode_e
 	mk_tom_crypto_operation_mode_cbc,
 	mk_tom_crypto_operation_mode_cfb,
 	mk_tom_crypto_operation_mode_ecb,
+	mk_tom_crypto_operation_mode_ofb,
 };
 
 enum mk_tom_crypto_block_cipher_e

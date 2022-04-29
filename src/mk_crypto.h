@@ -16,6 +16,7 @@ enum mk_crypto_operation_mode_e
 	mk_crypto_operation_mode_cbc,
 	mk_crypto_operation_mode_cfb,
 	mk_crypto_operation_mode_ecb,
+	mk_crypto_operation_mode_ofb,
 };
 
 enum mk_crypto_block_cipher_e

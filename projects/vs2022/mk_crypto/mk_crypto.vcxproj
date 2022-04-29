@@ -73,6 +73,7 @@
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_impl.c" />
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_impl.h" />
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\utils\mk_setup.h" />
