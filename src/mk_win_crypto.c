@@ -74,7 +74,7 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	csp_acquired = CryptAcquireContextW(&csp, NULL, MS_ENH_RSA_AES_PROV_W, PROV_RSA_AES, CRYPT_VERIFYCONTEXT | CRYPT_SILENT);
 	if(!(csp_acquired != 0))
 	{
-		return NULL;
+		goto cleanup_null;
 	}
 
 	key_blob_size = 0;
@@ -117,9 +117,7 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	ck_created = CryptImportKey(csp, (BYTE const*)&key_blob, key_blob_size, 0, 0, &ck);
 	if(!(ck_created != 0))
 	{
-		csp_released = CryptReleaseContext(csp, 0);
-		mk_assert(csp_released != 0);
-		return NULL;
+		goto cleanup_release_context;
 	}
 
 	switch(operation_mode)
@@ -131,11 +129,7 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	mode_set = CryptSetKeyParam(ck, KP_MODE, (BYTE const*)&kp_mode, 0);
 	if(!(mode_set != 0))
 	{
-		key_destroyed = CryptDestroyKey(ck);
-		mk_assert(key_destroyed != 0);
-		csp_released = CryptReleaseContext(csp, 0);
-		mk_assert(csp_released != 0);
-		return NULL;
+		goto cleanup_destroy_key;
 	}
 
 	if(iv)
@@ -143,22 +137,14 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 		iv_set = CryptSetKeyParam(ck, KP_IV, (BYTE const*)iv, 0);
 		if(!(iv_set != 0))
 		{
-			key_destroyed = CryptDestroyKey(ck);
-			mk_assert(key_destroyed != 0);
-			csp_released = CryptReleaseContext(csp, 0);
-			mk_assert(csp_released != 0);
-			return NULL;
+			goto cleanup_destroy_key;
 		}
 	}
 
 	struct mk_win_crypto_s* win_crypto = (struct mk_win_crypto_s*)malloc(sizeof (struct mk_win_crypto_s));
 	if(!win_crypto)
 	{
-		key_destroyed = CryptDestroyKey(ck);
-		mk_assert(key_destroyed != 0);
-		csp_released = CryptReleaseContext(csp, 0);
-		mk_assert(csp_released != 0);
-		return NULL;
+		goto cleanup_destroy_key;
 	}
 
 	win_crypto->m_csp = csp;
@@ -191,6 +177,14 @@ void mk_win_crypto_set_param(mk_win_crypto_h win_crypto_h, enum mk_win_crypto_pa
 			mk_assert(set != 0);
 		break;
 	}
+cleanup_destroy_key:
+		key_destroyed = CryptDestroyKey(ck);
+		mk_assert(key_destroyed != 0);
+cleanup_release_context:
+		csp_released = CryptReleaseContext(csp, 0);
+		mk_assert(csp_released != 0);
+cleanup_null:
+	return NULL;
 }
 
 mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output)
