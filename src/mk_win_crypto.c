@@ -52,15 +52,16 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 
 	BOOL csp_acquired;
 	HCRYPTPROV csp;
-	union mk_win_aes_blob_u key_blob;
 	int key_blob_size;
+	union mk_win_aes_blob_u key_blob;
 	BOOL ck_created;
 	HCRYPTKEY ck;
 	DWORD kp_mode;
 	BOOL mode_set;
-	BOOL csp_released;
-	BOOL key_destroyed;
 	BOOL iv_set;
+	struct mk_win_crypto_s* win_crypto;
+	BOOL key_destroyed;
+	BOOL csp_released;
 
 	mk_assert
 	(
@@ -141,7 +142,7 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 		}
 	}
 
-	struct mk_win_crypto_s* win_crypto = (struct mk_win_crypto_s*)malloc(sizeof (struct mk_win_crypto_s));
+	win_crypto = (struct mk_win_crypto_s*)malloc(sizeof (struct mk_win_crypto_s));
 	if(!win_crypto)
 	{
 		goto cleanup_destroy_key;
