@@ -27,8 +27,14 @@ enum mk_win_cryptong_algorithm_e
 	mk_win_cryptong_algorithm_aes256,
 };
 
+enum mk_win_cryptong_param_e
+{
+	mk_win_cryptong_param_cfb_s_bytes,
+};
+
 
 mk_extern_c mk_win_cryptong_h mk_win_cryptong_create(enum mk_win_cryptong_operation_mode_e operation_mode, enum mk_win_cryptong_algorithm_e algorithm, void const* iv, void const* key);
+mk_extern_c void mk_win_cryptong_set_param(mk_win_cryptong_h win_cryptong_h, enum mk_win_cryptong_param_e param, void const* value);
 mk_extern_c void mk_win_cryptong_encrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c int mk_win_cryptong_decrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c void mk_win_cryptong_destroy(mk_win_cryptong_h win_cryptong_h);

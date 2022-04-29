@@ -9,9 +9,6 @@
 #endif
 
 
-enum mk_operation_mode_detail_max_block_len_e { mk_operation_mode_detail_max_block_len = 16 };
-
-
 mk_extern_c void mk_operation_mode_detail_xor(int count, unsigned char const* src1, unsigned char const* src2, unsigned char* output);
 
 

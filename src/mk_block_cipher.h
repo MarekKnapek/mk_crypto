@@ -16,6 +16,9 @@ enum mk_block_cipher_e
 	mk_block_cipher_aes256,
 };
 
+enum mk_block_cipher_block_len_max_e { mk_block_cipher_block_len_max = 16 };
+enum mk_block_cipher_key_len_max_e { mk_block_cipher_key_len_max = 32 };
+
 
 mk_extern_c int mk_block_cipher_get_block_len(enum mk_block_cipher_e block_cipher);
 mk_extern_c int mk_block_cipher_get_key_len(enum mk_block_cipher_e block_cipher);

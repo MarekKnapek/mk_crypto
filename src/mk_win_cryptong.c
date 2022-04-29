@@ -10,13 +10,6 @@
 #define STATUS_SUCCESS 0
 
 
-#if defined(mk_win_cryptong_jumbo) && mk_win_cryptong_jumbo == 1
-#define mk_jumbo static mk_inline
-#else
-#define mk_jumbo
-#endif
-
-
 struct mk_win_cryptong_s
 {
 	BCRYPT_ALG_HANDLE m_alg;
@@ -27,7 +20,7 @@ struct mk_win_cryptong_s
 };
 
 
-mk_jumbo mk_win_cryptong_h mk_win_cryptong_create(enum mk_win_cryptong_operation_mode_e operation_mode, enum mk_win_cryptong_algorithm_e algorithm, void const* iv, void const* key)
+mk_win_cryptong_h mk_win_cryptong_create(enum mk_win_cryptong_operation_mode_e operation_mode, enum mk_win_cryptong_algorithm_e algorithm, void const* iv, void const* key)
 {
 	NTSTATUS alg_provider_opened;
 	BCRYPT_ALG_HANDLE alg;
@@ -164,7 +157,36 @@ cleanup_null:
 
 }
 
-mk_jumbo void mk_win_cryptong_encrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output)
+void mk_win_cryptong_set_param(mk_win_cryptong_h win_cryptong_h, enum mk_win_cryptong_param_e param, void const* value)
+{
+	struct mk_win_cryptong_s* win_cryptong;
+	DWORD dw_value;
+	PUCHAR p_value;
+	DWORD value_len;
+	NTSTATUS st;
+
+	mk_assert(win_cryptong_h);
+
+	mk_assert
+	(
+		param == mk_win_cryptong_param_cfb_s_bytes ||
+		0
+	);
+
+	win_cryptong = (struct mk_win_cryptong_s*)win_cryptong_h;
+	switch(param)
+	{
+		case mk_win_cryptong_param_cfb_s_bytes:
+			dw_value = *(int const*)value;
+			p_value = (PUCHAR)&dw_value;
+			value_len = sizeof(dw_value);
+			st = BCryptSetProperty(win_cryptong->m_key, BCRYPT_MESSAGE_BLOCK_LENGTH, p_value, value_len, 0);
+			mk_assert(st == STATUS_SUCCESS);
+		break;
+	}
+}
+
+void mk_win_cryptong_encrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output)
 {
 	struct mk_win_cryptong_s* win_cryptong;
 	PUCHAR iv;
@@ -187,7 +209,7 @@ mk_jumbo void mk_win_cryptong_encrypt(mk_win_cryptong_h win_cryptong_h, int fina
 	mk_assert(out_len == out_len_real);
 }
 
-mk_jumbo int mk_win_cryptong_decrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output)
+int mk_win_cryptong_decrypt(mk_win_cryptong_h win_cryptong_h, int final, void const* input, int input_len_bytes, void* output)
 {
 	struct mk_win_cryptong_s* win_cryptong;
 	PUCHAR iv;
@@ -210,7 +232,7 @@ mk_jumbo int mk_win_cryptong_decrypt(mk_win_cryptong_h win_cryptong_h, int final
 	return (int)out_len_real;
 }
 
-mk_jumbo void mk_win_cryptong_destroy(mk_win_cryptong_h win_cryptong_h)
+void mk_win_cryptong_destroy(mk_win_cryptong_h win_cryptong_h)
 {
 	struct mk_win_cryptong_s* win_cryptong;
 	NTSTATUS alg_provider_closed;

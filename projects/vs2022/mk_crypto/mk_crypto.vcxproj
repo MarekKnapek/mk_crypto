@@ -56,6 +56,7 @@
     <ClCompile Include="..\..\..\src\mk_sha3_detail.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_shake128.c" />
     <ClCompile Include="..\..\..\src\mk_sha3_shake256.c" />
+    <ClCompile Include="..\..\..\src\mk_tom_crypto.c" />
     <ClCompile Include="..\..\..\src\mk_win_aes.c" />
     <ClCompile Include="..\..\..\src\mk_win_crypto.c" />
     <ClCompile Include="..\..\..\src\mk_win_cryptong.c" />
@@ -67,6 +68,7 @@
     <ClCompile Include="..\..\..\src\mk_win_sha2_384.c" />
     <ClCompile Include="..\..\..\src\mk_win_sha2_512.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode.c" />
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_base.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.c" />
@@ -77,6 +79,7 @@
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_1.h" />
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_3.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
@@ -110,6 +113,7 @@
     <ClInclude Include="..\..\..\src\mk_sha3_detail.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\mk_sha3_shake256.h" />
+    <ClInclude Include="..\..\..\src\mk_tom_crypto.h" />
     <ClInclude Include="..\..\..\src\mk_win_aes.h" />
     <ClInclude Include="..\..\..\src\mk_win_crypto.h" />
     <ClInclude Include="..\..\..\src\mk_win_cryptong.h" />
@@ -121,6 +125,7 @@
     <ClInclude Include="..\..\..\src\mk_win_sha2_384.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha2_512.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode.h" />
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_base.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.h" />

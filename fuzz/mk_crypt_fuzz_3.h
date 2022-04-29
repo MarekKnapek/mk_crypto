@@ -1,5 +1,5 @@
 #include "../src/mk_crypto.h"
-#include "../src/mk_win_cryptong.h"
+#include "../src/mk_tom_crypto.h"
 
 #include "../utils/mk_inline.h"
 
@@ -11,34 +11,33 @@
 #define test(x) do{ if(!(x)){ int volatile* volatile ptr = NULL; *ptr = 0; } }while(0)
 
 
-static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
+static mk_inline void mk_crypto_fuzz_3(unsigned char const* data, size_t size)
 {
 	enum mk_crypto_operation_mode_e om_mk;
-	enum mk_win_cryptong_operation_mode_e om_winng;
+	enum mk_tom_crypto_operation_mode_e om_tom;
 	enum mk_crypto_algorithm_e alg_mk;
-	enum mk_win_cryptong_algorithm_e alg_winng;
+	enum mk_tom_crypto_algorithm_e alg_tom;
 	int key_len;
 	unsigned char const* iv;
 	unsigned char const* key;
 	int chunks;
-	int cfb_full;
 	int cfb_s_bytes;
 	int good;
 	int i;
 	int blocks;
 	mk_crypto_h crypto_mk;
-	mk_win_cryptong_h crypto_winng;
+	mk_tom_crypto_h crypto_tom;
 	mk_crypto_h cryptod_mk;
-	mk_win_cryptong_h cryptod_winng;
+	mk_tom_crypto_h cryptod_tom;
 	unsigned char const* msg;
 	int msg_len;
 	int out_len;
 	unsigned char* out_mk;
-	unsigned char* out_winng;
+	unsigned char* out_tom;
 	int out_lend_mk;
-	int out_lend_winng;
+	int out_lend_tom;
 	unsigned char* outd_mk;
-	unsigned char* outd_winng;
+	unsigned char* outd_tom;
 
 	test(data);
 
@@ -46,12 +45,12 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	{
 		return;
 	}
-	om_mk = 0, om_winng = 0;
+	om_mk = 0, om_tom = 0;
 	switch(*data % 3)
 	{
-		case 0: om_mk = mk_crypto_operation_mode_cbc; om_winng = mk_win_cryptong_operation_mode_cbc; break;
-		case 1: om_mk = mk_crypto_operation_mode_ecb; om_winng = mk_win_cryptong_operation_mode_ecb; break;
-		case 2: om_mk = mk_crypto_operation_mode_cfb; om_winng = mk_win_cryptong_operation_mode_cfb; break;
+		case 0: om_mk = mk_crypto_operation_mode_cbc; om_tom = mk_tom_crypto_operation_mode_cbc; break;
+		case 1: om_mk = mk_crypto_operation_mode_ecb; om_tom = mk_tom_crypto_operation_mode_ecb; break;
+		case 2: om_mk = mk_crypto_operation_mode_cfb; om_tom = mk_tom_crypto_operation_mode_cfb; break;
 	}
 	++data;
 	--size;
@@ -60,13 +59,13 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	{
 		return;
 	}
-	alg_mk = 0, alg_winng = 0;
+	alg_mk = 0, alg_tom = 0;
 	key_len = 0;
 	switch(*data % 3)
 	{
-		case 0: alg_mk = mk_crypto_block_cipher_aes128; alg_winng = mk_win_cryptong_algorithm_aes128; key_len = 16; break;
-		case 1: alg_mk = mk_crypto_block_cipher_aes192; alg_winng = mk_win_cryptong_algorithm_aes192; key_len = 24; break;
-		case 2: alg_mk = mk_crypto_block_cipher_aes256; alg_winng = mk_win_cryptong_algorithm_aes256; key_len = 32; break;
+		case 0: alg_mk = mk_crypto_block_cipher_aes128; alg_tom = mk_tom_crypto_block_cipher_aes128; key_len = 16; break;
+		case 1: alg_mk = mk_crypto_block_cipher_aes192; alg_tom = mk_tom_crypto_block_cipher_aes192; key_len = 24; break;
+		case 2: alg_mk = mk_crypto_block_cipher_aes256; alg_tom = mk_tom_crypto_block_cipher_aes256; key_len = 32; break;
 	}
 	++data;
 	--size;
@@ -95,30 +94,20 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	++data;
 	--size;
 
-	if(!(size >= 1))
-	{
-		return;
-	}
-	cfb_full = *data % 2;
-	++data;
-	--size;
-
 	crypto_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	crypto_winng = mk_win_cryptong_create(om_winng, alg_winng, iv, key);
+	crypto_tom = mk_tom_crypto_create(om_tom, alg_tom, iv, key);
 	test(crypto_mk);
-	test(crypto_winng);
+	test(crypto_tom);
 	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	cryptod_winng = mk_win_cryptong_create(om_winng, alg_winng, iv, key);
+	cryptod_tom = mk_tom_crypto_create(om_tom, alg_tom, iv, key);
 	test(cryptod_mk);
-	test(cryptod_winng);
+	test(cryptod_tom);
 
-	if(om_mk == mk_crypto_operation_mode_cfb && cfb_full == 1)
+	if(om_mk == mk_crypto_operation_mode_cfb)
 	{
 		cfb_s_bytes = 16;
 		mk_crypto_set_param(crypto_mk, mk_crypto_param_cfb_s_bytes, &cfb_s_bytes);
 		mk_crypto_set_param(cryptod_mk, mk_crypto_param_cfb_s_bytes, &cfb_s_bytes);
-		mk_win_cryptong_set_param(crypto_winng, mk_win_cryptong_param_cfb_s_bytes, &cfb_s_bytes);
-		mk_win_cryptong_set_param(cryptod_winng, mk_win_cryptong_param_cfb_s_bytes, &cfb_s_bytes);
 	}
 
 	good = 1;
@@ -143,11 +132,11 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 		test(out_mk);
 		mk_crypto_encrypt(crypto_mk, 0, data, blocks * 16, out_mk);
 
-		out_winng = malloc(blocks * 16);
-		test(out_winng);
-		mk_win_cryptong_encrypt(crypto_winng, 0, data, blocks * 16, out_winng);
+		out_tom = malloc(blocks * 16);
+		test(out_tom);
+		mk_tom_crypto_encrypt(crypto_tom, 0, data, blocks * 16, out_tom);
 
-		test(memcmp(out_mk, out_winng, blocks * 16) == 0);
+		test(memcmp(out_mk, out_tom, blocks * 16) == 0);
 
 		outd_mk = malloc(blocks * 16);
 		test(outd_mk);
@@ -155,16 +144,16 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 		test(out_lend_mk == blocks * 16);
 		test(memcmp(outd_mk, data, blocks * 16) == 0);
 
-		outd_winng = malloc(blocks * 16);
-		test(outd_winng);
-		out_lend_winng = mk_win_cryptong_decrypt(cryptod_winng, 0, out_winng, blocks * 16, outd_winng);
+		outd_tom = malloc(blocks * 16);
+		test(outd_tom);
+		out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 0, out_tom, blocks * 16, outd_tom);
 		test(out_lend_mk == blocks * 16);
-		test(memcmp(outd_winng, data, blocks * 16) == 0);
+		test(memcmp(outd_tom, data, blocks * 16) == 0);
 
 		free(out_mk);
-		free(out_winng);
+		free(out_tom);
 		free(outd_mk);
-		free(outd_winng);
+		free(outd_tom);
 
 		data += blocks * 16;
 		size -= blocks * 16;
@@ -172,9 +161,9 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	if(!good)
 	{
 		mk_crypto_destroy(crypto_mk);
-		mk_win_cryptong_destroy(crypto_winng);
+		mk_tom_crypto_destroy(crypto_tom);
 		mk_crypto_destroy(cryptod_mk);
-		mk_win_cryptong_destroy(cryptod_winng);
+		mk_tom_crypto_destroy(cryptod_tom);
 		return;
 	}
 
@@ -183,16 +172,16 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	
 	out_len = (msg_len / 16 + 1) * 16;
 	out_mk = (unsigned char*)malloc(out_len);
-	out_winng = (unsigned char*)malloc(out_len);
+	out_tom = (unsigned char*)malloc(out_len);
 	test(out_mk);
-	test(out_winng);
+	test(out_tom);
 	memset(out_mk, 0, out_len);
-	memset(out_winng, 0, out_len);
+	memset(out_tom, 0, out_len);
 
 	mk_crypto_encrypt(crypto_mk, 1, msg, msg_len, out_mk);
-	mk_win_cryptong_encrypt(crypto_winng, 1, msg, msg_len, out_winng);
+	mk_tom_crypto_encrypt(crypto_tom, 1, msg, msg_len, out_tom);
 
-	test(memcmp(out_mk, out_winng, out_len) == 0);
+	test(memcmp(out_mk, out_tom, out_len) == 0);
 
 	outd_mk = malloc(out_len);
 	test(outd_mk);
@@ -200,21 +189,21 @@ static mk_inline void mk_crypto_fuzz_2(unsigned char const* data, size_t size)
 	test(out_lend_mk == msg_len);
 	test(memcmp(outd_mk, msg, msg_len) == 0);
 
-	outd_winng = malloc(out_len);
-	test(outd_winng);
-	out_lend_winng = mk_win_cryptong_decrypt(cryptod_winng, 1, out_winng, out_len, outd_winng);
-	test(out_lend_winng == msg_len);
-	test(memcmp(outd_winng, msg, msg_len) == 0);
+	outd_tom = malloc(out_len);
+	test(outd_tom);
+	out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 1, out_tom, out_len, outd_tom);
+	test(out_lend_tom == msg_len);
+	test(memcmp(outd_tom, msg, msg_len) == 0);
 
 	mk_crypto_destroy(crypto_mk);
-	mk_win_cryptong_destroy(crypto_winng);
+	mk_tom_crypto_destroy(crypto_tom);
 	mk_crypto_destroy(cryptod_mk);
-	mk_win_cryptong_destroy(cryptod_winng);
+	mk_tom_crypto_destroy(cryptod_tom);
 
 	free(out_mk);
-	free(out_winng);
+	free(out_tom);
 	free(outd_mk);
-	free(outd_winng);
+	free(outd_tom);
 }
 
 

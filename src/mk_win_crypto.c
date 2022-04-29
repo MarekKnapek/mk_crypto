@@ -166,6 +166,33 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	return (mk_win_crypto_h)win_crypto;
 }
 
+void mk_win_crypto_set_param(mk_win_crypto_h win_crypto_h, enum mk_win_crypto_param_e param, void const* value)
+{
+	struct mk_win_crypto_s* win_crypto;
+	DWORD dw_value;
+	BYTE const* p_value;
+	BOOL set;
+
+	mk_assert(win_crypto_h);
+
+	mk_assert
+	(
+		param == mk_win_crypto_param_cfb_s_bytes ||
+		0
+	);
+
+	win_crypto = (struct mk_win_crypto_s*)win_crypto_h;
+	switch(param)
+	{
+		case mk_win_crypto_param_cfb_s_bytes:
+			dw_value = *(int const*)value;
+			p_value = (BYTE const*)&dw_value;
+			set = CryptSetKeyParam(win_crypto->m_ck, KP_MODE_BITS, p_value, 0);
+			mk_assert(set != 0);
+		break;
+	}
+}
+
 mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output)
 {
 	struct mk_win_crypto_s* win_crypto;

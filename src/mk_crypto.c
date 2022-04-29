@@ -30,8 +30,28 @@ mk_crypto_h mk_crypto_create(enum mk_crypto_operation_mode_e operation_mode, enu
 	{
 		return NULL;
 	}
-	mk_crypt_init(crypt, operation_mode, block_cipher, iv, key);
+	mk_crypt_init(crypt, operation_mode, block_cipher, key);
+	if(operation_mode != mk_operation_mode_ecb)
+	{
+		mk_crypt_set_param_iv(crypt, iv);
+	}
 	return (mk_crypto_h)crypt;
+}
+
+void mk_crypto_set_param(mk_crypto_h crypto, enum mk_crypto_param_e param, void const* value)
+{
+	mk_assert(crypto);
+
+	mk_assert
+	(
+		param == mk_crypto_param_cfb_s_bytes ||
+		0
+	);
+
+	switch(param)
+	{
+		case mk_crypto_param_cfb_s_bytes: mk_crypt_set_param_cfb_s_bytes((struct mk_crypt_s*)crypto, *(int const*)value); break;
+	}
 }
 
 void mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output)
