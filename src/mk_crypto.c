@@ -13,6 +13,7 @@ mk_crypto_h mk_crypto_create(enum mk_crypto_operation_mode_e operation_mode, enu
 	(
 		operation_mode == mk_crypto_operation_mode_cbc ||
 		operation_mode == mk_crypto_operation_mode_cfb ||
+		operation_mode == mk_crypto_operation_mode_ctr ||
 		operation_mode == mk_crypto_operation_mode_ecb ||
 		operation_mode == mk_crypto_operation_mode_ofb ||
 		0

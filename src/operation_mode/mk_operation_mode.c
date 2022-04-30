@@ -13,6 +13,7 @@
 	( \
 		(operation_mode) == mk_operation_mode_cbc || \
 		(operation_mode) == mk_operation_mode_cfb || \
+		(operation_mode) == mk_operation_mode_ctr || \
 		(operation_mode) == mk_operation_mode_ecb || \
 		(operation_mode) == mk_operation_mode_ofb || \
 		0 \
@@ -29,6 +30,7 @@ void mk_operation_mode_init(struct mk_operation_mode_s* operation_mode, enum mk_
 	{
 		case mk_operation_mode_cbc: mk_operation_mode_init_cbc(&operation_mode->m_cbc, block_cipher, key); break;
 		case mk_operation_mode_cfb: mk_operation_mode_init_cfb(&operation_mode->m_cfb, block_cipher, key); break;
+		case mk_operation_mode_ctr: mk_operation_mode_init_ctr(&operation_mode->m_ctr, block_cipher, key); break;
 		case mk_operation_mode_ecb: mk_operation_mode_init_ecb(&operation_mode->m_ecb, block_cipher, key); break;
 		case mk_operation_mode_ofb: mk_operation_mode_init_ofb(&operation_mode->m_ofb, block_cipher, key); break;
 	}
@@ -43,6 +45,7 @@ enum mk_block_cipher_e mk_operation_mode_get_block_cipher(struct mk_operation_mo
 	{
 		case mk_operation_mode_cbc: return mk_operation_mode_get_block_cipher_cbc(&operation_mode->m_cbc); break;
 		case mk_operation_mode_cfb: return mk_operation_mode_get_block_cipher_cfb(&operation_mode->m_cfb); break;
+		case mk_operation_mode_ctr: return mk_operation_mode_get_block_cipher_ctr(&operation_mode->m_ctr); break;
 		case mk_operation_mode_ecb: return mk_operation_mode_get_block_cipher_ecb(&operation_mode->m_ecb); break;
 		case mk_operation_mode_ofb: return mk_operation_mode_get_block_cipher_ofb(&operation_mode->m_ofb); break;
 	}
@@ -59,6 +62,7 @@ void mk_operation_mode_set_param_iv(struct mk_operation_mode_s* operation_mode, 
 	{
 		case mk_operation_mode_cbc: mk_operation_mode_set_param_iv_cbc(&operation_mode->m_cbc, iv); break;
 		case mk_operation_mode_cfb: mk_operation_mode_set_param_iv_cfb(&operation_mode->m_cfb, iv); break;
+		case mk_operation_mode_ctr: mk_operation_mode_set_param_iv_ctr(&operation_mode->m_ctr, iv); break;
 		case mk_operation_mode_ofb: mk_operation_mode_set_param_iv_ofb(&operation_mode->m_ofb, iv); break;
 	}
 }
@@ -81,6 +85,7 @@ void mk_operation_mode_encrypt_blocks(struct mk_operation_mode_s* operation_mode
 	{
 		case mk_operation_mode_cbc: mk_operation_mode_encrypt_blocks_cbc(&operation_mode->m_cbc, blocks, input, output); break;
 		case mk_operation_mode_cfb: mk_operation_mode_encrypt_blocks_cfb(&operation_mode->m_cfb, blocks, input, output); break;
+		case mk_operation_mode_ctr: mk_operation_mode_encrypt_blocks_ctr(&operation_mode->m_ctr, blocks, input, output); break;
 		case mk_operation_mode_ecb: mk_operation_mode_encrypt_blocks_ecb(&operation_mode->m_ecb, blocks, input, output); break;
 		case mk_operation_mode_ofb: mk_operation_mode_encrypt_blocks_ofb(&operation_mode->m_ofb, blocks, input, output); break;
 	}
@@ -95,6 +100,7 @@ void mk_operation_mode_decrypt_blocks(struct mk_operation_mode_s* operation_mode
 	{
 		case mk_operation_mode_cbc: mk_operation_mode_decrypt_blocks_cbc(&operation_mode->m_cbc, blocks, input, output); break;
 		case mk_operation_mode_cfb: mk_operation_mode_decrypt_blocks_cfb(&operation_mode->m_cfb, blocks, input, output); break;
+		case mk_operation_mode_ctr: mk_operation_mode_decrypt_blocks_ctr(&operation_mode->m_ctr, blocks, input, output); break;
 		case mk_operation_mode_ecb: mk_operation_mode_decrypt_blocks_ecb(&operation_mode->m_ecb, blocks, input, output); break;
 		case mk_operation_mode_ofb: mk_operation_mode_decrypt_blocks_ofb(&operation_mode->m_ofb, blocks, input, output); break;
 	}

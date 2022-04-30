@@ -71,6 +71,7 @@
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_base.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.c" />
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_impl.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.c" />
@@ -129,6 +130,7 @@
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_base.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cbc.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_cfb.h" />
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_impl.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.h" />
