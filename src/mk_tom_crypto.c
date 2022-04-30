@@ -10,9 +10,17 @@
 
 #include "../../libtomcrypt/src/headers/tomcrypt.h"
 #if defined(_M_IX86)
+#if defined(NDEBUG)
+#pragma comment(lib, "../../../../libtomcrypt/MSVC_Win32_Release/tomcrypt.lib")
+#else
 #pragma comment(lib, "../../../../libtomcrypt/MSVC_Win32_Debug/tomcryptd.lib")
+#endif
 #elif defined(_M_AMD64)
+#if defined(NDEBUG)
+#pragma comment(lib, "../../../../libtomcrypt/MSVC_x64_Release/tomcrypt.lib")
+#else
 #pragma comment(lib, "../../../../libtomcrypt/MSVC_x64_Debug/tomcryptd.lib")
+#endif
 #endif
 
 
