@@ -58,11 +58,11 @@ void mk_crypto_set_param(mk_crypto_h crypto, enum mk_crypto_param_e param, void 
 	}
 }
 
-void mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output)
+int mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output)
 {
 	mk_assert(crypto);
 
-	mk_crypt_encrypt((struct mk_crypt_s*)crypto, final, input, input_len_bytes, output);
+	return mk_crypt_encrypt((struct mk_crypt_s*)crypto, final, input, input_len_bytes, output);
 }
 
 int mk_crypto_decrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output)

@@ -36,7 +36,7 @@ enum mk_crypto_param_e
 
 mk_extern_c mk_crypto_h mk_crypto_create(enum mk_crypto_operation_mode_e operation_mode, enum mk_crypto_block_cipher_e block_cipher, void const* iv, void const* key);
 mk_extern_c void mk_crypto_set_param(mk_crypto_h crypto, enum mk_crypto_param_e param, void const* value);
-mk_extern_c void mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output);
+mk_extern_c int mk_crypto_encrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c int mk_crypto_decrypt(mk_crypto_h crypto, int final, void const* input, int input_len_bytes, void* output);
 mk_extern_c void mk_crypto_destroy(mk_crypto_h crypto);
 
