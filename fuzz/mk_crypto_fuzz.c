@@ -14,8 +14,26 @@
 #include <stddef.h> /* size_t */
 
 
+
+#include "../src/hw/mk_cpuid.h"
+
+
 int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
+	struct mk_cpuid_registers_s registers;
+	mk_cpuid(0, &registers);
+	if(registers.m_eax >= 1)
+	{
+		mk_cpuid(1, &registers);
+		if
+		(
+			((registers.m_ecx & (1u <<  1)) != 0) &&
+			((registers.m_ecx & (1u << 25)) != 0)
+		)
+		{
+		}
+	}
+
 	mk_crypto_fuzz(data, size);
 	//mk_aes_fuzz(data, size);
 	//mk_md2_fuzz(data, size);

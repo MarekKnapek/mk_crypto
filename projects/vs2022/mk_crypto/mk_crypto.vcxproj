@@ -33,6 +33,7 @@
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512256_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512_fuzz.c" />
     <ClCompile Include="..\..\..\libs\mk_int.c" />
+    <ClCompile Include="..\..\..\src\hw\mk_cpuid.c" />
     <ClCompile Include="..\..\..\src\mk_aes.c" />
     <ClCompile Include="..\..\..\src\mk_block_cipher.c" />
     <ClCompile Include="..\..\..\src\mk_crypt.c" />
@@ -93,6 +94,8 @@
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512224_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512256_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512_fuzz.h" />
+    <ClInclude Include="..\..\..\src\hw\mk_cpuid.h" />
+    <ClInclude Include="..\..\..\src\hw\mk_cpuid_hw.h" />
     <ClInclude Include="..\..\..\src\mk_aes.h" />
     <ClInclude Include="..\..\..\src\mk_block_cipher.h" />
     <ClInclude Include="..\..\..\src\mk_crypt.h" />
@@ -139,6 +142,15 @@
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\utils\mk_setup.h" />
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x86.asm">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </MASM>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -183,6 +195,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -287,5 +300,6 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
