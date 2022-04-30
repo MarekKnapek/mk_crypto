@@ -27,6 +27,13 @@ void mk_crypt_set_param_cfb_s_bytes(struct mk_crypt_s* crypt, int cfb_s_bytes)
 	mk_operation_mode_set_param_cfb_s_bytes(&crypt->m_operation_mode, cfb_s_bytes);
 }
 
+void mk_crypt_set_param_ctr_endian(struct mk_crypt_s* crypt, int ctr_endian)
+{
+	mk_assert(crypt);
+
+	mk_operation_mode_set_param_ctr_endian(&crypt->m_operation_mode, ctr_endian);
+}
+
 int mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* input, int input_len_bytes, void* output)
 {
 	unsigned char const* in;

@@ -72,8 +72,15 @@ void mk_operation_mode_set_param_cfb_s_bytes(struct mk_operation_mode_s* operati
 	mk_assert(operation_mode);
 	mk_assert(operation_mode->m_type == mk_operation_mode_cfb);
 
-
 	mk_operation_mode_set_param_cfb_s_bytes_cfb(&operation_mode->m_cfb, cfb_s_bytes);
+}
+
+void mk_operation_mode_set_param_ctr_endian(struct mk_operation_mode_s* operation_mode, int ctr_endian)
+{
+	mk_assert(operation_mode);
+	mk_assert(operation_mode->m_type == mk_operation_mode_ctr);
+
+	mk_operation_mode_set_param_ctr_endian_ctr(&operation_mode->m_ctr, ctr_endian);
 }
 
 void mk_operation_mode_encrypt_blocks(struct mk_operation_mode_s* operation_mode, int blocks, unsigned char const* input, unsigned char* output)

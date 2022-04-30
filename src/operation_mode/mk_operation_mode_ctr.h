@@ -17,6 +17,7 @@ struct mk_operation_mode_ctr_s
 {
 	struct mk_operation_mode_base_s m_base;
 	unsigned char m_iv[mk_block_cipher_block_len_max];
+	int m_endian;
 };
 
 
@@ -24,6 +25,7 @@ mk_extern_c void mk_operation_mode_init_ctr(struct mk_operation_mode_ctr_s* ctr,
 mk_extern_c enum mk_block_cipher_e mk_operation_mode_get_block_cipher_ctr(struct mk_operation_mode_ctr_s* ctr);
 mk_extern_c unsigned char const* mk_operation_mode_get_key_ctr(struct mk_operation_mode_ctr_s* ctr);
 mk_extern_c void mk_operation_mode_set_param_iv_ctr(struct mk_operation_mode_ctr_s* ctr, unsigned char const* iv);
+mk_extern_c void mk_operation_mode_set_param_ctr_endian_ctr(struct mk_operation_mode_ctr_s* ctr, int endian);
 mk_extern_c void mk_operation_mode_encrypt_blocks_ctr(struct mk_operation_mode_ctr_s* ctr, int blocks, unsigned char const* input, unsigned char* output);
 mk_extern_c void mk_operation_mode_decrypt_blocks_ctr(struct mk_operation_mode_ctr_s* ctr, int blocks, unsigned char const* input, unsigned char* output);
 

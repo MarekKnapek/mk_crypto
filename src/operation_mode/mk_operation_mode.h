@@ -44,6 +44,7 @@ mk_extern_c void mk_operation_mode_init(struct mk_operation_mode_s* operation_mo
 mk_extern_c enum mk_block_cipher_e mk_operation_mode_get_block_cipher(struct mk_operation_mode_s* operation_mode);
 mk_extern_c void mk_operation_mode_set_param_iv(struct mk_operation_mode_s* operation_mode, unsigned char const* iv);
 mk_extern_c void mk_operation_mode_set_param_cfb_s_bytes(struct mk_operation_mode_s* operation_mode, int cfb_s_bytes);
+mk_extern_c void mk_operation_mode_set_param_ctr_endian(struct mk_operation_mode_s* operation_mode, int ctr_endian);
 mk_extern_c void mk_operation_mode_encrypt_blocks(struct mk_operation_mode_s* operation_mode, int blocks, unsigned char const* input, unsigned char* output);
 mk_extern_c void mk_operation_mode_decrypt_blocks(struct mk_operation_mode_s* operation_mode, int blocks, unsigned char const* input, unsigned char* output);
 

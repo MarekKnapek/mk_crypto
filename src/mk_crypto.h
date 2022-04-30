@@ -30,6 +30,7 @@ enum mk_crypto_block_cipher_e
 enum mk_crypto_param_e
 {
 	mk_crypto_param_cfb_s_bytes,
+	mk_crypto_param_ctr_endian,
 };
 
 

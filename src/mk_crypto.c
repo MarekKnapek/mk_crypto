@@ -47,12 +47,14 @@ void mk_crypto_set_param(mk_crypto_h crypto, enum mk_crypto_param_e param, void 
 	mk_assert
 	(
 		param == mk_crypto_param_cfb_s_bytes ||
+		param == mk_crypto_param_ctr_endian ||
 		0
 	);
 
 	switch(param)
 	{
 		case mk_crypto_param_cfb_s_bytes: mk_crypt_set_param_cfb_s_bytes((struct mk_crypt_s*)crypto, *(int const*)value); break;
+		case mk_crypto_param_ctr_endian: mk_crypt_set_param_ctr_endian((struct mk_crypt_s*)crypto, *(int const*)value); break;
 	}
 }
 
