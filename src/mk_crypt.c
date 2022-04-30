@@ -60,13 +60,13 @@ int mk_crypt_encrypt(struct mk_crypt_s* crypt, int final, void const* input, int
 
 	block_len = mk_block_cipher_get_block_len(mk_operation_mode_get_block_cipher(&crypt->m_operation_mode));
 	capacity = block_len - crypt->m_idx;
-	if(len >= block_len)
+	if(len >= capacity)
 	{
 		if(crypt->m_idx != 0)
 		{
 			memcpy(crypt->m_block + crypt->m_idx, in, capacity);
 			crypt->m_idx = 0;
-			encrypted = mk_crypt_encrypt(crypt, final, crypt->m_block, block_len, out);
+			encrypted = mk_crypt_encrypt(crypt, 0, crypt->m_block, block_len, out);
 			mk_assert(encrypted == block_len);
 			in += capacity;
 			len -= capacity;
