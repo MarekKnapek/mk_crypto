@@ -19,7 +19,7 @@ static mk_inline void mk_operation_mode_ctr_detail_inc(int count, unsigned char 
 	do
 	{
 		dst[i] = src[i] + 1;
-	}while(dst[i++] == 0);
+	}while(dst[i++] == 0 && i < count);
 }
 
 static mk_inline void mk_operation_mode_process_blocks_ctr(struct mk_operation_mode_ctr_s* ctr, int blocks, unsigned char const* input, unsigned char* output)
