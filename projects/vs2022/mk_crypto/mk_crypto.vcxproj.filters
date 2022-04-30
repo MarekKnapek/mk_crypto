@@ -368,5 +368,8 @@
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.h">
       <Filter>src\operation_mode</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_4.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -82,6 +82,7 @@
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_1.h" />
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h" />
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_3.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_4.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
