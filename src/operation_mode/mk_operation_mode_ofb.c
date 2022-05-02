@@ -1,6 +1,7 @@
 #include "mk_operation_mode_ofb.h"
 
 #include "mk_operation_mode_impl.h"
+
 #include "../../utils/mk_assert.h"
 #include "../../utils/mk_inline.h"
 
@@ -10,8 +11,6 @@
 static mk_inline void mk_operation_mode_process_blocks_ofb(struct mk_operation_mode_ofb_s* ofb, int blocks, unsigned char const* input, unsigned char* output)
 {
 	int block_len;
-	unsigned char const* ivp;
-	unsigned char tmp[mk_block_cipher_block_len_max];
 	int i;
 
 	mk_assert(ofb);
@@ -20,18 +19,13 @@ static mk_inline void mk_operation_mode_process_blocks_ofb(struct mk_operation_m
 	mk_assert(output);
 
 	block_len = mk_block_cipher_get_block_len(ofb->m_base.m_block_cipher);
-	mk_assert(block_len <= mk_block_cipher_block_len_max);
-
-	ivp = ofb->m_iv;
 	for(i = 0; i != blocks; ++i)
 	{
-		mk_block_cipher_encrypt_block(ofb->m_base.m_block_cipher, ofb->m_base.m_key, ivp, tmp);
-		mk_operation_mode_detail_xor(block_len, tmp, input, output);
-		ivp = tmp;
+		mk_block_cipher_encrypt_block(ofb->m_base.m_block_cipher, ofb->m_base.m_key, ofb->m_iv, ofb->m_iv);
+		mk_operation_mode_detail_xor(block_len, ofb->m_iv, input, output);
 		input += block_len;
 		output += block_len;
 	}
-	memcpy(ofb->m_iv, ivp, block_len);
 }
 
 

@@ -1,15 +1,21 @@
 #include "mk_crypt_fuzz.h"
 
-#include "mk_crypt_fuzz_1.h"
-#include "mk_crypt_fuzz_2.h"
-#include "mk_crypt_fuzz_3.h"
-#include "mk_crypt_fuzz_4.h"
+#include "mk_crypt_fuzz_inplace_decrypt.h"
+#include "mk_crypt_fuzz_inplace_encrypt.h"
+#include "mk_crypt_fuzz_piecewise_decrypt.h"
+#include "mk_crypt_fuzz_piecewise_encrypt.h"
+#include "mk_crypt_fuzz_tom.h"
+#include "mk_crypt_fuzz_win.h"
+#include "mk_crypt_fuzz_winng.h"
 
 
 void mk_crypto_fuzz(unsigned char const* data, size_t size)
 {
-	mk_crypto_fuzz_1(data, size);
-	mk_crypto_fuzz_2(data, size);
-	mk_crypto_fuzz_3(data, size);
-	mk_crypto_fuzz_4(data, size);
+	mk_crypt_fuzz_inplace_decrypt(data, size);
+	mk_crypt_fuzz_inplace_encrypt(data, size);
+	mk_crypt_fuzz_piecewise_decrypt(data, size);
+	mk_crypt_fuzz_piecewise_encrypt(data, size);
+	mk_crypto_fuzz_tom(data, size);
+	mk_crypto_fuzz_win(data, size);
+	mk_crypto_fuzz_winng(data, size);
 }

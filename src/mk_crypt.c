@@ -116,6 +116,7 @@ int mk_crypt_decrypt(struct mk_crypt_s* crypt, int final, void const* input, int
 	mk_assert(final == 0 || final == 1);
 	mk_assert(input || input_len_bytes == 0);
 	mk_assert(input_len_bytes >= 0);
+	mk_assert(final == 0 || input_len_bytes != 0);
 	mk_assert(output || (!input && final == 0));
 
 	in = (unsigned char const*)input;
@@ -124,43 +125,39 @@ int mk_crypt_decrypt(struct mk_crypt_s* crypt, int final, void const* input, int
 	ret = 0;
 
 	block_len = mk_block_cipher_get_block_len(mk_operation_mode_get_block_cipher(&crypt->m_operation_mode));
-	mk_assert(final == 0 || len % block_len == 0);
-	if(final == 1 && len >= block_len)
-	{
-		len -= block_len;
-	}
+	mk_assert(final == 0 || (crypt->m_idx + len) % block_len == 0);
 	capacity = block_len - crypt->m_idx;
-	if(len >= block_len)
+	if(len >= capacity + final * block_len)
 	{
 		if(crypt->m_idx != 0)
 		{
 			memcpy(crypt->m_block + crypt->m_idx, in, capacity);
 			crypt->m_idx = 0;
-			decrypted = mk_crypt_decrypt(crypt, final, crypt->m_block, block_len, out);
+			decrypted = mk_crypt_decrypt(crypt, 0, crypt->m_block, block_len, out);
 			mk_assert(decrypted == block_len);
 			in += capacity;
 			len -= capacity;
 			out += block_len;
 			ret += block_len;
 		}
-		blocks = len / block_len;
+		blocks = len / block_len - final;
 		mk_operation_mode_decrypt_blocks(&crypt->m_operation_mode, blocks, in, out);
 		in += blocks * block_len;
 		len -= blocks * block_len;
 		out += blocks * block_len;
 		ret += blocks * block_len;
 	}
-	mk_assert(len < block_len);
-	mk_assert(crypt->m_idx + len < block_len);
+	mk_assert(len < block_len + final);
+	mk_assert(crypt->m_idx + len < block_len + final);
 	memcpy(crypt->m_block + crypt->m_idx, in, len);
 	crypt->m_idx += len;
 
 	if(final == 1)
 	{
 		#define decrypt_check(x) do{ if(!(x)){ return -1; } }while(0)
-		mk_assert(crypt->m_idx == 0);
-		mk_assert(len == 0);
-		decrypted = mk_crypt_decrypt(crypt, 0, in, block_len, crypt->m_block);
+		mk_assert(crypt->m_idx == block_len);
+		crypt->m_idx = 0;
+		decrypted = mk_crypt_decrypt(crypt, 0, crypt->m_block, block_len, crypt->m_block);
 		mk_assert(decrypted == block_len);
 		padding = crypt->m_block[block_len - 1];
 		decrypt_check(padding <= block_len);

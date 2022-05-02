@@ -33,7 +33,6 @@
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512256_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512_fuzz.c" />
     <ClCompile Include="..\..\..\libs\mk_int.c" />
-    <ClCompile Include="..\..\..\src\hw\mk_cpuid.c" />
     <ClCompile Include="..\..\..\src\mk_aes.c" />
     <ClCompile Include="..\..\..\src\mk_block_cipher.c" />
     <ClCompile Include="..\..\..\src\mk_crypt.c" />
@@ -80,10 +79,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz.h" />
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_1.h" />
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h" />
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_3.h" />
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_4.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_inplace_decrypt.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_inplace_encrypt.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_piecewise_decrypt.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_piecewise_encrypt.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_tom.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_win.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_winng.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
@@ -94,8 +96,6 @@
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512224_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512256_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512_fuzz.h" />
-    <ClInclude Include="..\..\..\src\hw\mk_cpuid.h" />
-    <ClInclude Include="..\..\..\src\hw\mk_cpuid_hw.h" />
     <ClInclude Include="..\..\..\src\mk_aes.h" />
     <ClInclude Include="..\..\..\src\mk_block_cipher.h" />
     <ClInclude Include="..\..\..\src\mk_crypt.h" />
@@ -141,15 +141,6 @@
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\utils\mk_setup.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x64.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </MASM>
-    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x86.asm">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </MASM>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

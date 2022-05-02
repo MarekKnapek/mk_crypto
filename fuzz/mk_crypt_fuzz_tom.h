@@ -11,7 +11,7 @@
 #define test(x) do{ if(!(x)){ int volatile* volatile ptr = NULL; *ptr = 0; } }while(0)
 
 
-static mk_inline void mk_crypto_fuzz_3(unsigned char const* data, size_t size)
+static mk_inline void mk_crypto_fuzz_tom(unsigned char const* data, size_t size)
 {
 	enum mk_crypto_operation_mode_e om_mk;
 	enum mk_tom_crypto_operation_mode_e om_tom;

@@ -16,9 +16,6 @@
     <Filter Include="src\operation_mode">
       <UniqueIdentifier>{8cb76bae-3ffa-43c5-b87f-c8031980632a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\hw">
-      <UniqueIdentifier>{bf06a100-8165-45da-b5e4-83ba7d0b8b53}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\mk_md2.c">
@@ -189,9 +186,6 @@
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.c">
       <Filter>src\operation_mode</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hw\mk_cpuid.c">
-      <Filter>src\hw</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -332,12 +326,6 @@
     <ClInclude Include="..\..\..\src\mk_win_cryptong.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_1.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_2.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mk_block_cipher.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -362,9 +350,6 @@
     <ClInclude Include="..\..\..\src\mk_tom_crypto.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_3.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_base.h">
       <Filter>src\operation_mode</Filter>
     </ClInclude>
@@ -374,22 +359,26 @@
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.h">
       <Filter>src\operation_mode</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_4.h">
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_inplace_decrypt.h">
       <Filter>fuzz</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\hw\mk_cpuid.h">
-      <Filter>src\hw</Filter>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_inplace_encrypt.h">
+      <Filter>fuzz</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\hw\mk_cpuid_hw.h">
-      <Filter>src\hw</Filter>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_piecewise_encrypt.h">
+      <Filter>fuzz</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x86.asm">
-      <Filter>src\hw</Filter>
-    </MASM>
-    <MASM Include="..\..\..\src\hw\mk_cpuid_hw_x64.asm">
-      <Filter>src\hw</Filter>
-    </MASM>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_piecewise_decrypt.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_tom.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_win.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_winng.h">
+      <Filter>fuzz</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
