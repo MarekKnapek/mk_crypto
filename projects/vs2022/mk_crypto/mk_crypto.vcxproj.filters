@@ -135,12 +135,6 @@
     <ClCompile Include="..\..\..\src\mk_aes.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_win_aes.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_aes_fuzz.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\mk_crypto.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -307,12 +301,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mk_aes.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_win_aes.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_aes_fuzz.h">
-      <Filter>fuzz</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mk_crypto.h">
       <Filter>src</Filter>

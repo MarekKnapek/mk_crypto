@@ -1,4 +1,3 @@
-#include "mk_aes_fuzz.h"
 #include "mk_crypt_fuzz.h"
 #include "mk_md2_fuzz.h"
 #include "mk_md4_fuzz.h"
@@ -17,7 +16,6 @@
 int LLVMFuzzerTestOneInput(unsigned char const* data, size_t size)
 {
 	mk_crypto_fuzz(data, size);
-	//mk_aes_fuzz(data, size);
 	//mk_md2_fuzz(data, size);
 	//mk_md4_fuzz(data, size);
 	//mk_md5_fuzz(data, size);
