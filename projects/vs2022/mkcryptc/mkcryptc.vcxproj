@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc.c" />
+    <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc_libs.c" />
     <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc_main.c" />
   </ItemGroup>
   <ItemGroup>

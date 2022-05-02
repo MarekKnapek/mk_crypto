@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc_main.c" />
     <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc.c" />
+    <ClCompile Include="..\..\..\apps\mkcryptc\mkcryptc_libs.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\apps\mkcryptc\mkcryptc.h" />
