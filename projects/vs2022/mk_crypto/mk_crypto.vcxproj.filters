@@ -189,6 +189,9 @@
     <ClCompile Include="..\..\..\src\random\mk_xoshiro128pp.c">
       <Filter>src\random</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash_function.c">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\mk_hash_fn.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\random\mk_xoshiro128pp.h">
       <Filter>src\random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash_function.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mk_hash_fn.h">
       <Filter>src</Filter>
