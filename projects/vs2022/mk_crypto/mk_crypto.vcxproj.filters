@@ -16,6 +16,9 @@
     <Filter Include="src\operation_mode">
       <UniqueIdentifier>{8cb76bae-3ffa-43c5-b87f-c8031980632a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\random">
+      <UniqueIdentifier>{9716b013-0293-4d56-95ed-742ba3bbab56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\mk_md2.c">
@@ -179,6 +182,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ctr.c">
       <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\random\mk_xoshiro128ss.c">
+      <Filter>src\random</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\random\mk_xoshiro128pp.c">
+      <Filter>src\random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +376,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz_winng.h">
       <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\random\mk_xoshiro128ss.h">
+      <Filter>src\random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\random\mk_xoshiro128pp.h">
+      <Filter>src\random</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

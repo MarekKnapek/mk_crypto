@@ -73,6 +73,8 @@
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_impl.c" />
     <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.c" />
+    <ClCompile Include="..\..\..\src\random\mk_xoshiro128pp.c" />
+    <ClCompile Include="..\..\..\src\random\mk_xoshiro128ss.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_crypt_fuzz.h" />
@@ -134,6 +136,8 @@
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ecb.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_impl.h" />
     <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_ofb.h" />
+    <ClInclude Include="..\..\..\src\random\mk_xoshiro128pp.h" />
+    <ClInclude Include="..\..\..\src\random\mk_xoshiro128ss.h" />
     <ClInclude Include="..\..\..\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\utils\mk_setup.h" />
