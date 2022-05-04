@@ -8,9 +8,9 @@
 #include <string.h> /* memcpy */
 
 
-static mk_inline void mk_operation_mode_cbc_swap_ptr(unsigned char const** a, unsigned char const** b)
+static mk_inline void mk_operation_mode_cbc_swap_ptr(unsigned char** a, unsigned char** b)
 {
-	unsigned char const* t;
+	unsigned char* t;
 
 	mk_assert(a);
 	mk_assert(b);
@@ -77,7 +77,7 @@ static mk_inline void mk_operation_mode_decrypt_blocks_cbc_overlap1(struct mk_op
 {
 	int block_len;
 	unsigned char* tmp;
-	unsigned char const* iv;
+	unsigned char* iv;
 	unsigned char temporary[mk_block_cipher_block_len_max];
 	int i;
 
