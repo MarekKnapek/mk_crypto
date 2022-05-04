@@ -64,6 +64,7 @@ void mk_operation_mode_set_param_iv(struct mk_operation_mode_s* operation_mode, 
 		case mk_operation_mode_cbc: mk_operation_mode_set_param_iv_cbc(&operation_mode->m_mode.m_cbc, iv); break;
 		case mk_operation_mode_cfb: mk_operation_mode_set_param_iv_cfb(&operation_mode->m_mode.m_cfb, iv); break;
 		case mk_operation_mode_ctr: mk_operation_mode_set_param_iv_ctr(&operation_mode->m_mode.m_ctr, iv); break;
+		case mk_operation_mode_ecb: break;
 		case mk_operation_mode_ofb: mk_operation_mode_set_param_iv_ofb(&operation_mode->m_mode.m_ofb, iv); break;
 	}
 }
