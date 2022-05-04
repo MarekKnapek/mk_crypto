@@ -96,6 +96,8 @@ int mkcryptc(int argc_, char const* const* argv_)
 	--argc;
 	++argv;
 
+	cfb_f = -1;
+	ctr_be = -1;
 	check(argc >= 1);
 	len = (int)strlen(*argv);
 	if(len == sizeof(s_operation_mode_cbc) - 1 && memcmp(*argv, s_operation_mode_cbc, sizeof(s_operation_mode_cbc) - 1) == 0){ operation_mode = mk_operation_mode_cbc; }
@@ -177,6 +179,14 @@ int mkcryptc(int argc_, char const* const* argv_)
 	mk_pbkdf2(hash_id, password, password_len, salt, salt_len, iterations, mk_block_cipher_get_key_len(block_cipher), key);
 
 	mk_crypt_init(&crypt, operation_mode, block_cipher, key);
+	if(operation_mode == mk_operation_mode_cfb && cfb_f == 1)
+	{
+		mk_crypt_set_param_cfb_s_bytes(&crypt, mk_block_cipher_get_block_len(block_cipher));
+	}
+	if(operation_mode == mk_operation_mode_ctr && ctr_be == 1)
+	{
+		mk_crypt_set_param_ctr_endian(&crypt, 1);
+	}
 
 	input_file = fopen(input_file_name, "rb");
 	check(input_file);
