@@ -70,14 +70,14 @@ void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password
 	for(i = 0; i != blocks; ++i)
 	{
 		mk_pbkdf2_detail_inc(counter_be);
-		mk_hmac_init(&hash, hash_id, password, password_len);
+		mk_hmac_init(&hash, (enum mk_hmac_e)hash_id, password, password_len);
 		mk_hmac_append(&hash, salt, salt_len);
 		mk_hmac_append(&hash, counter_be, 4);
 		mk_hmac_finish(&hash, digest_1);
 		memcpy(digest_2, digest_1, digest_len);
 		for(j = 1; j != iterations; ++j)
 		{
-			mk_hmac_init(&hash, hash_id, password, password_len);
+			mk_hmac_init(&hash, (enum mk_hmac_e)hash_id, password, password_len);
 			mk_hmac_append(&hash, digest_2, digest_len);
 			mk_hmac_finish(&hash, digest_2);
 			mk_pbkdf2_detail_xor(digest_len, digest_1, digest_2, digest_1);

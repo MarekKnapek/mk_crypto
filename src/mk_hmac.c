@@ -32,8 +32,8 @@ void mk_hmac_init(struct mk_hmac_s* hmac, enum mk_hmac_e id, void const* key, in
 	int digest_len;
 	unsigned char ipad[mk_hash_fn_max_block_len];
 
-	block_len = mk_hash_fn_get_block_len(id);
-	digest_len = mk_hash_fn_get_digest_len(id);
+	block_len = mk_hash_fn_get_block_len((enum mk_hash_fn_e)id);
+	digest_len = mk_hash_fn_get_digest_len((enum mk_hash_fn_e)id);
 
 	if(key_len < digest_len)
 	{
