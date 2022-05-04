@@ -58,7 +58,6 @@ int mkcryptc(int argc_, char const* const* argv_)
 	int cfb_f;
 	int ctr_be;
 	enum mk_block_cipher_e block_cipher;
-	int key_len;
 	enum mk_pbkdf2_hash_e hash_id;
 	int password_len;
 	char const* password;
@@ -112,9 +111,9 @@ int mkcryptc(int argc_, char const* const* argv_)
 
 	check(argc >= 1);
 	len = (int)strlen(*argv);
-	if(len == sizeof(s_block_cipher_aes128) - 1 && memcmp(*argv, s_block_cipher_aes128, sizeof(s_block_cipher_aes128) - 1) == 0){ block_cipher = mk_block_cipher_aes128; key_len = 16; }
-	else if(len == sizeof(s_block_cipher_aes192) - 1 && memcmp(*argv, s_block_cipher_aes192, sizeof(s_block_cipher_aes192) - 1) == 0){ block_cipher = mk_block_cipher_aes192; key_len = 24; }
-	else if(len == sizeof(s_block_cipher_aes256) - 1 && memcmp(*argv, s_block_cipher_aes256, sizeof(s_block_cipher_aes256) - 1) == 0){ block_cipher = mk_block_cipher_aes256; key_len = 32; }
+	if(len == sizeof(s_block_cipher_aes128) - 1 && memcmp(*argv, s_block_cipher_aes128, sizeof(s_block_cipher_aes128) - 1) == 0){ block_cipher = mk_block_cipher_aes128; }
+	else if(len == sizeof(s_block_cipher_aes192) - 1 && memcmp(*argv, s_block_cipher_aes192, sizeof(s_block_cipher_aes192) - 1) == 0){ block_cipher = mk_block_cipher_aes192; }
+	else if(len == sizeof(s_block_cipher_aes256) - 1 && memcmp(*argv, s_block_cipher_aes256, sizeof(s_block_cipher_aes256) - 1) == 0){ block_cipher = mk_block_cipher_aes256; }
 	else{ check(0); }
 	--argc;
 	++argv;
