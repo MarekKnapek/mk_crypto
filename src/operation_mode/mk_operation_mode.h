@@ -36,7 +36,7 @@ struct mk_operation_mode_s
 		struct mk_operation_mode_ctr_s m_ctr;
 		struct mk_operation_mode_ecb_s m_ecb;
 		struct mk_operation_mode_ofb_s m_ofb;
-	};
+	} m_mode;
 };
 
 
