@@ -82,7 +82,7 @@ void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password
 			mk_hmac_finish(&hash, digest_2);
 			mk_pbkdf2_detail_xor(digest_len, digest_1, digest_2, digest_1);
 		}
-		memcpy(output, digest_1, digest_len);
+		memcpy(output, digest_1, i == blocks - 1 ? rest : digest_len);
 		output += digest_len;
 		remaining -= digest_len;
 	}
