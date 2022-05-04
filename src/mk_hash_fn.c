@@ -36,10 +36,10 @@ int mk_hash_fn_get_block_len(enum mk_hash_fn_e id)
 		case mk_hash_fn_sha1: return 64; break;
 		case mk_hash_fn_sha2_224: return 64; break;
 		case mk_hash_fn_sha2_256: return 64; break;
-		case mk_hash_fn_sha2_384: return 64; break;
-		case mk_hash_fn_sha2_512: return 64; break;
-		case mk_hash_fn_sha2_512224: return 64; break;
-		case mk_hash_fn_sha2_512256: return 64; break;
+		case mk_hash_fn_sha2_384: return 128; break;
+		case mk_hash_fn_sha2_512: return 128; break;
+		case mk_hash_fn_sha2_512224: return 128; break;
+		case mk_hash_fn_sha2_512256: return 128; break;
 		case mk_hash_fn_sha3_224: return 144; break;
 		case mk_hash_fn_sha3_256: return 136; break;
 		case mk_hash_fn_sha3_384: return 104; break;
