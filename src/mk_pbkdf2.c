@@ -38,7 +38,7 @@ static mk_inline void mk_pbkdf2_detail_xor(int count, unsigned char const* src1,
 }
 
 
-void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password_len, void const* salt, int salt_len, int iterations, int key_len, void* key)
+void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password_len, void const* salt, int salt_len, long iterations, int key_len, void* key)
 {
 	int digest_len;
 	int blocks;
@@ -49,7 +49,7 @@ void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password
 	unsigned char counter_be[4];
 	struct mk_hmac_s hash;
 	unsigned char digest_1[mk_hash_fn_max_digest_len];
-	int j;
+	long j;
 	unsigned char digest_2[mk_hash_fn_max_digest_len];
 
 	mk_assert(password || password_len == 0);

@@ -31,7 +31,7 @@ enum mk_pbkdf2_hash_e
 /* rfc 2898 */
 
 
-mk_extern_c void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password_len, void const* salt, int salt_len, int iterations, int key_len, void* key);
+mk_extern_c void mk_pbkdf2(enum mk_pbkdf2_hash_e hash_id, void const* password, int password_len, void const* salt, int salt_len, long iterations, int key_len, void* key);
 
 
 #undef mk_extern_c
