@@ -1,5 +1,5 @@
-#ifndef mk_include_guard_mk_pbkdf2
-#define mk_include_guard_mk_pbkdf2
+#ifndef mk_include_guard_pbkdf2
+#define mk_include_guard_pbkdf2
 
 
 #ifdef __cplusplus
