@@ -201,6 +201,9 @@
     <ClCompile Include="..\..\..\src\mk_hash_fn.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_win_pbkdf2.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -405,6 +408,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mk_hash_fn.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_win_pbkdf2.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

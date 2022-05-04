@@ -65,6 +65,7 @@
     <ClCompile Include="..\..\..\src\mk_win_md2.c" />
     <ClCompile Include="..\..\..\src\mk_win_md4.c" />
     <ClCompile Include="..\..\..\src\mk_win_md5.c" />
+    <ClCompile Include="..\..\..\src\mk_win_pbkdf2.c" />
     <ClCompile Include="..\..\..\src\mk_win_sha1.c" />
     <ClCompile Include="..\..\..\src\mk_win_sha2_256.c" />
     <ClCompile Include="..\..\..\src\mk_win_sha2_384.c" />
@@ -132,6 +133,7 @@
     <ClInclude Include="..\..\..\src\mk_win_md2.h" />
     <ClInclude Include="..\..\..\src\mk_win_md4.h" />
     <ClInclude Include="..\..\..\src\mk_win_md5.h" />
+    <ClInclude Include="..\..\..\src\mk_win_pbkdf2.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha1.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha2_256.h" />
     <ClInclude Include="..\..\..\src\mk_win_sha2_384.h" />
