@@ -56,6 +56,7 @@ enum mk_block_cipher_e mk_operation_mode_get_block_cipher(struct mk_operation_mo
 void mk_operation_mode_set_param_iv(struct mk_operation_mode_s* operation_mode, unsigned char const* iv)
 {
 	mk_assert(operation_mode);
+	mk_assert_operation_mode(operation_mode->m_type);
 	mk_assert(operation_mode->m_type != mk_operation_mode_ecb);
 
 	switch(operation_mode->m_type)
