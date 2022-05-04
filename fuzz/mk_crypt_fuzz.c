@@ -7,6 +7,7 @@
 #include "mk_crypt_fuzz_tom.h"
 #include "mk_crypt_fuzz_win.h"
 #include "mk_crypt_fuzz_winng.h"
+#include "mk_pbkdf2_fuzz.h"
 
 
 void mk_crypto_fuzz(unsigned char const* data, size_t size)
@@ -18,4 +19,5 @@ void mk_crypto_fuzz(unsigned char const* data, size_t size)
 	mk_crypto_fuzz_tom(data, size);
 	mk_crypto_fuzz_win(data, size);
 	mk_crypto_fuzz_winng(data, size);
+	mk_pbkdf2_fuzz(data, size);
 }

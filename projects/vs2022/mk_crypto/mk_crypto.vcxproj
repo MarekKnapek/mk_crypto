@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md5_fuzz.c" />
+    <ClCompile Include="..\..\..\fuzz\mk_pbkdf2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha1_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_224_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_256_fuzz.c" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
+    <ClInclude Include="..\..\..\fuzz\mk_pbkdf2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha1_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_224_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_256_fuzz.h" />

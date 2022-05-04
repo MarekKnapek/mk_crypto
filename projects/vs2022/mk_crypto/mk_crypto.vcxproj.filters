@@ -204,6 +204,9 @@
     <ClCompile Include="..\..\..\src\mk_win_pbkdf2.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_pbkdf2_fuzz.c">
+      <Filter>fuzz</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mk_win_pbkdf2.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_pbkdf2_fuzz.h">
+      <Filter>fuzz</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
