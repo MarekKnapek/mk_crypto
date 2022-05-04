@@ -18,7 +18,7 @@ static mk_inline void mk_pbkdf2_detail_inc(unsigned char* counter_be)
 	i = 4 - 1;
 	do
 	{
-		counter_be[i] =+ 1;
+		counter_be[i] += 1;
 	}while(counter_be[i--] == 0 && i >= 0);
 }
 
