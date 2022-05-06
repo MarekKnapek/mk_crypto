@@ -5,7 +5,7 @@
 #ifdef NDEBUG
 
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && _MSC_VER >= 1200
 #define mk_assert(x) __assume(x)
 #elif defined (__GNUC__)
 #define mk_assert(x) do{ if(!(x)){ __builtin_unreachable(); } }while(0)
