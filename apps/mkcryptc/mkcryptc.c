@@ -8,16 +8,19 @@
 #include "../../src/mk_pbkdf2.h"
 
 #include <limits.h> /* LONG_MAX LONG_MIN */
+#include <stdarg.h> /* va_list va_start va_arg va_end */
 #include <stddef.h> /* NULL */
-#include <stdio.h> /* FILE size_t fopen fread fclose */
+#include <stdio.h> /* printf FILE size_t fopen fread fclose */
 #include <stdlib.h> /* strtol srand rand */
 #include <string.h> /* strlen memcmp */
 #include <time.h> /* time time_t */
 
 
+static char const s_command[] = "command";
 static char const s_command_encrypt[] = "encrypt";
 static char const s_command_decrypt[] = "decrypt";
 
+static char const s_operation_mode[] = "operation mode";
 static char const s_operation_mode_cbc[] = "cbc";
 static char const s_operation_mode_cfb[] = "cfb";
 static char const s_operation_mode_cfb_f[] = "cfb-f";
@@ -26,12 +29,15 @@ static char const s_operation_mode_ctr_be[] = "ctr-be";
 static char const s_operation_mode_ecb[] = "ecb";
 static char const s_operation_mode_ofb[] = "ofb";
 
+static char const s_block_cipher[] = "block cipher";
 static char const s_block_cipher_aes128[] = "aes128";
 static char const s_block_cipher_aes192[] = "aes192";
 static char const s_block_cipher_aes256[] = "aes256";
 
+static char const s_kdf[] = "key derivation function";
 static char const s_kdf_pbkdf2[] = "pbkdf2";
 
+static char const s_pbkdf2_hash[] = "pseudorandom function";
 static char const s_pbkdf2_hash_hmac_md2[] = "hmac-md2";
 static char const s_pbkdf2_hash_hmac_md4[] = "hmac-md4";
 static char const s_pbkdf2_hash_hmac_md5[] = "hmac-md5";
@@ -46,6 +52,12 @@ static char const s_pbkdf2_hash_hmac_sha3_224[] = "hmac-sha3-224";
 static char const s_pbkdf2_hash_hmac_sha3_256[] = "hmac-sha3-256";
 static char const s_pbkdf2_hash_hmac_sha3_384[] = "hmac-sha3-384";
 static char const s_pbkdf2_hash_hmac_sha3_512[] = "hmac-sha3-512";
+
+static char const s_password[] = "password";
+static char const s_salt[] = "salt";
+static char const s_iterations[] = "iterations";
+static char const s_input_file[] = "input file";
+static char const s_output_file[] = "output file";
 
 
 struct inputs_s
@@ -64,6 +76,11 @@ struct inputs_s
 	char const* input_file_name;
 	char const* output_file_name;
 };
+
+char g_password[64 + 1];
+char g_salt[64 + 1];
+char g_input_file[64 + 1];
+char g_output_file[64 + 1];
 
 
 #define check(x) do{ if(!(x)){ return __LINE__; } }while(0)
@@ -362,6 +379,87 @@ static mk_inline int mkcryptc_detail_parse_inputs(int* argc, char const* const**
 	return 0;
 }
 
+static mk_inline int mkcryptc_detail_gather_variant(int* variant, int variants, char const* title, ...)
+{
+	va_list va;
+	int i;
+	char const* str;
+	int scanned;
+	int var;
+
+	mk_assert(variant);
+	mk_assert(variants > 0);
+	mk_assert(title);
+
+	va_start(va, title);
+	printf("%s\n", title);
+	for(i = 0; i != variants; ++i)
+	{
+		str = va_arg(va, char const*);
+		printf("\t%d) %s\n", i + 1, str);
+	}
+	va_end(va);
+
+	scanned = scanf("%d", &var);
+	check(scanned == 1);
+
+	--var;
+	check(var >= 0 && var < variants);
+
+	*variant = var;
+	return 0;
+}
+
+static mk_inline int mkcryptc_detail_gather_string(char* str, char const* title)
+{
+	int scanned;
+
+	mk_assert(str);
+	mk_assert(title);
+
+	printf("%s\n", title);
+
+	scanned = scanf("%64s", str);
+	check(scanned == 1);
+
+	return 0;
+}
+
+static mk_inline int mkcryptc_detail_gather_lng(long* val, char const* title)
+{
+	int scanned;
+
+	mk_assert(val);
+	mk_assert(title);
+
+	printf("%s\n", title);
+
+	scanned = scanf("%ld", val);
+	check(scanned == 1);
+
+	return 0;
+}
+
+static mk_inline int mkcryptc_detail_gather_inputs(struct inputs_s* inputs)
+{
+	int variant;
+
+	mk_assert(inputs);
+
+	mk_try(mkcryptc_detail_gather_variant(&variant, 2, s_command, s_command_encrypt, s_command_decrypt)); inputs->direction = variant;
+	mk_try(mkcryptc_detail_gather_variant(&variant, 7, s_operation_mode, s_operation_mode_cbc, s_operation_mode_cfb, s_operation_mode_cfb_f, s_operation_mode_ctr, s_operation_mode_ctr_be, s_operation_mode_ecb, s_operation_mode_ofb)); inputs->operation_mode = (enum mk_operation_mode_e)variant;
+	mk_try(mkcryptc_detail_gather_variant(&variant, 3, s_block_cipher, s_block_cipher_aes128, s_block_cipher_aes192, s_block_cipher_aes256)); inputs->block_cipher = (enum mk_block_cipher_e)variant;
+	mk_try(mkcryptc_detail_gather_variant(&variant, 1, s_kdf, s_kdf_pbkdf2));
+	mk_try(mkcryptc_detail_gather_variant(&variant, 14, s_pbkdf2_hash, s_pbkdf2_hash_hmac_md2, s_pbkdf2_hash_hmac_md4, s_pbkdf2_hash_hmac_md5, s_pbkdf2_hash_hmac_sha1, s_pbkdf2_hash_hmac_sha2_224, s_pbkdf2_hash_hmac_sha2_256, s_pbkdf2_hash_hmac_sha2_384, s_pbkdf2_hash_hmac_sha2_512, s_pbkdf2_hash_hmac_sha2_512224, s_pbkdf2_hash_hmac_sha2_512256, s_pbkdf2_hash_hmac_sha3_224, s_pbkdf2_hash_hmac_sha3_256, s_pbkdf2_hash_hmac_sha3_384, s_pbkdf2_hash_hmac_sha3_512)); inputs->prf = (enum mk_pbkdf2_hash_e)variant;
+	mk_try(mkcryptc_detail_gather_string(g_password, s_password)); inputs->password = g_password; inputs->password_len = (int)strlen(g_password);
+	mk_try(mkcryptc_detail_gather_string(g_salt, s_salt)); inputs->salt = g_salt; inputs->salt_len = (int)strlen(g_salt);
+	mk_try(mkcryptc_detail_gather_lng(&inputs->iterations, s_iterations)); check(inputs->iterations > 0);
+	mk_try(mkcryptc_detail_gather_string(g_input_file, s_input_file)); inputs->input_file_name = g_input_file;
+	mk_try(mkcryptc_detail_gather_string(g_output_file, s_output_file)); inputs->output_file_name = g_output_file;
+
+	return 0;
+}
+
 static mk_inline int mkcryptc_detail_init_crypt(struct mk_crypt_s* crypt, struct inputs_s* inputs)
 {
 	unsigned char key[mk_block_cipher_key_len_max];
@@ -543,7 +641,15 @@ int mkcryptc(int argc, char const* const* argv)
 	--argc;
 	++argv;
 
-	mk_try(mkcryptc_detail_parse_inputs(&argc, &argv, &inputs));
+	if(argc == 0)
+	{
+		mk_try(mkcryptc_detail_gather_inputs(&inputs));
+	}
+	else
+	{
+		mk_try(mkcryptc_detail_parse_inputs(&argc, &argv, &inputs));
+	}
+
 	mk_try(mkcryptc_detail_init_crypt(&crypt, &inputs));
 	mk_try(mkcryptc_detail_open_file_read(inputs.input_file_name, &input_file));
 	mk_try(mkcryptc_detail_open_file_write(inputs.output_file_name, &output_file));
