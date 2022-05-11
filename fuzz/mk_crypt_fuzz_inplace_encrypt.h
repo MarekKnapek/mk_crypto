@@ -12,10 +12,17 @@
 
 static mk_inline void mk_crypt_fuzz_inplace_encrypt(unsigned char const* data, size_t size)
 {
+	struct pointer_and_lenght_s
+	{
+		void const* m_pointer;
+		int m_lenght;
+	};
+
 	enum mk_crypto_operation_mode_e om;
 	int want_cfb_s_bytes;
 	int want_ctr_big_endian;
 	enum mk_crypto_block_cipher_e bc;
+	enum mk_crypto_padding_e padding;
 	int key_len;
 	unsigned char const* iv;
 	unsigned char const* key;
@@ -24,6 +31,7 @@ static mk_inline void mk_crypt_fuzz_inplace_encrypt(unsigned char const* data, s
 	unsigned char* out2;
 	mk_crypto_h crypto1;
 	mk_crypto_h crypto2;
+	struct pointer_and_lenght_s ivs;
 	int cfb_s_bytes;
 	int ctr_endian;
 	int encrypted;
@@ -77,6 +85,22 @@ static mk_inline void mk_crypt_fuzz_inplace_encrypt(unsigned char const* data, s
 	++data;
 	--size;
 
+	if(!(size >= 1))
+	{
+		return;
+	}
+	padding = 0;
+	switch(*data % 5)
+	{
+		case 0: padding = mk_crypto_padding_pkcs7; break;
+		case 1: padding = mk_crypto_padding_10s; break;
+		case 2: padding = mk_crypto_padding_10s1; break;
+		case 3: padding = mk_crypto_padding_zero; break;
+		case 4: padding = mk_crypto_padding_none; break;
+	}
+	++data;
+	--size;
+
 	if(!(size >= 16))
 	{
 		return;
@@ -99,11 +123,18 @@ static mk_inline void mk_crypt_fuzz_inplace_encrypt(unsigned char const* data, s
 	test(out1);
 	test(out2);
 
-	crypto1 = mk_crypto_create(om, bc, iv, key);
-	crypto2 = mk_crypto_create(om, bc, iv, key);
+	crypto1 = mk_crypto_create(om, bc, padding, key, key_len);
+	crypto2 = mk_crypto_create(om, bc, padding, key, key_len);
 	test(crypto1);
 	test(crypto2);
 
+	if(om != mk_crypto_operation_mode_ecb)
+	{
+		ivs.m_pointer = iv;
+		ivs.m_lenght = 16;
+		mk_crypto_set_param(crypto1, mk_crypto_param_iv, &ivs);
+		mk_crypto_set_param(crypto2, mk_crypto_param_iv, &ivs);
+	}
 	if(om == mk_crypto_operation_mode_cfb && want_cfb_s_bytes == 0)
 	{
 		cfb_s_bytes = 16;
@@ -117,11 +148,11 @@ static mk_inline void mk_crypt_fuzz_inplace_encrypt(unsigned char const* data, s
 		mk_crypto_set_param(crypto2, mk_crypto_param_ctr_endian, &ctr_endian);
 	}
 
-	encrypted = mk_crypto_encrypt(crypto1, 1, data, (int)size, out1);
+	encrypted = mk_crypto_encrypt(crypto1, 1, data, (int)size, out1, out_len);
 	test(encrypted == out_len);
 
 	memcpy(out2, data, size);
-	encrypted = mk_crypto_encrypt(crypto2, 1, out2, (int)size, out2);
+	encrypted = mk_crypto_encrypt(crypto2, 1, out2, (int)size, out2, out_len);
 	test(encrypted == out_len);
 
 	test(memcmp(out1, out2, out_len) == 0);

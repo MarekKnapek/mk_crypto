@@ -462,14 +462,16 @@ static mk_inline int mkcryptc_detail_gather_inputs(struct inputs_s* inputs)
 
 static mk_inline int mkcryptc_detail_init_crypt(struct mk_crypt_s* crypt, struct inputs_s* inputs)
 {
+	int key_len;
 	unsigned char key[mk_block_cipher_key_len_max];
 
 	mk_assert(crypt);
 	mk_assert(inputs);
 
-	mk_pbkdf2(inputs->prf, inputs->password, inputs->password_len, inputs->salt, inputs->salt_len, inputs->iterations, mk_block_cipher_get_key_len(inputs->block_cipher), &key);
+	key_len = mk_block_cipher_get_key_len(inputs->block_cipher);
+	mk_pbkdf2(inputs->prf, inputs->password, inputs->password_len, inputs->salt, inputs->salt_len, inputs->iterations, key_len, &key);
 
-	mk_crypt_init(crypt, inputs->operation_mode, inputs->block_cipher, key);
+	mk_crypt_init(crypt, inputs->operation_mode, inputs->block_cipher, key, key_len);
 	if(inputs->operation_mode == mk_operation_mode_cfb && inputs->cfb_f == 1)
 	{
 		mk_crypt_set_param_cfb_s_bytes(crypt, mk_block_cipher_get_block_len(inputs->block_cipher));
@@ -542,7 +544,7 @@ static mk_inline int mkcryptc_detail_init_iv(struct inputs_s* inputs, struct mk_
 		read = fread(iv, 1, sizeof(iv), input_file);
 		check(read == sizeof(iv));
 	}
-	mk_crypt_set_param_iv(crypt, iv);
+	mk_crypt_set_param_iv(crypt, iv, sizeof(iv));
 	return 0;
 }
 
@@ -551,7 +553,7 @@ static mk_inline int mkcryptc_detail_process(int direction, struct mk_crypt_s* c
 	unsigned char* buffer_a;
 	unsigned char buffer_1[512 + mk_block_cipher_block_len_max];
 	unsigned char* buffer_b;
-	unsigned char buffer_2[512 + mk_block_cipher_block_len_max];
+	unsigned char buffer_2[sizeof(buffer_1)];
 	size_t read_a;
 	size_t read_b;
 	int crypted;
@@ -582,13 +584,13 @@ static mk_inline int mkcryptc_detail_process(int direction, struct mk_crypt_s* c
 				break;
 			}
 
-			if( direction == 0)
+			if(direction == 0)
 			{
-				crypted = mk_crypt_encrypt(crypt, 0, buffer_a, (int)read_a, buffer_a);
+				crypted = mk_crypt_encrypt(crypt, 0, buffer_a, (int)read_a, buffer_a, sizeof(buffer_1));
 			}
 			else
 			{
-				crypted = mk_crypt_decrypt(crypt, 0, buffer_a, (int)read_a, buffer_a);
+				crypted = mk_crypt_decrypt(crypt, 0, buffer_a, (int)read_a, buffer_a, sizeof(buffer_1));
 			}
 
 			written = fwrite(buffer_a, 1, crypted, output_file);
@@ -604,11 +606,11 @@ static mk_inline int mkcryptc_detail_process(int direction, struct mk_crypt_s* c
 	}
 	if(direction == 0)
 	{
-		crypted = mk_crypt_encrypt(crypt, 1, buffer_a, (int)read_a, buffer_a);
+		crypted = mk_crypt_encrypt(crypt, 1, buffer_a, (int)read_a, buffer_a, sizeof(buffer_1));
 	}
 	else
 	{
-		crypted = mk_crypt_decrypt(crypt, 1, buffer_a, (int)read_a, buffer_a);
+		crypted = mk_crypt_decrypt(crypt, 1, buffer_a, (int)read_a, buffer_a, sizeof(buffer_1));
 		check(crypted != -1);
 	}
 	written = fwrite(buffer_a, 1, crypted, output_file);
@@ -657,6 +659,7 @@ int mkcryptc(int argc, char const* const* argv)
 	mk_try(mkcryptc_detail_process(inputs.direction, &crypt, input_file, output_file));
 	mk_try(mkcryptc_detail_close_file(input_file));
 	mk_try(mkcryptc_detail_close_file(output_file));
+
 
 	return 0;
 }

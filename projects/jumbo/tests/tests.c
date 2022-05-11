@@ -8,6 +8,7 @@
 
 #include "../../../tests/mk_aes_test_examples.h"
 #include "../../../tests/mk_sha3_test_examples.h"
+#include "../../../tests/mk_test_aes_gcm.h"
 
 #include <stdio.h> /* printf */
 
@@ -20,6 +21,7 @@ int test_all(void)
 {
 	mk_try(mk_sha3_test_examples());
 	mk_try(mk_aes_test_examples());
+	mk_try(mk_test_aes_gcm());
 	return 0;
 }
 
@@ -48,6 +50,7 @@ int main(void)
 
 #include "../../../tests/mk_aes_test_examples.c"
 #include "../../../tests/mk_sha3_test_examples.c"
+#include "../../../tests/mk_test_aes_gcm.c"
 
 #include "../../../src/mk_sha3_224.c"
 #include "../../../src/mk_sha3_256.c"
@@ -57,6 +60,20 @@ int main(void)
 #include "../../../src/mk_sha3_shake256.c"
 
 #include "../../../src/mk_sha3_detail.c"
+
+#include "../../../src/mk_block_cipher.c"
+#include "../../../src/mk_crypt.c"
+#include "../../../src/mk_crypto.c"
+#include "../../../src/mk_padding.c"
+#include "../../../src/operation_mode/mk_operation_mode.c"
+#include "../../../src/operation_mode/mk_operation_mode_base.c"
+#include "../../../src/operation_mode/mk_operation_mode_cbc.c"
+#include "../../../src/operation_mode/mk_operation_mode_cfb.c"
+#include "../../../src/operation_mode/mk_operation_mode_ctr.c"
+#include "../../../src/operation_mode/mk_operation_mode_ecb.c"
+#include "../../../src/operation_mode/mk_operation_mode_gcm.c"
+#include "../../../src/operation_mode/mk_operation_mode_impl.c"
+#include "../../../src/operation_mode/mk_operation_mode_ofb.c"
 
 #include "../../../../mk_int/src/exact/mk_uint_64.c"
 

@@ -42,11 +42,10 @@ struct mk_tom_crypto_s
 };
 
 
-mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, void const* key)
+mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, int iv_len, void const* key, int key_len)
 {
 	int registered;
 	struct mk_tom_crypto_s* tom_crypto;
-	int key_len;
 	int num_rounds;
 	int om_started;
 
@@ -79,23 +78,22 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 	tom_crypto->m_operation_mode = operation_mode;
 	tom_crypto->m_block_cipher = block_cipher;
 
-	key_len = 0;
 	num_rounds = 0;
 	switch(block_cipher)
 	{
-		case mk_tom_crypto_block_cipher_aes128: key_len = 16; num_rounds = 10; break;
-		case mk_tom_crypto_block_cipher_aes192: key_len = 24; num_rounds = 12; break;
-		case mk_tom_crypto_block_cipher_aes256: key_len = 32; num_rounds = 14; break;
+		case mk_tom_crypto_block_cipher_aes128: mk_assert(key_len == 16); num_rounds = 10; break;
+		case mk_tom_crypto_block_cipher_aes192: mk_assert(key_len == 24); num_rounds = 12; break;
+		case mk_tom_crypto_block_cipher_aes256: mk_assert(key_len == 32); num_rounds = 14; break;
 	}
 
 	om_started = CRYPT_ERROR;
 	switch(operation_mode)
 	{
-		case mk_tom_crypto_operation_mode_cbc: om_started = cbc_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cbc); break;
-		case mk_tom_crypto_operation_mode_cfb: om_started = cfb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cfb); break;
-		case mk_tom_crypto_operation_mode_ctr: om_started = ctr_start(0, iv, key, key_len, num_rounds, CTR_COUNTER_LITTLE_ENDIAN, &tom_crypto->m_systemic.m_ctr); break;
-		case mk_tom_crypto_operation_mode_ecb: om_started = ecb_start(0,     key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ecb); break;
-		case mk_tom_crypto_operation_mode_ofb: om_started = ofb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ofb); break;
+		case mk_tom_crypto_operation_mode_cbc: mk_assert(iv_len == 16); om_started = cbc_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cbc); break;
+		case mk_tom_crypto_operation_mode_cfb: mk_assert(iv_len == 16); om_started = cfb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cfb); break;
+		case mk_tom_crypto_operation_mode_ctr: mk_assert(iv_len == 16); om_started = ctr_start(0, iv, key, key_len, num_rounds, CTR_COUNTER_LITTLE_ENDIAN, &tom_crypto->m_systemic.m_ctr); break;
+		case mk_tom_crypto_operation_mode_ecb: mk_assert(iv_len ==  0); om_started = ecb_start(0,     key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ecb); break;
+		case mk_tom_crypto_operation_mode_ofb: mk_assert(iv_len == 16); om_started = ofb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ofb); break;
 	}
 	if(!(om_started == CRYPT_OK))
 	{
@@ -105,7 +103,7 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 	return (mk_tom_crypto_h)tom_crypto;
 }
 
-void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output)
+void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes)
 {
 	struct mk_tom_crypto_s* tom_crypto;
 	int n;
@@ -135,11 +133,11 @@ void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* 
 	{
 		memcpy(last_block, (unsigned char const*)input + n * 16, m);
 		memset(last_block + m, 16 - m, 16 - m);
-		mk_tom_crypto_encrypt(tom_crypto_h, 0, last_block, 16, (unsigned char*)output + n * 16);
+		mk_tom_crypto_encrypt(tom_crypto_h, 0, last_block, 16, (unsigned char*)output + n * 16, output_len_bytes - n * 16);
 	}
 }
 
-int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output)
+int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes)
 {
 	struct mk_tom_crypto_s* tom_crypto;
 	int decrypted;
@@ -147,7 +145,11 @@ int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* i
 	int i;
 
 	mk_assert(tom_crypto_h);
-	(void)final;
+	mk_assert(final == 0 || final == 1);
+	mk_assert(input || input_len_bytes == 0);
+	mk_assert(input_len_bytes >= 0);
+	mk_assert(output || output_len_bytes == 0);
+	mk_assert(output_len_bytes >= 0);
 
 	tom_crypto = (struct mk_tom_crypto_s*)tom_crypto_h;
 

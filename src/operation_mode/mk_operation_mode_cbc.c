@@ -102,12 +102,12 @@ static mk_inline void mk_operation_mode_decrypt_blocks_cbc_overlap1(struct mk_op
 }
 
 
-void mk_operation_mode_init_cbc(struct mk_operation_mode_cbc_s* cbc, enum mk_block_cipher_e block_cipher, unsigned char const* key)
+void mk_operation_mode_init_cbc(struct mk_operation_mode_cbc_s* cbc, enum mk_block_cipher_e block_cipher, enum mk_padding_e padding, void const* key, int key_len)
 {
 	mk_assert(cbc);
 	mk_assert(key);
 
-	mk_operation_mode_init_base(&cbc->m_base, block_cipher, key);
+	mk_operation_mode_init_base(&cbc->m_base, block_cipher, padding, key, key_len);
 }
 
 enum mk_block_cipher_e mk_operation_mode_get_block_cipher_cbc(struct mk_operation_mode_cbc_s* cbc)
@@ -124,12 +124,15 @@ unsigned char const* mk_operation_mode_get_key_cbc(struct mk_operation_mode_cbc_
 	return mk_operation_mode_get_key_base(&cbc->m_base);
 }
 
-void mk_operation_mode_set_param_iv_cbc(struct mk_operation_mode_cbc_s* cbc, unsigned char const* iv)
+void mk_operation_mode_set_param_iv_cbc(struct mk_operation_mode_cbc_s* cbc, void const* iv, int iv_len)
 {
 	mk_assert(cbc);
-	mk_assert(iv);
+	mk_assert(iv || iv_len == 0);
+	mk_assert(iv_len >= 0);
 
-	memcpy(cbc->m_iv, iv, mk_block_cipher_get_block_len(cbc->m_base.m_block_cipher));
+	mk_assert(iv_len == mk_block_cipher_get_block_len(cbc->m_base.m_block_cipher));
+
+	memcpy(cbc->m_iv, iv, iv_len);
 }
 
 void mk_operation_mode_encrypt_blocks_cbc(struct mk_operation_mode_cbc_s* cbc, int blocks, unsigned char const* input, unsigned char* output)
@@ -164,4 +167,29 @@ void mk_operation_mode_decrypt_blocks_cbc(struct mk_operation_mode_cbc_s* cbc, i
 	{
 		mk_operation_mode_decrypt_blocks_cbc_overlap0(cbc, blocks, input, output);
 	}
+}
+
+int mk_operation_mode_encrypt_finish_cbc(struct mk_operation_mode_cbc_s* cbc, void const* input, int input_len, void* output, int output_len)
+{
+	int block_len;
+	unsigned char tmp[mk_block_cipher_block_len_max];
+	int padded_len;
+
+	mk_assert(cbc);
+	mk_assert(input || input_len == 0);
+	mk_assert(input_len >= 0 && input_len < mk_block_cipher_get_block_len(mk_operation_mode_get_block_cipher_base(&cbc->m_base)));
+	mk_assert(output || output_len == 0);
+	mk_assert(output_len >= 0 && output_len >= input_len);
+
+	block_len = mk_block_cipher_get_block_len(mk_operation_mode_get_block_cipher_base(&cbc->m_base));
+	memcpy(tmp, input, input_len);
+	padded_len = mk_padding_add(cbc->m_padding, block_len, tmp, input_len);
+	mk_assert(padded_len == 0 || padded_len == block_len);
+	if(padded_len == 0)
+	{
+		return 0;
+	}
+	mk_assert(output_len >= block_len);
+	mk_operation_mode_encrypt_blocks_cbc(cbc, 1, tmp, output);
+	return block_len;
 }

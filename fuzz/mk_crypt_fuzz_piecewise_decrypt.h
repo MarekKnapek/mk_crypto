@@ -12,10 +12,17 @@
 
 static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data, size_t size)
 {
+	struct pointer_and_lenght_s
+	{
+		void const* m_pointer;
+		int m_lenght;
+	};
+
 	enum mk_crypto_operation_mode_e om;
 	int want_cfb_s_bytes;
 	int want_ctr_big_endian;
 	enum mk_crypto_block_cipher_e bc;
+	enum mk_crypto_padding_e padding;
 	int key_len;
 	unsigned char const* iv;
 	unsigned char const* key;
@@ -31,6 +38,7 @@ static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data,
 	mk_crypto_h crypto1;
 	mk_crypto_h crypto2;
 	mk_crypto_h crypto3;
+	struct pointer_and_lenght_s ivs;
 	int cfb_s_bytes;
 	int ctr_endian;
 	unsigned char const* input;
@@ -87,6 +95,22 @@ static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data,
 		case 0: bc = mk_crypto_block_cipher_aes128; key_len = 16; break;
 		case 1: bc = mk_crypto_block_cipher_aes192; key_len = 24; break;
 		case 2: bc = mk_crypto_block_cipher_aes256; key_len = 32; break;
+	}
+	++data;
+	--size;
+
+	if(!(size >= 1))
+	{
+		return;
+	}
+	padding = 0;
+	switch(*data % 5)
+	{
+		case 0: padding = mk_crypto_padding_pkcs7; break;
+		case 1: padding = mk_crypto_padding_10s; break;
+		case 2: padding = mk_crypto_padding_10s1; break;
+		case 3: padding = mk_crypto_padding_zero; break;
+		case 4: padding = mk_crypto_padding_none; break;
 	}
 	++data;
 	--size;
@@ -151,13 +175,21 @@ static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data,
 	test(out2);
 	test(out3);
 
-	crypto1 = mk_crypto_create(om, bc, iv, key);
-	crypto2 = mk_crypto_create(om, bc, iv, key);
-	crypto3 = mk_crypto_create(om, bc, iv, key);
+	crypto1 = mk_crypto_create(om, bc, padding, key, key_len);
+	crypto2 = mk_crypto_create(om, bc, padding, key, key_len);
+	crypto3 = mk_crypto_create(om, bc, padding, key, key_len);
 	test(crypto1);
 	test(crypto2);
 	test(crypto3);
 
+	if(om != mk_crypto_operation_mode_ecb)
+	{
+		ivs.m_pointer = iv;
+		ivs.m_lenght = 16;
+		mk_crypto_set_param(crypto1, mk_crypto_param_iv, &ivs);
+		mk_crypto_set_param(crypto2, mk_crypto_param_iv, &ivs);
+		mk_crypto_set_param(crypto3, mk_crypto_param_iv, &ivs);
+	}
 	if(om == mk_crypto_operation_mode_cfb && want_cfb_s_bytes == 0)
 	{
 		cfb_s_bytes = 16;
@@ -175,10 +207,10 @@ static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data,
 
 	input = data;
 
-	encrypted = mk_crypto_encrypt(crypto1, 1, input, (int)size, out1);
+	encrypted = mk_crypto_encrypt(crypto1, 1, input, (int)size, out1, out_len);
 	test(encrypted == out_len);
 
-	decrypted = mk_crypto_decrypt(crypto2, 1, out1, out_len, out2);
+	decrypted = mk_crypto_decrypt(crypto2, 1, out1, out_len, out2, out_len);
 	test(decrypted == (int)size);
 	test(memcmp(out2, data, size) == 0);
 
@@ -188,14 +220,14 @@ static mk_inline void mk_crypt_fuzz_piecewise_decrypt(unsigned char const* data,
 	for(i = 0; i != nchunks - 1; ++i)
 	{
 		chunk = chunks[i];
-		decrypted = mk_crypto_decrypt(crypto3, 0, out1p, chunk, out3p);
+		decrypted = mk_crypto_decrypt(crypto3, 0, out1p, chunk, out3p, out_len);
 		test(decrypted != -1);
 		out3p += decrypted;
 		sum += decrypted;
 		out1p += chunk;
 	}
 	chunk = chunks[i];
-	decrypted = mk_crypto_decrypt(crypto3, 1, out1p, chunk, out3p);
+	decrypted = mk_crypto_decrypt(crypto3, 1, out1p, chunk, out3p, out_len);
 	test(decrypted != -1);
 	out3p += decrypted;
 	sum += decrypted;

@@ -2,5 +2,30 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\jumbo\tests\tests.c" />
+    <ClCompile Include="..\..\..\tests\mk_aes_test_examples.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tests\mk_sha3_test_examples.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tests\mk_test_aes_gcm.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="tests">
+      <UniqueIdentifier>{1cfdbebd-dc75-45fd-a5d6-8d2dc569b311}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\tests\mk_aes_test_examples.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tests\mk_sha3_test_examples.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tests\mk_test_aes_gcm.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

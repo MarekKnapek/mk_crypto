@@ -93,12 +93,12 @@ static mk_inline void mk_crypto_fuzz_win(unsigned char const* data, size_t size)
 	++data;
 	--size;
 
-	crypto_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	crypto_win = mk_win_crypto_create(om_win, alg_win, iv, key);
+	crypto_mk = mk_crypto_create(om_mk, alg_mk, iv, om_mk == mk_crypto_operation_mode_ecb ? 0 : 16, key, key_len);
+	crypto_win = mk_win_crypto_create(om_win, alg_win, iv, om_win == mk_win_crypto_operation_mode_ecb ? 0 : 16, key, key_len);
 	test(crypto_mk);
 	test(crypto_win);
-	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	cryptod_win = mk_win_crypto_create(om_win, alg_win, iv, key);
+	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, 16, key, key_len);
+	cryptod_win = mk_win_crypto_create(om_win, alg_win, iv, 16, key, key_len);
 	test(cryptod_mk);
 	test(cryptod_win);
 
@@ -122,23 +122,23 @@ static mk_inline void mk_crypto_fuzz_win(unsigned char const* data, size_t size)
 		
 		out_mk = malloc(blocks * 16);
 		test(out_mk);
-		mk_crypto_encrypt(crypto_mk, 0, data, blocks * 16, out_mk);
+		mk_crypto_encrypt(crypto_mk, 0, data, blocks * 16, out_mk, blocks * 16);
 
 		out_win = malloc(blocks * 16);
 		test(out_win);
-		mk_win_crypto_encrypt(crypto_win, 0, data, blocks * 16, out_win);
+		mk_win_crypto_encrypt(crypto_win, 0, data, blocks * 16, out_win, blocks * 16);
 
 		test(memcmp(out_mk, out_win, blocks * 16) == 0);
 
 		outd_mk = malloc(blocks * 16);
 		test(outd_mk);
-		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk);
+		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk, blocks * 16);
 		test(out_lend_mk == blocks * 16);
 		test(memcmp(outd_mk, data, blocks * 16) == 0);
 
 		outd_win = malloc(blocks * 16);
 		test(outd_win);
-		out_lend_win = mk_win_crypto_decrypt(cryptod_win, 0, out_win, blocks * 16, outd_win);
+		out_lend_win = mk_win_crypto_decrypt(cryptod_win, 0, out_win, blocks * 16, outd_win, blocks * 16);
 		test(out_lend_mk == blocks * 16);
 		test(memcmp(outd_win, data, blocks * 16) == 0);
 
@@ -170,20 +170,20 @@ static mk_inline void mk_crypto_fuzz_win(unsigned char const* data, size_t size)
 	memset(out_mk, 0, out_len);
 	memset(out_win, 0, out_len);
 
-	mk_crypto_encrypt(crypto_mk, 1, msg, msg_len, out_mk);
-	mk_win_crypto_encrypt(crypto_win, 1, msg, msg_len, out_win);
+	mk_crypto_encrypt(crypto_mk, 1, msg, msg_len, out_mk, out_len);
+	mk_win_crypto_encrypt(crypto_win, 1, msg, msg_len, out_win, out_len);
 
 	test(memcmp(out_mk, out_win, out_len) == 0);
 
 	outd_mk = malloc(out_len);
 	test(outd_mk);
-	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk);
+	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk, out_len);
 	test(out_lend_mk == msg_len);
 	test(memcmp(outd_mk, msg, msg_len) == 0);
 
 	outd_win = malloc(out_len);
 	test(outd_win);
-	out_lend_win = mk_win_crypto_decrypt(cryptod_win, 1, out_win, out_len, outd_win);
+	out_lend_win = mk_win_crypto_decrypt(cryptod_win, 1, out_win, out_len, outd_win, out_len);
 	test(out_lend_win == msg_len);
 	test(memcmp(outd_win, msg, msg_len) == 0);
 

@@ -28,9 +28,9 @@ enum mk_tom_crypto_block_cipher_e
 };
 
 
-mk_extern_c mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, void const* key);
-mk_extern_c void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output);
-mk_extern_c int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output);
+mk_extern_c mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, int iv_len, void const* key, int key_len);
+mk_extern_c void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes);
+mk_extern_c int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes);
 mk_extern_c void mk_tom_crypto_destroy(mk_tom_crypto_h tom_crypto_h);
 
 

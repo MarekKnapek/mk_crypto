@@ -207,6 +207,12 @@
     <ClCompile Include="..\..\..\fuzz\mk_pbkdf2_fuzz.c">
       <Filter>fuzz</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\operation_mode\mk_operation_mode_gcm.c">
+      <Filter>src\operation_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_padding.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mk_md2.h">
@@ -418,6 +424,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_pbkdf2_fuzz.h">
       <Filter>fuzz</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\operation_mode\mk_operation_mode_gcm.h">
+      <Filter>src\operation_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_padding.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

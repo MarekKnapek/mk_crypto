@@ -96,12 +96,12 @@ static mk_inline void mk_crypto_fuzz_tom(unsigned char const* data, size_t size)
 	++data;
 	--size;
 
-	crypto_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	crypto_tom = mk_tom_crypto_create(om_tom, alg_tom, iv, key);
+	crypto_mk = mk_crypto_create(om_mk, alg_mk, mk_crypto_padding_pkcs7, key, key_len);
+	crypto_tom = mk_tom_crypto_create(om_tom, alg_tom, mk_crypto_padding_pkcs7, key, key_len);
 	test(crypto_mk);
 	test(crypto_tom);
-	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, key);
-	cryptod_tom = mk_tom_crypto_create(om_tom, alg_tom, iv, key);
+	cryptod_mk = mk_crypto_create(om_mk, alg_mk, iv, 16, key, key_len);
+	cryptod_tom = mk_tom_crypto_create(om_tom, alg_tom, iv, 16, key, key_len);
 	test(cryptod_mk);
 	test(cryptod_tom);
 
@@ -132,23 +132,23 @@ static mk_inline void mk_crypto_fuzz_tom(unsigned char const* data, size_t size)
 		
 		out_mk = malloc(blocks * 16);
 		test(out_mk);
-		mk_crypto_encrypt(crypto_mk, 0, data, blocks * 16, out_mk);
+		mk_crypto_encrypt(crypto_mk, 0, data, blocks * 16, out_mk, blocks * 16);
 
 		out_tom = malloc(blocks * 16);
 		test(out_tom);
-		mk_tom_crypto_encrypt(crypto_tom, 0, data, blocks * 16, out_tom);
+		mk_tom_crypto_encrypt(crypto_tom, 0, data, blocks * 16, out_tom, blocks * 16);
 
 		test(memcmp(out_mk, out_tom, blocks * 16) == 0);
 
 		outd_mk = malloc(blocks * 16);
 		test(outd_mk);
-		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk);
+		out_lend_mk = mk_crypto_decrypt(cryptod_mk, 0, out_mk, blocks * 16, outd_mk, blocks * 16);
 		test(out_lend_mk == blocks * 16);
 		test(memcmp(outd_mk, data, blocks * 16) == 0);
 
 		outd_tom = malloc(blocks * 16);
 		test(outd_tom);
-		out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 0, out_tom, blocks * 16, outd_tom);
+		out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 0, out_tom, blocks * 16, outd_tom, blocks * 16);
 		test(out_lend_mk == blocks * 16);
 		test(memcmp(outd_tom, data, blocks * 16) == 0);
 
@@ -180,20 +180,20 @@ static mk_inline void mk_crypto_fuzz_tom(unsigned char const* data, size_t size)
 	memset(out_mk, 0, out_len);
 	memset(out_tom, 0, out_len);
 
-	mk_crypto_encrypt(crypto_mk, 1, msg, msg_len, out_mk);
-	mk_tom_crypto_encrypt(crypto_tom, 1, msg, msg_len, out_tom);
+	mk_crypto_encrypt(crypto_mk, 1, msg, msg_len, out_mk, out_len);
+	mk_tom_crypto_encrypt(crypto_tom, 1, msg, msg_len, out_tom, out_len);
 
 	test(memcmp(out_mk, out_tom, out_len) == 0);
 
 	outd_mk = malloc(out_len);
 	test(outd_mk);
-	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk);
+	out_lend_mk = mk_crypto_decrypt(cryptod_mk, 1, out_mk, out_len, outd_mk, out_len);
 	test(out_lend_mk == msg_len);
 	test(memcmp(outd_mk, msg, msg_len) == 0);
 
 	outd_tom = malloc(out_len);
 	test(outd_tom);
-	out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 1, out_tom, out_len, outd_tom);
+	out_lend_tom = mk_tom_crypto_decrypt(cryptod_tom, 1, out_tom, out_len, outd_tom, out_len);
 	test(out_lend_tom == msg_len);
 	test(memcmp(outd_tom, msg, msg_len) == 0);
 

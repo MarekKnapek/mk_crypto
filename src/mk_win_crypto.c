@@ -23,7 +23,7 @@ struct mk_win_crypto_s
 };
 
 
-mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_e operation_mode, enum mk_win_crypto_algorithm_e algorithm, void const* iv, void const* key)
+mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_e operation_mode, enum mk_win_crypto_algorithm_e algorithm, void const* iv, int iv_len, void const* key, int key_len)
 {
 	struct mk_win_aes128_blob_s
 	{
@@ -83,34 +83,37 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	{
 		case mk_win_crypto_algorithm_aes128:
 		{
+			mk_assert(key_len == 16);
 			key_blob.m_128.m_header.bType = PLAINTEXTKEYBLOB;
 			key_blob.m_128.m_header.bVersion = CUR_BLOB_VERSION;
 			key_blob.m_128.m_header.reserved = 0;
 			key_blob.m_128.m_header.aiKeyAlg = CALG_AES_128;
-			key_blob.m_128.m_key_len = 16;
-			memcpy(key_blob.m_128.m_key, key, 16);
+			key_blob.m_128.m_key_len = key_len;
+			memcpy(key_blob.m_128.m_key, key, key_len);
 			key_blob_size = sizeof(key_blob.m_128);
 		}
 		break;
 		case mk_win_crypto_algorithm_aes192:
 		{
+			mk_assert(key_len == 24);
 			key_blob.m_192.m_header.bType = PLAINTEXTKEYBLOB;
 			key_blob.m_192.m_header.bVersion = CUR_BLOB_VERSION;
 			key_blob.m_192.m_header.reserved = 0;
 			key_blob.m_192.m_header.aiKeyAlg = CALG_AES_192;
-			key_blob.m_192.m_key_len = 24;
-			memcpy(key_blob.m_192.m_key, key, 24);
+			key_blob.m_192.m_key_len = key_len;
+			memcpy(key_blob.m_192.m_key, key, key_len);
 			key_blob_size = sizeof(key_blob.m_192);
 		}
 		break;
 		case mk_win_crypto_algorithm_aes256:
 		{
+			mk_assert(key_len == 32);
 			key_blob.m_256.m_header.bType = PLAINTEXTKEYBLOB;
 			key_blob.m_256.m_header.bVersion = CUR_BLOB_VERSION;
 			key_blob.m_256.m_header.reserved = 0;
 			key_blob.m_256.m_header.aiKeyAlg = CALG_AES_256;
-			key_blob.m_256.m_key_len = 32;
-			memcpy(key_blob.m_256.m_key, key, 32);
+			key_blob.m_256.m_key_len = key_len;
+			memcpy(key_blob.m_256.m_key, key, key_len);
 			key_blob_size = sizeof(key_blob.m_256);
 		}
 		break;
@@ -125,7 +128,9 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 	{
 		case mk_win_crypto_operation_mode_cbc: kp_mode = CRYPT_MODE_CBC; break;
 		case mk_win_crypto_operation_mode_cfb: kp_mode = CRYPT_MODE_CFB; break;
+		case mk_win_crypto_operation_mode_cts: kp_mode = CRYPT_MODE_CTS; break;
 		case mk_win_crypto_operation_mode_ecb: kp_mode = CRYPT_MODE_ECB; break;
+		case mk_win_crypto_operation_mode_ofb: kp_mode = CRYPT_MODE_OFB; break;
 	}
 	mode_set = CryptSetKeyParam(ck, KP_MODE, (BYTE const*)&kp_mode, 0);
 	if(!(mode_set != 0))
@@ -133,13 +138,18 @@ mk_jumbo mk_win_crypto_h mk_win_crypto_create(enum mk_win_crypto_operation_mode_
 		goto cleanup_destroy_key;
 	}
 
-	if(iv)
+	if(operation_mode != mk_win_crypto_operation_mode_ecb)
 	{
+		mk_assert(iv_len == 16);
 		iv_set = CryptSetKeyParam(ck, KP_IV, (BYTE const*)iv, 0);
 		if(!(iv_set != 0))
 		{
 			goto cleanup_destroy_key;
 		}
+	}
+	else
+	{
+		mk_assert(iv_len == 0);
 	}
 
 	win_crypto = (struct mk_win_crypto_s*)malloc(sizeof (struct mk_win_crypto_s));
@@ -162,7 +172,7 @@ cleanup_null:
 	return NULL;
 }
 
-mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output)
+mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes)
 {
 	struct mk_win_crypto_s* win_crypto;
 	DWORD data_len;
@@ -176,21 +186,21 @@ mk_jumbo void mk_win_crypto_encrypt(mk_win_crypto_h win_crypto_h, int final, voi
 
 	if(input != output)
 	{
+		mk_assert(output_len_bytes >= input_len_bytes);
 		memcpy(output, input, input_len_bytes);
 	}
 	data_len = input_len_bytes;
-	out_len = (input_len_bytes / 16 + final) * 16;
+	out_len = output_len_bytes;
 	encrypted = CryptEncrypt(win_crypto->m_ck, 0, final == 0 ? FALSE : TRUE, 0, output, &data_len, out_len);
 	mk_assert(encrypted != 0);
 	mk_assert(data_len == out_len);
 }
 
-mk_jumbo int mk_win_crypto_decrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output)
+mk_jumbo int mk_win_crypto_decrypt(mk_win_crypto_h win_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes)
 {
 	struct mk_win_crypto_s* win_crypto;
 	DWORD data_len;
 	BOOL encrypted;
-	DWORD out_len;
 
 	mk_assert(win_crypto_h);
 	mk_assert(final == 0 || final == 1);
@@ -199,10 +209,10 @@ mk_jumbo int mk_win_crypto_decrypt(mk_win_crypto_h win_crypto_h, int final, void
 
 	if(input != output)
 	{
+		mk_assert(output_len_bytes >= input_len_bytes);
 		memcpy(output, input, input_len_bytes);
 	}
 	data_len = input_len_bytes;
-	out_len = (input_len_bytes / 16) * 16;
 	encrypted = CryptDecrypt(win_crypto->m_ck, 0, final == 0 ? FALSE : TRUE, 0, output, &data_len);
 	mk_assert(encrypted != 0);
 	return (int)data_len;
