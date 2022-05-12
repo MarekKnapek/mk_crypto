@@ -47,7 +47,7 @@ static mk_inline void mk_md4_fuzz_complex(unsigned char const* data, size_t size
 	{
 		return;
 	}
-	parts = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+	parts = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 	data += 2;
 	size -= 2;
 	mk_win_md4_init(&mk_win_md4_state);
@@ -56,20 +56,14 @@ static mk_inline void mk_md4_fuzz_complex(unsigned char const* data, size_t size
 	{
 		if(size < 2)
 		{
-			mk_win_md4_finish(&mk_win_md4_state, &mk_win_md4_digest);
-			mk_md4_finish(&mk_md4_state, &mk_md4_digest);
-			test(memcmp(&mk_md4_digest, &mk_win_md4_digest, sizeof(mk_win_md4_digest)) == 0);
-			return;
+			break;
 		}
-		part_len = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+		part_len = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 		data += 2;
 		size -= 2;
 		if(size < part_len)
 		{
-			mk_win_md4_finish(&mk_win_md4_state, &mk_win_md4_digest);
-			mk_md4_finish(&mk_md4_state, &mk_md4_digest);
-			test(memcmp(&mk_md4_digest, &mk_win_md4_digest, sizeof(mk_win_md4_digest)) == 0);
-			return;
+			break;
 		}
 		mk_win_md4_append(&mk_win_md4_state, data, part_len);
 		mk_md4_append(&mk_md4_state, data, part_len);

@@ -47,7 +47,7 @@ static mk_inline void mk_sha2_512_fuzz_complex(unsigned char const* data, size_t
 	{
 		return;
 	}
-	parts = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+	parts = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 	data += 2;
 	size -= 2;
 	mk_win_sha2_512_init(&mk_win_sha2_512_state);
@@ -56,20 +56,14 @@ static mk_inline void mk_sha2_512_fuzz_complex(unsigned char const* data, size_t
 	{
 		if(size < 2)
 		{
-			mk_win_sha2_512_finish(&mk_win_sha2_512_state, &mk_win_sha2_512_digest);
-			mk_sha2_512_finish(&mk_sha2_512_state, &mk_sha2_512_digest);
-			test(memcmp(&mk_sha2_512_digest, &mk_win_sha2_512_digest, sizeof(mk_win_sha2_512_digest)) == 0);
-			return;
+			break;
 		}
-		part_len = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+		part_len = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 		data += 2;
 		size -= 2;
 		if(size < part_len)
 		{
-			mk_win_sha2_512_finish(&mk_win_sha2_512_state, &mk_win_sha2_512_digest);
-			mk_sha2_512_finish(&mk_sha2_512_state, &mk_sha2_512_digest);
-			test(memcmp(&mk_sha2_512_digest, &mk_win_sha2_512_digest, sizeof(mk_win_sha2_512_digest)) == 0);
-			return;
+			break;
 		}
 		mk_win_sha2_512_append(&mk_win_sha2_512_state, data, part_len);
 		mk_sha2_512_append(&mk_sha2_512_state, data, part_len);

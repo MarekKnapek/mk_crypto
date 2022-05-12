@@ -47,7 +47,7 @@ static mk_inline void mk_sha2_384_fuzz_complex(unsigned char const* data, size_t
 	{
 		return;
 	}
-	parts = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+	parts = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 	data += 2;
 	size -= 2;
 	mk_win_sha2_384_init(&mk_win_sha2_384_state);
@@ -56,20 +56,14 @@ static mk_inline void mk_sha2_384_fuzz_complex(unsigned char const* data, size_t
 	{
 		if(size < 2)
 		{
-			mk_win_sha2_384_finish(&mk_win_sha2_384_state, &mk_win_sha2_384_digest);
-			mk_sha2_384_finish(&mk_sha2_384_state, &mk_sha2_384_digest);
-			test(memcmp(&mk_sha2_384_digest, &mk_win_sha2_384_digest, sizeof(mk_win_sha2_384_digest)) == 0);
-			return;
+			break;
 		}
-		part_len = ((unsigned)(data[0]) << CHAR_BIT) | ((unsigned)(data[1]));
+		part_len = (((unsigned)(data[0])) << 8) | ((unsigned)(data[1]));
 		data += 2;
 		size -= 2;
 		if(size < part_len)
 		{
-			mk_win_sha2_384_finish(&mk_win_sha2_384_state, &mk_win_sha2_384_digest);
-			mk_sha2_384_finish(&mk_sha2_384_state, &mk_sha2_384_digest);
-			test(memcmp(&mk_sha2_384_digest, &mk_win_sha2_384_digest, sizeof(mk_win_sha2_384_digest)) == 0);
-			return;
+			break;
 		}
 		mk_win_sha2_384_append(&mk_win_sha2_384_state, data, part_len);
 		mk_sha2_384_append(&mk_sha2_384_state, data, part_len);
