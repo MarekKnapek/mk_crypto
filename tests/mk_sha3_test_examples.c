@@ -141,6 +141,28 @@ static char const s_sha3_shake128_4088[] = "7F9C2BA4E88F827D616045507605853ED73B
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
+static mk_inline void cast_sha3_224_init(void* self){ mk_sha3_224_init((struct mk_sha3_224_state_s*)self); }
+static mk_inline void cast_sha3_256_init(void* self){ mk_sha3_256_init((struct mk_sha3_256_state_s*)self); }
+static mk_inline void cast_sha3_384_init(void* self){ mk_sha3_384_init((struct mk_sha3_384_state_s*)self); }
+static mk_inline void cast_sha3_512_init(void* self){ mk_sha3_512_init((struct mk_sha3_512_state_s*)self); }
+static mk_inline void cast_sha3_shake128_init(void* self){ mk_sha3_shake128_init((struct mk_sha3_shake128_state_s*)self); }
+static mk_inline void cast_sha3_shake256_init(void* self){ mk_sha3_shake256_init((struct mk_sha3_shake256_state_s*)self); }
+
+static mk_inline void cast_sha3_224_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_224_append_bits((struct mk_sha3_224_state_s*)self, msg, msg_len_bits); }
+static mk_inline void cast_sha3_256_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_256_append_bits((struct mk_sha3_256_state_s*)self, msg, msg_len_bits); }
+static mk_inline void cast_sha3_384_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_384_append_bits((struct mk_sha3_384_state_s*)self, msg, msg_len_bits); }
+static mk_inline void cast_sha3_512_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_512_append_bits((struct mk_sha3_512_state_s*)self, msg, msg_len_bits); }
+static mk_inline void cast_sha3_shake128_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_shake128_append_bits((struct mk_sha3_shake128_state_s*)self, msg, msg_len_bits); }
+static mk_inline void cast_sha3_shake256_append_bits(void* self, void const* msg, size_t msg_len_bits){ mk_sha3_shake256_append_bits((struct mk_sha3_shake256_state_s*)self, msg, msg_len_bits); }
+
+static mk_inline void cast_sha3_224_finish(void* self, void* digest){ mk_sha3_224_finish((struct mk_sha3_224_state_s*)self, digest); }
+static mk_inline void cast_sha3_256_finish(void* self, void* digest){ mk_sha3_256_finish((struct mk_sha3_256_state_s*)self, digest); }
+static mk_inline void cast_sha3_384_finish(void* self, void* digest){ mk_sha3_384_finish((struct mk_sha3_384_state_s*)self, digest); }
+static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_sha3_512_finish((struct mk_sha3_512_state_s*)self, digest); }
+static mk_inline void cast_sha3_shake128_finish(void* self, void* digest){ mk_sha3_shake128_finish((struct mk_sha3_shake128_state_s*)self, digest, 4096); }
+static mk_inline void cast_sha3_shake256_finish(void* self, void* digest){ mk_sha3_shake256_finish((struct mk_sha3_shake256_state_s*)self, digest, 4096); }
+
+
 static mk_inline void mk_string_bin_to_bytes(char const* in, int len, void* out)
 {
 	unsigned char* output;
@@ -212,22 +234,6 @@ static mk_inline void mk_string_hex_to_bytes(void const* in, int len, void* out)
 	}
 }
 
-static mk_inline void mk_sha3_shake128_finish_4096(struct mk_sha3_shake128_state_s* self, void* digest)
-{
-	mk_assert(self);
-	mk_assert(digest);
-
-	mk_sha3_shake128_finish(self, digest, 4096);
-}
-
-static mk_inline void mk_sha3_shake256_finish_4096(struct mk_sha3_shake256_state_s* self, void* digest)
-{
-	mk_assert(self);
-	mk_assert(digest);
-
-	mk_sha3_shake256_finish(self, digest, 4096);
-}
-
 
 int mk_sha3_test_examples(void)
 {
@@ -287,12 +293,12 @@ int mk_sha3_test_examples(void)
 
 	static struct alg_descr_s const s_alg_descrs[] =
 	{
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_224),            28, (alg_init_t)&mk_sha3_224_init,      (alg_append_t)&mk_sha3_224_append_bits,      (alg_finish_t)mk_sha3_224_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_256),            32, (alg_init_t)&mk_sha3_256_init,      (alg_append_t)&mk_sha3_256_append_bits,      (alg_finish_t)mk_sha3_256_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_384),            48, (alg_init_t)&mk_sha3_384_init,      (alg_append_t)&mk_sha3_384_append_bits,      (alg_finish_t)mk_sha3_384_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_512),            64, (alg_init_t)&mk_sha3_512_init,      (alg_append_t)&mk_sha3_512_append_bits,      (alg_finish_t)mk_sha3_512_finish},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake128_4096), 512, (alg_init_t)&mk_sha3_shake128_init, (alg_append_t)&mk_sha3_shake128_append_bits, (alg_finish_t)mk_sha3_shake128_finish_4096},
-		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake256_4096), 512, (alg_init_t)&mk_sha3_shake256_init, (alg_append_t)&mk_sha3_shake256_append_bits, (alg_finish_t)mk_sha3_shake256_finish_4096},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_224),            28, &cast_sha3_224_init,      &cast_sha3_224_append_bits,      &cast_sha3_224_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_256),            32, &cast_sha3_256_init,      &cast_sha3_256_append_bits,      &cast_sha3_256_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_384),            48, &cast_sha3_384_init,      &cast_sha3_384_append_bits,      &cast_sha3_384_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_512),            64, &cast_sha3_512_init,      &cast_sha3_512_append_bits,      &cast_sha3_512_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake128_4096), 512, &cast_sha3_shake128_init, &cast_sha3_shake128_append_bits, &cast_sha3_shake128_finish},
+		{offsetof(struct msg_and_digests_s, m_sha3_str_hex_shake256_4096), 512, &cast_sha3_shake256_init, &cast_sha3_shake256_append_bits, &cast_sha3_shake256_finish},
 	};
 
 	union alg_states_u
