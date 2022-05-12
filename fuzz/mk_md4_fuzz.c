@@ -1,9 +1,9 @@
 #include "mk_md4_fuzz.h"
 
-#include "../src/mk_md4.h"
-#include "../src/mk_win_md4.h"
+#include "../src/hash/mk_md4.h"
+#include "../src/hash/mk_win_md4.h"
 
-#include "../utils/mk_inline.h"
+#include "../src/utils/mk_inline.h"
 
 #include <stddef.h> /* size_t NULL */
 #include <string.h> /* memcmp */

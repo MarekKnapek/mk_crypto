@@ -5,8 +5,8 @@
 
 #include "../mk_hash_file_lib/mk_hash_file.h"
 
-#include "../../utils/mk_assert.h"
-#include "../../utils/mk_inline.h"
+#include "../../src/utils/mk_assert.h"
+#include "../../src/utils/mk_inline.h"
 
 #if defined(_MSC_VER)
 #pragma warning(pop)

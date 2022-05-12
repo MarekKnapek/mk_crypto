@@ -1,9 +1,9 @@
 #include "mk_sha2_256_fuzz.h"
 
-#include "../src/mk_sha2_256.h"
-#include "../src/mk_win_sha2_256.h"
+#include "../src/hash/mk_sha2_256.h"
+#include "../src/hash/mk_win_sha2_256.h"
 
-#include "../utils/mk_inline.h"
+#include "../src/utils/mk_inline.h"
 
 #include <stddef.h> /* size_t NULL */
 #include <string.h> /* memcmp */

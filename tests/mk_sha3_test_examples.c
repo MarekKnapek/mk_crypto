@@ -1,14 +1,14 @@
 #include "mk_sha3_test_examples.h"
 
-#include "../utils/mk_assert.h"
-#include "../utils/mk_inline.h"
+#include "../src/utils/mk_assert.h"
+#include "../src/utils/mk_inline.h"
 
-#include "../src/mk_sha3_224.h"
-#include "../src/mk_sha3_256.h"
-#include "../src/mk_sha3_384.h"
-#include "../src/mk_sha3_512.h"
-#include "../src/mk_sha3_shake128.h"
-#include "../src/mk_sha3_shake256.h"
+#include "../src/hash/mk_sha3_224.h"
+#include "../src/hash/mk_sha3_256.h"
+#include "../src/hash/mk_sha3_384.h"
+#include "../src/hash/mk_sha3_512.h"
+#include "../src/hash/mk_sha3_shake128.h"
+#include "../src/hash/mk_sha3_shake256.h"
 
 #include <stddef.h> /* size_t offsetof */
 #include <string.h> /* memcmp */

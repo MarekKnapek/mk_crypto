@@ -31,14 +31,14 @@ int main(void)
 
 #include "../../../tests/mk_sha3_test_examples.c"
 
-#include "../../../src/mk_sha3_224.c"
-#include "../../../src/mk_sha3_256.c"
-#include "../../../src/mk_sha3_384.c"
-#include "../../../src/mk_sha3_512.c"
-#include "../../../src/mk_sha3_shake128.c"
-#include "../../../src/mk_sha3_shake256.c"
+#include "../../../src/hash/mk_sha3_224.c"
+#include "../../../src/hash/mk_sha3_256.c"
+#include "../../../src/hash/mk_sha3_384.c"
+#include "../../../src/hash/mk_sha3_512.c"
+#include "../../../src/hash/mk_sha3_shake128.c"
+#include "../../../src/hash/mk_sha3_shake256.c"
 
-#include "../../../src/mk_sha3_detail.c"
+#include "../../../src/hash/mk_sha3_detail.c"
 
 #include "../../../../mk_int/src/exact/mk_uint_64.c"
 

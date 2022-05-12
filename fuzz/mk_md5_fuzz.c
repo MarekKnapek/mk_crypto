@@ -1,9 +1,9 @@
 #include "mk_md5_fuzz.h"
 
-#include "../src/mk_md5.h"
-#include "../src/mk_win_md5.h"
+#include "../src/hash/mk_md5.h"
+#include "../src/hash/mk_win_md5.h"
 
-#include "../utils/mk_inline.h"
+#include "../src/utils/mk_inline.h"
 
 #include <stddef.h> /* size_t NULL */
 #include <string.h> /* memcmp */
