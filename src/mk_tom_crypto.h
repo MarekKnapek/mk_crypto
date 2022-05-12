@@ -27,8 +27,20 @@ enum mk_tom_crypto_block_cipher_e
 	mk_tom_crypto_block_cipher_aes256,
 };
 
+enum mk_tom_crypto_padding_e
+{
+	mk_tom_crypto_padding_pkcs7,
+};
 
-mk_extern_c mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, int iv_len, void const* key, int key_len);
+
+enum mk_tom_crypto_param_e
+{
+	mk_tom_crypto_param_iv,
+};
+
+
+mk_extern_c mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, enum mk_tom_crypto_padding_e padding, void const* key, int key_len);
+mk_extern_c void mk_tom_crypto_set_param(mk_tom_crypto_h tom_crypto_h, enum mk_tom_crypto_param_e param, void const* value);
 mk_extern_c void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes);
 mk_extern_c int mk_tom_crypto_decrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes);
 mk_extern_c void mk_tom_crypto_destroy(mk_tom_crypto_h tom_crypto_h);

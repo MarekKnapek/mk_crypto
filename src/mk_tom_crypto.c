@@ -5,10 +5,14 @@
 #include "mk_tom_crypto.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_inline.h"
 
 #include <stdlib.h> /* malloc free NULL */
+#include <string.h> /* memcpy */
 
 #include "../../libtomcrypt/src/headers/tomcrypt.h"
+
+
 #if defined(_M_IX86)
 #if defined(NDEBUG)
 #pragma comment(lib, "../../../../libtomcrypt/MSVC_Win32_Release/tomcrypt.lib")
@@ -38,11 +42,13 @@ struct mk_tom_crypto_s
 {
 	enum mk_tom_crypto_operation_mode_e m_operation_mode;
 	enum mk_tom_crypto_block_cipher_e m_block_cipher;
+	int m_cipher_id;
+	unsigned char m_key[32];
 	union mk_tom_systemic_u m_systemic;
 };
 
 
-mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, void const* iv, int iv_len, void const* key, int key_len)
+mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operation_mode, enum mk_tom_crypto_block_cipher_e block_cipher, enum mk_tom_crypto_padding_e padding, void const* key, int key_len)
 {
 	int registered;
 	struct mk_tom_crypto_s* tom_crypto;
@@ -65,42 +71,110 @@ mk_tom_crypto_h mk_tom_crypto_create(enum mk_tom_crypto_operation_mode_e operati
 		block_cipher == mk_tom_crypto_block_cipher_aes256 ||
 		0
 	);
-	mk_assert(key);
+	mk_assert
+	(
+		padding == mk_tom_crypto_padding_pkcs7 ||
+		0
+	);
+	mk_assert(key || key_len == 0);
+	mk_assert(key_len >= 0);
 
 	registered = register_cipher(&aes_desc);
-	mk_assert(registered != -1);
+	if(!(registered != -1))
+	{
+		goto cleanup_null;
+	}
 
-	tom_crypto = (struct mk_tom_crypto_s*)malloc(sizeof (struct mk_tom_crypto_s));
+	tom_crypto = (struct mk_tom_crypto_s*)malloc(sizeof(struct mk_tom_crypto_s));
 	if(!tom_crypto)
 	{
-		return NULL;
+		goto cleanup_null;
 	}
 	tom_crypto->m_operation_mode = operation_mode;
 	tom_crypto->m_block_cipher = block_cipher;
+	tom_crypto->m_cipher_id = registered;
 
-	num_rounds = 0;
-	switch(block_cipher)
+	if(operation_mode == mk_tom_crypto_operation_mode_ecb)
 	{
-		case mk_tom_crypto_block_cipher_aes128: mk_assert(key_len == 16); num_rounds = 10; break;
-		case mk_tom_crypto_block_cipher_aes192: mk_assert(key_len == 24); num_rounds = 12; break;
-		case mk_tom_crypto_block_cipher_aes256: mk_assert(key_len == 32); num_rounds = 14; break;
-	}
+		switch(block_cipher)
+		{
+			case mk_tom_crypto_block_cipher_aes128: mk_assert(key_len == 16); num_rounds = 10; break;
+			case mk_tom_crypto_block_cipher_aes192: mk_assert(key_len == 24); num_rounds = 12; break;
+			case mk_tom_crypto_block_cipher_aes256: mk_assert(key_len == 32); num_rounds = 14; break;
+			default: mk_assert((num_rounds = 0, 0)); break;
+		}
 
-	om_started = CRYPT_ERROR;
-	switch(operation_mode)
-	{
-		case mk_tom_crypto_operation_mode_cbc: mk_assert(iv_len == 16); om_started = cbc_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cbc); break;
-		case mk_tom_crypto_operation_mode_cfb: mk_assert(iv_len == 16); om_started = cfb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cfb); break;
-		case mk_tom_crypto_operation_mode_ctr: mk_assert(iv_len == 16); om_started = ctr_start(0, iv, key, key_len, num_rounds, CTR_COUNTER_LITTLE_ENDIAN, &tom_crypto->m_systemic.m_ctr); break;
-		case mk_tom_crypto_operation_mode_ecb: mk_assert(iv_len ==  0); om_started = ecb_start(0,     key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ecb); break;
-		case mk_tom_crypto_operation_mode_ofb: mk_assert(iv_len == 16); om_started = ofb_start(0, iv, key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ofb); break;
+		om_started = ecb_start(registered, key, key_len, num_rounds, &tom_crypto->m_systemic.m_ecb);
+		if(!(om_started == CRYPT_OK))
+		{
+			goto cleanup_malloc;
+		}
 	}
-	if(!(om_started == CRYPT_OK))
+	else
 	{
-		return NULL;
+		mk_assert(sizeof(tom_crypto->m_key) >= key_len);
+		memcpy(tom_crypto->m_key, key, key_len);
 	}
 
 	return (mk_tom_crypto_h)tom_crypto;
+
+cleanup_malloc:
+	free(tom_crypto);
+
+cleanup_null:
+	return NULL;
+}
+
+static mk_inline void mk_tom_crypto_set_param_iv(mk_tom_crypto_h tom_crypto_h, void const* iv, int iv_len)
+{
+	struct mk_tom_crypto_s* tom_crypto;
+	int key_len;
+	int num_rounds;
+	int om_started;
+
+	mk_assert(tom_crypto_h);
+	mk_assert(iv || iv_len == 0);
+	mk_assert(iv_len >= 0);
+
+	tom_crypto = (struct mk_tom_crypto_s*)tom_crypto_h;
+	switch(tom_crypto->m_block_cipher)
+	{
+		case mk_tom_crypto_block_cipher_aes128: key_len == 16; num_rounds = 10; break;
+		case mk_tom_crypto_block_cipher_aes192: key_len == 24; num_rounds = 12; break;
+		case mk_tom_crypto_block_cipher_aes256: key_len == 32; num_rounds = 14; break;
+		default: mk_assert((key_len = num_rounds = 0, 0)); break;
+	}
+	switch(tom_crypto->m_operation_mode)
+	{
+		case mk_tom_crypto_operation_mode_cbc: mk_assert(iv && iv_len == 16); om_started = cbc_start(tom_crypto->m_cipher_id, iv, tom_crypto->m_key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cbc); break;
+		case mk_tom_crypto_operation_mode_cfb: mk_assert(iv && iv_len == 16); om_started = cfb_start(tom_crypto->m_cipher_id, iv, tom_crypto->m_key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_cfb); break;
+		case mk_tom_crypto_operation_mode_ctr: mk_assert(iv && iv_len == 16); om_started = ctr_start(tom_crypto->m_cipher_id, iv, tom_crypto->m_key, key_len, num_rounds, CTR_COUNTER_LITTLE_ENDIAN, &tom_crypto->m_systemic.m_ctr); break;
+		case mk_tom_crypto_operation_mode_ofb: mk_assert(iv && iv_len == 16); om_started = ofb_start(tom_crypto->m_cipher_id, iv, tom_crypto->m_key, key_len, num_rounds,                            &tom_crypto->m_systemic.m_ofb); break;
+		default: mk_assert(0); break;
+	}
+}
+
+void mk_tom_crypto_set_param(mk_tom_crypto_h tom_crypto_h, enum mk_tom_crypto_param_e param, void const* value)
+{
+	struct ptr_len_s
+	{
+		void const* m_ptr;
+		int m_len;
+	};
+
+	mk_assert(tom_crypto_h);
+	mk_assert
+	(
+		param == mk_tom_crypto_param_iv ||
+		0
+	);
+	mk_assert(value);
+
+	switch(param)
+	{
+		case mk_tom_crypto_param_iv: mk_tom_crypto_set_param_iv(tom_crypto_h, ((struct ptr_len_s*)value)->m_ptr, ((struct ptr_len_s*)value)->m_len); break;
+		default: mk_assert(0); break;
+	}
 }
 
 void mk_tom_crypto_encrypt(mk_tom_crypto_h tom_crypto_h, int final, void const* input, int input_len_bytes, void* output, int output_len_bytes)
