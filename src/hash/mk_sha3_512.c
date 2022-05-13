@@ -42,7 +42,7 @@ void mk_sha3_512_finish(struct mk_sha3_512_state_s* self, void* digest)
 	mk_assert(self);
 	mk_assert(digest);
 
-	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_sha3, digest, 512);
+	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_sha3, digest, 512);
 }
 
 

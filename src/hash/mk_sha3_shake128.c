@@ -36,5 +36,5 @@ void mk_sha3_shake128_finish(struct mk_sha3_shake128_state_s* self, void* digest
 	mk_assert(self);
 	mk_assert(digest);
 
-	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_e_shake, digest, digest_len_bits);
+	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_shake, digest, digest_len_bits);
 }

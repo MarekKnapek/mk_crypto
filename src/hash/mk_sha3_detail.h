@@ -15,9 +15,9 @@
 
 enum mk_sha3_detail_domain_e
 {
-	mk_sha3_detail_domain_e_sha3,
-	mk_sha3_detail_domain_e_shake,
-	mk_sha3_detail_domain_e_rawshake,
+	mk_sha3_detail_domain_sha3,
+	mk_sha3_detail_domain_shake,
+	mk_sha3_detail_domain_rawshake,
 };
 
 

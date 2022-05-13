@@ -336,7 +336,7 @@ static mk_inline void mk_sha3_detail_pad(struct mk_uint64_s state[5][5], int* id
 	mk_assert(idx);
 	mk_assert(block);
 	mk_assert(block_len_bits >= 0);
-	mk_assert(domain >= mk_sha3_detail_domain_e_sha3 && domain <= mk_sha3_detail_domain_e_rawshake);
+	mk_assert(domain == mk_sha3_detail_domain_sha3 || domain == mk_sha3_detail_domain_shake || domain == mk_sha3_detail_domain_rawshake);
 
 	memset(padding + 1, 0, sizeof(padding) - 1);
 	switch(domain)
@@ -457,7 +457,7 @@ void mk_sha3_detail_finish(struct mk_uint64_s state[5][5], int* idx, unsigned ch
 	mk_assert(idx);
 	mk_assert(block);
 	mk_assert(block_len_bits >= 0);
-	mk_assert(domain >= mk_sha3_detail_domain_e_sha3 && domain <= mk_sha3_detail_domain_e_rawshake);
+	mk_assert(domain == mk_sha3_detail_domain_sha3 || domain == mk_sha3_detail_domain_shake || domain == mk_sha3_detail_domain_rawshake);
 	mk_assert(digest);
 
 	mk_sha3_detail_pad(state, idx, block, block_len_bits, domain);
