@@ -19,6 +19,9 @@
 #include "../src/hash/mk_sha3_384.c"
 #include "../src/hash/mk_sha3_512.c"
 
+#include "../src/hash//base/mk_md2_base.c"
+#include "../src/hash//base/mk_md4_base.c"
+
 #include "../src/hash/mk_sha2_detail_256.c"
 #include "../src/hash/mk_sha2_detail_512.c"
 #include "../src/hash/mk_sha3_detail.c"

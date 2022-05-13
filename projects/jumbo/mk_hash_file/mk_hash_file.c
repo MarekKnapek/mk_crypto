@@ -32,8 +32,8 @@ struct alg_descr_s
 
 struct hash_states_s
 {
-	struct mk_md2_state_s m_state_md2;
-	struct mk_md4_state_s m_state_md4;
+	struct mk_md2_s m_state_md2;
+	struct mk_md4_s m_state_md4;
 	struct mk_md5_state_s m_state_md5;
 	struct mk_sha1_state_s m_state_sha1;
 	struct mk_sha2_224_state_s m_state_sha2_224;
@@ -183,6 +183,9 @@ int main(int argc, char const* const* argv)
 #include "../../../src/hash/mk_sha2_512.c"
 #include "../../../src/hash/mk_sha2_512224.c"
 #include "../../../src/hash/mk_sha2_512256.c"
+
+#include "../../../src/hash/base/mk_md2_base.c"
+#include "../../../src/hash/base/mk_md4_base.c"
 
 #include "../../../src/hash/mk_sha2_detail_256.c"
 #include "../../../src/hash/mk_sha2_detail_512.c"

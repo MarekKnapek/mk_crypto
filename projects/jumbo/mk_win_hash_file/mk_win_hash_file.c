@@ -365,3 +365,6 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 #include "../../../src/hash/mk_sha3_384.c"
 #include "../../../src/hash/mk_sha3_512.c"
 #include "../../../src/hash/mk_sha3_detail.c"
+
+#include "../../../src/hash/base/mk_md2_base.c"
+#include "../../../src/hash/base/mk_md4_base.c"

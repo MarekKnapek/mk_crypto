@@ -31,6 +31,9 @@
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512256_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512_fuzz.c" />
     <ClCompile Include="..\..\..\libs\mk_int.c" />
+    <ClCompile Include="..\..\..\src\hash\base\mk_md2_base.c" />
+    <ClCompile Include="..\..\..\src\hash\base\mk_md4_base.c" />
+    <ClCompile Include="..\..\..\src\hash\base\mk_md5_base.c" />
     <ClCompile Include="..\..\..\src\hash\mk_md2.c" />
     <ClCompile Include="..\..\..\src\hash\mk_md4.c" />
     <ClCompile Include="..\..\..\src\hash\mk_md5.c" />
@@ -69,6 +72,9 @@
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512224_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512256_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512_fuzz.h" />
+    <ClInclude Include="..\..\..\src\hash\base\mk_md2_base.h" />
+    <ClInclude Include="..\..\..\src\hash\base\mk_md4_base.h" />
+    <ClInclude Include="..\..\..\src\hash\base\mk_md5_base.h" />
     <ClInclude Include="..\..\..\src\hash\mk_md2.h" />
     <ClInclude Include="..\..\..\src\hash\mk_md4.h" />
     <ClInclude Include="..\..\..\src\hash\mk_md5.h" />

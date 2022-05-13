@@ -43,8 +43,8 @@
 #endif
 
 
-static mk_inline void cast_md2_init(void* self){ mk_md2_init((struct mk_md2_state_s*)self); }
-static mk_inline void cast_md4_init(void* self){ mk_md4_init((struct mk_md4_state_s*)self); }
+static mk_inline void cast_md2_init(void* self){ mk_md2_init((struct mk_md2_s*)self); }
+static mk_inline void cast_md4_init(void* self){ mk_md4_init((struct mk_md4_s*)self); }
 static mk_inline void cast_md5_init(void* self){ mk_md5_init((struct mk_md5_state_s*)self); }
 static mk_inline void cast_sha1_init(void* self){ mk_sha1_init((struct mk_sha1_state_s*)self); }
 static mk_inline void cast_sha2_224_init(void* self){ mk_sha2_224_init((struct mk_sha2_224_state_s*)self); }
@@ -58,8 +58,8 @@ static mk_inline void cast_sha3_256_init(void* self){ mk_sha3_256_init((struct m
 static mk_inline void cast_sha3_384_init(void* self){ mk_sha3_384_init((struct mk_sha3_384_state_s*)self); }
 static mk_inline void cast_sha3_512_init(void* self){ mk_sha3_512_init((struct mk_sha3_512_state_s*)self); }
 
-static mk_inline void cast_md2_append(void* self, void const* msg, size_t msg_len_bytes){ mk_md2_append((struct mk_md2_state_s*)self, msg, msg_len_bytes); }
-static mk_inline void cast_md4_append(void* self, void const* msg, size_t msg_len_bytes){ mk_md4_append((struct mk_md4_state_s*)self, msg, msg_len_bytes); }
+static mk_inline void cast_md2_append(void* self, void const* msg, size_t msg_len_bytes){ mk_md2_append((struct mk_md2_s*)self, msg, msg_len_bytes); }
+static mk_inline void cast_md4_append(void* self, void const* msg, size_t msg_len_bytes){ mk_md4_append((struct mk_md4_s*)self, msg, msg_len_bytes); }
 static mk_inline void cast_md5_append(void* self, void const* msg, size_t msg_len_bytes){ mk_md5_append((struct mk_md5_state_s*)self, msg, msg_len_bytes); }
 static mk_inline void cast_sha1_append(void* self, void const* msg, size_t msg_len_bytes){ mk_sha1_append((struct mk_sha1_state_s*)self, msg, msg_len_bytes); }
 static mk_inline void cast_sha2_224_append(void* self, void const* msg, size_t msg_len_bytes){ mk_sha2_224_append((struct mk_sha2_224_state_s*)self, msg, msg_len_bytes); }
@@ -73,8 +73,8 @@ static mk_inline void cast_sha3_256_append(void* self, void const* msg, size_t m
 static mk_inline void cast_sha3_384_append(void* self, void const* msg, size_t msg_len_bytes){ mk_sha3_384_append((struct mk_sha3_384_state_s*)self, msg, msg_len_bytes); }
 static mk_inline void cast_sha3_512_append(void* self, void const* msg, size_t msg_len_bytes){ mk_sha3_512_append((struct mk_sha3_512_state_s*)self, msg, msg_len_bytes); }
 
-static mk_inline void cast_md2_finish(void* self, void* digest){ mk_md2_finish((struct mk_md2_state_s*)self, digest); }
-static mk_inline void cast_md4_finish(void* self, void* digest){ mk_md4_finish((struct mk_md4_state_s*)self, digest); }
+static mk_inline void cast_md2_finish(void* self, void* digest){ mk_md2_finish((struct mk_md2_s*)self, digest); }
+static mk_inline void cast_md4_finish(void* self, void* digest){ mk_md4_finish((struct mk_md4_s*)self, digest); }
 static mk_inline void cast_md5_finish(void* self, void* digest){ mk_md5_finish((struct mk_md5_state_s*)self, digest); }
 static mk_inline void cast_sha1_finish(void* self, void* digest){ mk_sha1_finish((struct mk_sha1_state_s*)self, digest); }
 static mk_inline void cast_sha2_224_finish(void* self, void* digest){ mk_sha2_224_finish((struct mk_sha2_224_state_s*)self, digest); }
@@ -91,8 +91,8 @@ static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_sha3_51
 
 struct hash_states_s
 {
-	struct mk_md2_state_s m_state_md2;
-	struct mk_md4_state_s m_state_md4;
+	struct mk_md2_s m_state_md2;
+	struct mk_md4_s m_state_md4;
 	struct mk_md5_state_s m_state_md5;
 	struct mk_sha1_state_s m_state_sha1;
 	struct mk_sha2_224_state_s m_state_sha2_224;
