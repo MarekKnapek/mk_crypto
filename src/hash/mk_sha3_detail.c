@@ -341,24 +341,10 @@ static mk_inline void mk_sha3_detail_pad(struct mk_uint64_s state[5][5], int* id
 	memset(padding + 1, 0, sizeof(padding) - 1);
 	switch(domain)
 	{
-		case mk_sha3_detail_domain_e_sha3:
-		{
-			suffix = 0x06;
-			suffix_bits = 3;
-		}
-		break;
-		case mk_sha3_detail_domain_e_shake:
-		{
-			suffix = 0x1f;
-			suffix_bits = 5;
-		}
-		break;
-		case mk_sha3_detail_domain_e_rawshake:
-		{
-			suffix = 0x07;
-			suffix_bits = 3;
-		}
-		break;
+		case mk_sha3_detail_domain_sha3: suffix = 0x06; suffix_bits = 3; break;
+		case mk_sha3_detail_domain_shake: suffix = 0x1f; suffix_bits = 5; break;
+		case mk_sha3_detail_domain_rawshake: suffix = 0x07; suffix_bits = 3; break;
+		default: mk_assert(0); break;
 	}
 	padding[0] = suffix;
 	capacity = block_len_bits - *idx;
