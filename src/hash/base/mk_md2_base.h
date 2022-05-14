@@ -2,9 +2,16 @@
 #define mk_include_guard_md2_base
 
 
-void mk_md2_base_init(void* state);
-void mk_md2_base_append_blocks(void* state, int nblocks, void const* pblocks);
-void mk_md2_base_finish(void* state, void const* msg, int msg_len, void* digest);
+struct mk_md2_base_s
+{
+	unsigned char m_state[16];
+	unsigned char m_checksum[16];
+};
+
+
+void mk_md2_base_init(struct mk_md2_base_s* md2_base);
+void mk_md2_base_append_blocks(struct mk_md2_base_s* md2_base, int nblocks, void const* pblocks);
+void mk_md2_base_finish(struct mk_md2_base_s* md2_base, void* block, int idx, void* digest);
 
 
 #endif

@@ -6,10 +6,10 @@
 #include "../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 
-#include <string.h> /* memcpy */
+#include <string.h> /* memset */
 
 
-static struct mk_uint32_s const mk_md4_base_detail_init[] =
+static struct mk_uint32_s const mk_md4_base_detail_init[4] =
 {
 	mk_uint32_c(0x67452301),
 	mk_uint32_c(0xefcdab89),

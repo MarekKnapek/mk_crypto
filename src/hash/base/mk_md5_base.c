@@ -6,7 +6,7 @@
 #include "../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 
-#include <string.h> /* memcpy */
+#include <string.h> /* memset */
 
 
 static struct mk_uint32_s const mk_md5_base_detail_table[64] =
@@ -28,7 +28,7 @@ static struct mk_uint32_s const mk_md5_base_detail_table[64] =
 	mk_uint32_c(0x6fa87e4f), mk_uint32_c(0xfe2ce6e0), mk_uint32_c(0xa3014314), mk_uint32_c(0x4e0811a1),
 	mk_uint32_c(0xf7537e82), mk_uint32_c(0xbd3af235), mk_uint32_c(0x2ad7d2bb), mk_uint32_c(0xeb86d391),
 };
-static struct mk_uint32_s const mk_md5_base_detail_init[] =
+static struct mk_uint32_s const mk_md5_base_detail_init[4] =
 {
 	mk_uint32_c(0x67452301),
 	mk_uint32_c(0xefcdab89),

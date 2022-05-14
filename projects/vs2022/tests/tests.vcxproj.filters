@@ -2,5 +2,35 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\jumbo\tests\tests.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha3_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_test_utils.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_224_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_256_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_384_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_512_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_512224_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_512256_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_additional_test_examples.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_additional_test_examples_224.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_additional_test_examples_256.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_additional_test_examples_384.c" />
+    <ClCompile Include="..\..\..\tests\mk_sha2_additional_test_examples_512.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\tests\mk_sha3_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_test_utils.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_224_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_256_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_384_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_512_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_512224_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_512256_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_additional_test_examples.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_additional_test_examples_224.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_additional_test_examples_256.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_additional_test_examples_384.h" />
+    <ClInclude Include="..\..\..\tests\mk_sha2_additional_test_examples_512.h" />
   </ItemGroup>
 </Project>

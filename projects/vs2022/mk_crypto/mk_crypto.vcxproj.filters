@@ -39,9 +39,6 @@
     <ClCompile Include="..\..\..\libs\mk_int.c">
       <Filter>libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_sha2_224_fuzz.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\fuzz\mk_sha2_256_fuzz.c">
       <Filter>fuzz</Filter>
     </ClCompile>
@@ -49,12 +46,6 @@
       <Filter>fuzz</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\fuzz\mk_sha2_512_fuzz.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_sha2_512224_fuzz.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_sha2_512256_fuzz.c">
       <Filter>fuzz</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hash\mk_md2.c">
@@ -85,12 +76,6 @@
       <Filter>src\hash</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hash\mk_sha2_512256.c">
-      <Filter>src\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\mk_sha2_detail_256.c">
-      <Filter>src\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\mk_sha2_detail_512.c">
       <Filter>src\hash</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hash\mk_sha3_224.c">
@@ -144,6 +129,33 @@
     <ClCompile Include="..\..\..\src\hash\base\mk_md5_base.c">
       <Filter>src\hash\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha1_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_224_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_256_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_base_detail_256.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_base_detail_512.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_512_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_384_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_512224_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\mk_sha2_512256_base.c">
+      <Filter>src\hash\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h">
@@ -158,9 +170,6 @@
     <ClInclude Include="..\..\..\fuzz\mk_sha1_fuzz.h">
       <Filter>fuzz</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_sha2_224_fuzz.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_sha2_256_fuzz.h">
       <Filter>fuzz</Filter>
     </ClInclude>
@@ -168,12 +177,6 @@
       <Filter>fuzz</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\fuzz\mk_sha2_512_fuzz.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_sha2_512224_fuzz.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_sha2_512256_fuzz.h">
       <Filter>fuzz</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\mk_md2.h">
@@ -204,12 +207,6 @@
       <Filter>src\hash</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\mk_sha2_512256.h">
-      <Filter>src\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\mk_sha2_detail_256.h">
-      <Filter>src\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\mk_sha2_detail_512.h">
       <Filter>src\hash</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\mk_sha3_224.h">
@@ -270,6 +267,33 @@
       <Filter>src\hash\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\base\mk_md5_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha1_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_224_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_256_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_base_detail_256.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_base_detail_512.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_512_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_384_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_512224_base.h">
+      <Filter>src\hash\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_sha2_512256_base.h">
       <Filter>src\hash\base</Filter>
     </ClInclude>
   </ItemGroup>

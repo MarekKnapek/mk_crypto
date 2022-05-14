@@ -1,64 +1,58 @@
 #include "mk_sha2_256.h"
 
-#include "mk_sha2_detail_256.h"
-
 #include "../utils/mk_assert.h"
 
-#include "../../../mk_int/src/exact/mk_uint_32.h"
-#include "../../../mk_int/src/exact/mk_uint_64.h"
-
-#include <stddef.h> /* size_t */
+#include <string.h> /* memcpy */
 
 
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
-#endif
-
-
-void mk_sha2_256_init(struct mk_sha2_256_state_s* self)
+void mk_sha2_256_init(struct mk_sha2_256_s* sha2_256)
 {
-	static struct mk_uint32_s const mk_sha2_256_detail_init[] =
+	mk_assert(sha2_256);
+
+	mk_sha2_256_base_init(&sha2_256->m_state);
+	sha2_256->m_idx = 0;
+}
+
+void mk_sha2_256_append(struct mk_sha2_256_s* sha2_256, void const* msg, int msg_len)
+{
+	unsigned char const* input;
+	int remaining;
+	int idx;
+	int capacity;
+	int blocks;
+
+	mk_assert(sha2_256);
+	mk_assert(msg || msg_len == 0);
+	mk_assert(msg_len >= 0);
+
+	input = (unsigned char const*)msg;
+	remaining = msg_len;
+
+	idx = sha2_256->m_idx;
+	capacity = sizeof(sha2_256->m_block) - idx;
+	if(remaining >= capacity)
 	{
-		mk_uint32_c(0x6a09e667),
-		mk_uint32_c(0xbb67ae85),
-		mk_uint32_c(0x3c6ef372),
-		mk_uint32_c(0xa54ff53a),
-		mk_uint32_c(0x510e527f),
-		mk_uint32_c(0x9b05688c),
-		mk_uint32_c(0x1f83d9ab),
-		mk_uint32_c(0x5be0cd19),
-	};
-
-	mk_assert(self);
-
-	self->m_state[0] = mk_sha2_256_detail_init[0];
-	self->m_state[1] = mk_sha2_256_detail_init[1];
-	self->m_state[2] = mk_sha2_256_detail_init[2];
-	self->m_state[3] = mk_sha2_256_detail_init[3];
-	self->m_state[4] = mk_sha2_256_detail_init[4];
-	self->m_state[5] = mk_sha2_256_detail_init[5];
-	self->m_state[6] = mk_sha2_256_detail_init[6];
-	self->m_state[7] = mk_sha2_256_detail_init[7];
-	mk_uint64_zero(&self->m_len);
+		if(idx != 0)
+		{
+			memcpy(sha2_256->m_block + idx, input, capacity);
+			mk_sha2_256_base_append_blocks(&sha2_256->m_state, 1, sha2_256->m_block);
+			input += capacity;
+			remaining -= capacity;
+			idx = 0;
+		}
+		blocks = remaining / sizeof(sha2_256->m_block);
+		mk_sha2_256_base_append_blocks(&sha2_256->m_state, blocks, input);
+		input += blocks * sizeof(sha2_256->m_block);
+		remaining -= blocks * sizeof(sha2_256->m_block);
+	}
+	memcpy(sha2_256->m_block + idx, input, remaining);
+	sha2_256->m_idx = idx + remaining;
 }
 
-void mk_sha2_256_append(struct mk_sha2_256_state_s* self, void const* msg, size_t msg_len_bytes)
+void mk_sha2_256_finish(struct mk_sha2_256_s* sha2_256, void* digest)
 {
-	mk_assert(self);
-	
-	mk_sha2_detail_256_append(self->m_state, &self->m_len, self->m_block, msg, msg_len_bytes);
-}
-
-void mk_sha2_256_finish(struct mk_sha2_256_state_s* self, void* digest)
-{
-	mk_assert(self);
+	mk_assert(sha2_256);
 	mk_assert(digest);
 
-	mk_sha2_detail_256_finish(self->m_state, &self->m_len, self->m_block, digest);
+	mk_sha2_256_base_finish(&sha2_256->m_state, sha2_256->m_block, sha2_256->m_idx, digest);
 }
-
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif

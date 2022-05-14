@@ -42,8 +42,8 @@ void mk_md4_append(struct mk_md4_s* md4, void const* msg, int msg_len)
 		}
 		blocks = remaining / sizeof(md4->m_block);
 		mk_md4_base_append_blocks(&md4->m_state, blocks, input);
-		input += blocks * 64;
-		remaining -= blocks * 64;
+		input += blocks * sizeof(md4->m_block);
+		remaining -= blocks * sizeof(md4->m_block);
 	}
 	memcpy(md4->m_block + idx, input, remaining);
 	md4->m_idx = idx + remaining;

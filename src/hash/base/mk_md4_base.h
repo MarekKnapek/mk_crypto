@@ -15,7 +15,7 @@ struct mk_md4_base_s
 
 void mk_md4_base_init(struct mk_md4_base_s* md4_base);
 void mk_md4_base_append_blocks(struct mk_md4_base_s* md4_base, int nblocks, void const* pblocks);
-void mk_md4_base_finish(struct mk_md4_base_s* md4_base, void const* msg, int msg_len, void* digest);
+void mk_md4_base_finish(struct mk_md4_base_s* md4_base, void* block, int idx, void* digest);
 
 
 #endif

@@ -42,8 +42,8 @@ void mk_md5_append(struct mk_md5_s* md5, void const* msg, int msg_len)
 		}
 		blocks = remaining / sizeof(md5->m_block);
 		mk_md5_base_append_blocks(&md5->m_state, blocks, input);
-		input += blocks * 64;
-		remaining -= blocks * 64;
+		input += blocks * sizeof(md5->m_block);
+		remaining -= blocks * sizeof(md5->m_block);
 	}
 	memcpy(md5->m_block + idx, input, remaining);
 	md5->m_idx = idx + remaining;

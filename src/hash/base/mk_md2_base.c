@@ -26,16 +26,16 @@ static unsigned char const s_mk_md2_base_detail_table[256] =
 };
 
 
-void mk_md2_base_init(void* state)
+void mk_md2_base_init(struct mk_md2_base_s* md2_base)
 {
-	mk_assert(state);
+	mk_assert(md2_base);
 
-	memset(state, 0, 2 * 16);
+	memset(md2_base->m_state, 0, 16);
+	memset(md2_base->m_checksum, 0, 16);
 }
 
-void mk_md2_base_append_blocks(void* state, int nblocks, void const* pblocks)
+void mk_md2_base_append_blocks(struct mk_md2_base_s* md2_base, int nblocks, void const* pblocks)
 {
-	unsigned char* checksum;
 	unsigned char const* input;
 	unsigned char x[48];
 	int iblock;
@@ -44,13 +44,12 @@ void mk_md2_base_append_blocks(void* state, int nblocks, void const* pblocks)
 	int k;
 	unsigned l;
 
-	mk_assert(state);
+	mk_assert(md2_base);
 	mk_assert(nblocks >= 0);
 	mk_assert(pblocks || nblocks == 0);
 
-	checksum = (unsigned char*)state + 16;
 	input = (unsigned char const*)pblocks;
-	memcpy(x + 0 * 16, state, 16);
+	memcpy(x + 0 * 16, md2_base->m_state, 16);
 	for(iblock = 0; iblock != nblocks; ++iblock, input += 16)
 	{
 		memcpy(x + 1 * 16, input, 16);
@@ -64,32 +63,29 @@ void mk_md2_base_append_blocks(void* state, int nblocks, void const* pblocks)
 			}
 			t = (t + j) & 0xff;
 		}
-		l = checksum[15];
+		l = md2_base->m_checksum[15];
 		for(j = 0; j != 16; ++j)
 		{
-			l = checksum[j] ^= s_mk_md2_base_detail_table[input[j] ^ l];
+			l = md2_base->m_checksum[j] ^= s_mk_md2_base_detail_table[input[j] ^ l];
 		}
 	}
-	memcpy(state, x + 0 * 16, 16);
+	memcpy(md2_base->m_state, x + 0 * 16, 16);
 }
 
-void mk_md2_base_finish(void* state, void* block, int idx, void* digest)
+void mk_md2_base_finish(struct mk_md2_base_s* md2_base, void* block, int idx, void* digest)
 {
-	unsigned char* checksum;
 	unsigned char* input;
 	int capacity;
 
-	mk_assert(state);
+	mk_assert(md2_base);
 	mk_assert(block);
 	mk_assert(idx >= 0 && idx < 16);
 	mk_assert(digest);
 
-	checksum = (unsigned char*)state + 16;
 	input = (unsigned char*)block;
-
 	capacity = 16 - idx;
 	memset(input + idx, capacity, capacity);
-	mk_md2_base_append_blocks(state, 1, input);
-	mk_md2_base_append_blocks(state, 1, checksum);
-	memcpy(digest, state, 16);
+	mk_md2_base_append_blocks(md2_base, 1, input);
+	mk_md2_base_append_blocks(md2_base, 1, md2_base->m_checksum);
+	memcpy(digest, md2_base->m_state, 16);
 }

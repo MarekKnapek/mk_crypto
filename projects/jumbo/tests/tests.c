@@ -1,51 +1,81 @@
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4464) /* warning C4464: relative include path contains '..' */
-#pragma warning(disable:4710)/* warning C4710: 'xxx': function not inlined */
-#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
-#endif
-
-
+#include "../../../tests/mk_sha2_test_examples.h"
 #include "../../../tests/mk_sha3_test_examples.h"
 
+#include "../../../src/utils/mk_inline.h"
+
 #include <stdio.h> /* printf */
+
+
+#define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
+
+
+static mk_inline int test_all(void)
+{
+	mk_try(mk_sha2_test_examples());
+	mk_try(mk_sha3_test_examples());
+	return 0;
+}
 
 
 int main(void)
 {
 	int tested;
 
-	tested = mk_sha3_test_examples();
+	tested = test_all();
 	if(tested == 0)
 	{
 		printf("Success!\n");
-		return 0;
 	}
 	else
 	{
 		printf("Failure at line %d!\n", tested);
-		return tested;
 	}
+	return tested;
 }
 
 
-#include "../../../tests/mk_sha3_test_examples.c"
+#undef mk_try
 
+
+#include "../../../../mk_int/src/base/mk_uint_base_128.c"
+#include "../../../../mk_int/src/base/mk_uint_base_int.c"
+#include "../../../../mk_int/src/base/mk_uint_base_llong.c"
+#include "../../../../mk_int/src/base/mk_uint_base_long.c"
+#include "../../../../mk_int/src/exact/mk_uint_128.c"
+#include "../../../../mk_int/src/exact/mk_uint_32.c"
+#include "../../../../mk_int/src/exact/mk_uint_64.c"
+#include "../../../src/hash/base/mk_sha2_224_base.c"
+#include "../../../src/hash/base/mk_sha2_256_base.c"
+#include "../../../src/hash/base/mk_sha2_384_base.c"
+#include "../../../src/hash/base/mk_sha2_512_base.c"
+#include "../../../src/hash/base/mk_sha2_512224_base.c"
+#include "../../../src/hash/base/mk_sha2_512256_base.c"
+#include "../../../src/hash/base/mk_sha2_base_detail_256.c"
+#include "../../../src/hash/base/mk_sha2_base_detail_512.c"
+#include "../../../src/hash/mk_sha2_224.c"
+#include "../../../src/hash/mk_sha2_256.c"
+#include "../../../src/hash/mk_sha2_384.c"
+#include "../../../src/hash/mk_sha2_512.c"
+#include "../../../src/hash/mk_sha2_512224.c"
+#include "../../../src/hash/mk_sha2_512256.c"
 #include "../../../src/hash/mk_sha3_224.c"
 #include "../../../src/hash/mk_sha3_256.c"
 #include "../../../src/hash/mk_sha3_384.c"
 #include "../../../src/hash/mk_sha3_512.c"
+#include "../../../src/hash/mk_sha3_detail.c"
 #include "../../../src/hash/mk_sha3_shake128.c"
 #include "../../../src/hash/mk_sha3_shake256.c"
-
-#include "../../../src/hash/mk_sha3_detail.c"
-
-#include "../../../../mk_int/src/exact/mk_uint_64.c"
-
-#include "../../../../mk_int/src/base/mk_uint_base_long.c"
-#include "../../../../mk_int/src/base/mk_uint_base_llong.c"
-
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
+#include "../../../tests/mk_sha2_224_test_examples.c"
+#include "../../../tests/mk_sha2_256_test_examples.c"
+#include "../../../tests/mk_sha2_384_test_examples.c"
+#include "../../../tests/mk_sha2_512_test_examples.c"
+#include "../../../tests/mk_sha2_512224_test_examples.c"
+#include "../../../tests/mk_sha2_512256_test_examples.c"
+#include "../../../tests/mk_sha2_additional_test_examples.c"
+#include "../../../tests/mk_sha2_additional_test_examples_224.c"
+#include "../../../tests/mk_sha2_additional_test_examples_256.c"
+#include "../../../tests/mk_sha2_additional_test_examples_384.c"
+#include "../../../tests/mk_sha2_additional_test_examples_512.c"
+#include "../../../tests/mk_sha2_test_examples.c"
+#include "../../../tests/mk_sha3_test_examples.c"
+#include "../../../tests/mk_test_utils.c"

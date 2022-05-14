@@ -1,5 +1,7 @@
 #include "mk_sha3_test_examples.h"
 
+#include "mk_test_utils.h"
+
 #include "../src/utils/mk_assert.h"
 #include "../src/utils/mk_inline.h"
 
@@ -163,78 +165,6 @@ static mk_inline void cast_sha3_shake128_finish(void* self, void* digest){ mk_sh
 static mk_inline void cast_sha3_shake256_finish(void* self, void* digest){ mk_sha3_shake256_finish((struct mk_sha3_shake256_state_s*)self, digest, 4096); }
 
 
-static mk_inline void mk_string_bin_to_bytes(char const* in, int len, void* out)
-{
-	unsigned char* output;
-	int i;
-	int byte;
-	int bit;
-
-	mk_assert(in);
-	mk_assert(len >= 0);
-	mk_assert(out);
-
-	output = (unsigned char*)out;
-	for(i = 0; i != len; ++i)
-	{
-		byte = i / CHAR_BIT;
-		bit = i % CHAR_BIT;
-		if(in[i] == '1')
-		{
-			output[byte] = (output[byte] & ~(1u << bit)) | (unsigned char)(1u << bit);
-		}
-		else
-		{
-			mk_assert(in[i] == '0');
-			output[byte] = (output[byte] & ~(1u << bit));
-		}
-	}
-}
-
-static mk_inline int mk_hex_symbol_to_int(char const hs)
-{
-	static char const s_hex_alphabet_lc[] = "0123456789abcdef";
-	static char const s_hex_alphabet_uc[] = "0123456789ABCDEF";
-
-	int i;
-
-	for(i = 0; i != sizeof(s_hex_alphabet_lc) - 1; ++i)
-	{
-		if(hs == s_hex_alphabet_lc[i])
-		{
-			break;
-		}
-		if(hs == s_hex_alphabet_uc[i])
-		{
-			break;
-		}
-	}
-	return i;
-}
-
-static mk_inline void mk_string_hex_to_bytes(void const* in, int len, void* out)
-{
-	char const* input;
-	unsigned char* output;
-	int i;
-	int hi;
-	int lo;
-
-	mk_assert(in);
-	mk_assert(out);
-	mk_assert(len % 2 == 0);
-
-	input = (char const*)in;
-	output = (unsigned char*)out;
-	for(i = 0; i != len / 2; ++i)
-	{
-		hi = mk_hex_symbol_to_int(input[2 * i + 0]);
-		lo = mk_hex_symbol_to_int(input[2 * i + 1]);
-		output[i] = (unsigned char)((hi << 4) | (lo << 0));
-	}
-}
-
-
 int mk_sha3_test_examples(void)
 {
 	struct msg_and_digests_s
@@ -326,12 +256,12 @@ int mk_sha3_test_examples(void)
 	msgs = sizeof(s_msgs_and_digests) / sizeof(s_msgs_and_digests[0]);
 	for(i = 0; i != msgs; ++i)
 	{
-		mk_string_bin_to_bytes(s_msgs_and_digests[i].m_msg_str_bin, s_msgs_and_digests[i].m_msg_len, &msg_bytes);
+		mk_string_bin_to_bytes(s_msgs_and_digests[i].m_msg_str_bin, s_msgs_and_digests[i].m_msg_len, &msg_bytes, sizeof(msg_bytes));
 		algs = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 		for(j = 0; j != algs; ++j)
 		{
 			digest_baseline_str_hex = *(char const**)((char*)&s_msgs_and_digests[i] + s_alg_descrs[j].m_digest_offset);
-			mk_string_hex_to_bytes(digest_baseline_str_hex, s_alg_descrs[j].m_digest_len * 2, &digest_baseline);
+			mk_string_hex_to_bytes(digest_baseline_str_hex, s_alg_descrs[j].m_digest_len * 2, &digest_baseline, sizeof(digest_baseline));
 			s_alg_descrs[j].m_init(&alg_state);
 			s_alg_descrs[j].m_append(&alg_state, &msg_bytes, s_msgs_and_digests[i].m_msg_len);
 			s_alg_descrs[j].m_finish(&alg_state, &digest_computed);
@@ -343,7 +273,7 @@ int mk_sha3_test_examples(void)
 	msgs = sizeof(s_digests_and_lens) / sizeof(s_digests_and_lens[0]);
 	for(i = 0; i != msgs; ++i)
 	{
-		mk_string_hex_to_bytes(s_digests_and_lens[i].m_digest, s_digests_and_lens[i].m_len, &digest_baseline);
+		mk_string_hex_to_bytes(s_digests_and_lens[i].m_digest, s_digests_and_lens[i].m_len, &digest_baseline, sizeof(digest_baseline));
 		mk_sha3_shake128_init(&alg_state.m_shake128);
 		mk_sha3_shake128_finish(&alg_state.m_shake128, &digest_computed, 4096 - i);
 		compared = memcmp(&digest_computed, &digest_baseline, s_digests_and_lens[i].m_len / 2);
