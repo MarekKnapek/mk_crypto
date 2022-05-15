@@ -8,43 +8,6 @@
 #include <string.h> /* memcpy memset */
 
 
-static mk_inline int mk_sha3_base_detail_string_bit_get(void const* str, int byte_idx, int bit_idx)
-{
-	unsigned char const* input;
-	int byte_offset;
-	int bit_offset;
-	int bit;
-
-	mk_assert(str);
-	mk_assert(byte_idx >= 0);
-	mk_assert(bit_idx >= 0);
-
-	input = (unsigned char const*)str;
-	byte_offset = byte_idx + bit_idx / CHAR_BIT;
-	bit_offset = bit_idx % CHAR_BIT;
-
-	bit = (input[byte_offset] >> bit_offset) & 0x01;
-	return bit;
-}
-
-static mk_inline void mk_sha3_base_detail_string_bit_set(void const* str, int byte_idx, int bit_idx, int bit)
-{
-	unsigned char* output;
-	int byte_offset;
-	int bit_offset;
-
-	mk_assert(str);
-	mk_assert(byte_idx >= 0);
-	mk_assert(bit_idx >= 0);
-	mk_assert(bit == 0 || bit == 1);
-
-	output = (unsigned char*)str;
-	byte_offset = byte_idx + bit_idx / CHAR_BIT;
-	bit_offset = bit_idx % CHAR_BIT;
-
-	output[byte_offset] = (output[byte_offset] & ~((unsigned char)1u << bit_offset)) | ((unsigned char)bit << bit_offset);
-}
-
 static mk_inline void mk_sha3_base_detail_theta(struct mk_uint64_s state[25])
 {
 	int x;
