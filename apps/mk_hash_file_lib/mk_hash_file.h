@@ -2,13 +2,6 @@
 #define mk_include_guard_hash_file
 
 
-#ifdef __cplusplus
-#define mk_extern_c extern "C"
-#else
-#define mk_extern_c
-#endif
-
-
 typedef void* mk_hash_file_handle;
 
 struct mk_hash_file_digests_s
@@ -30,14 +23,11 @@ struct mk_hash_file_digests_s
 };
 
 
-mk_extern_c mk_hash_file_handle mk_hash_file_create(char const* file_name);
-mk_extern_c int mk_hash_file_step(mk_hash_file_handle hash_file);
-mk_extern_c int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress);
-mk_extern_c int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result);
-mk_extern_c int mk_hash_file_destroy(mk_hash_file_handle hash_file);
-
-
-#undef mk_extern_c
+mk_hash_file_handle mk_hash_file_create(char const* file_name);
+int mk_hash_file_step(mk_hash_file_handle hash_file);
+int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress);
+int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result);
+int mk_hash_file_destroy(mk_hash_file_handle hash_file);
 
 
 #endif

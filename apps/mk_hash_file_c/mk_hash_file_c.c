@@ -1,16 +1,7 @@
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4464) /* warning C4464: relative include path contains '..' */
-#endif
-
 #include "../mk_hash_file_lib/mk_hash_file.h"
 
 #include "../../src/utils/mk_assert.h"
 #include "../../src/utils/mk_inline.h"
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 #include <stddef.h> /* offsetof */
 #include <stdio.h> /* printf fprintf stderr fflush */
@@ -20,14 +11,6 @@
 
 #define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
 #define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
-
-
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4710) /* warning C4710: 'xxx': function not inlined */
-#pragma warning(disable:4711) /* warning C4711: function 'xxx' selected for automatic inline expansion */
-#pragma warning(disable:4820) /* warning C4820: 'xxx': 'xxx' bytes padding added after data member 'xxx' */
-#endif
 
 
 static mk_inline void mk_bytes_to_string(void const* input, int count, void* output)
@@ -202,11 +185,6 @@ int main(int argc, char const* const* argv)
 	}
 	return EXIT_SUCCESS;
 }
-
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 
 #undef mk_check

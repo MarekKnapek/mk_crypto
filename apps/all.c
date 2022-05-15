@@ -1,8 +1,31 @@
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4464) /* warning C4464: relative include path contains '..' */
-#endif
+#include "../../mk_int/src/base/mk_uint_base_int.c"
+#include "../../mk_int/src/base/mk_uint_base_long.c"
+#include "../../mk_int/src/base/mk_uint_base_llong.c"
+#include "../../mk_int/src/base/mk_uint_base_128.c"
 
+#include "../../mk_int/src/exact/mk_uint_32.c"
+#include "../../mk_int/src/exact/mk_uint_64.c"
+#include "../../mk_int/src/exact/mk_uint_128.c"
+
+
+#include "../src/hash/base/mk_sha2_base_detail_256.c"
+#include "../src/hash/base/mk_sha2_base_detail_512.c"
+#include "../src/hash/base/mk_sha3_base_detail.c"
+
+#include "../src/hash/base/mk_md2_base.c"
+#include "../src/hash/base/mk_md4_base.c"
+#include "../src/hash/base/mk_md5_base.c"
+#include "../src/hash/base/mk_sha1_base.c"
+#include "../src/hash/base/mk_sha2_224_base.c"
+#include "../src/hash/base/mk_sha2_256_base.c"
+#include "../src/hash/base/mk_sha2_384_base.c"
+#include "../src/hash/base/mk_sha2_512_base.c"
+#include "../src/hash/base/mk_sha2_512224_base.c"
+#include "../src/hash/base/mk_sha2_512256_base.c"
+#include "../src/hash/base/mk_sha3_224_base.c"
+#include "../src/hash/base/mk_sha3_256_base.c"
+#include "../src/hash/base/mk_sha3_384_base.c"
+#include "../src/hash/base/mk_sha3_512_base.c"
 
 #include "../src/hash/mk_md2.c"
 #include "../src/hash/mk_md4.c"
@@ -18,24 +41,3 @@
 #include "../src/hash/mk_sha3_256.c"
 #include "../src/hash/mk_sha3_384.c"
 #include "../src/hash/mk_sha3_512.c"
-
-#include "../src/hash//base/mk_md2_base.c"
-#include "../src/hash//base/mk_md4_base.c"
-
-#include "../src/hash/mk_sha2_detail_256.c"
-#include "../src/hash/mk_sha2_detail_512.c"
-#include "../src/hash/mk_sha3_detail.c"
-
-#include "../../mk_int/src/exact/mk_uint_32.c"
-#include "../../mk_int/src/exact/mk_uint_64.c"
-#include "../../mk_int/src/exact/mk_uint_128.c"
-
-#include "../../mk_int/src/base/mk_uint_base_int.c"
-#include "../../mk_int/src/base/mk_uint_base_long.c"
-#include "../../mk_int/src/base/mk_uint_base_llong.c"
-#include "../../mk_int/src/base/mk_uint_base_128.c"
-
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
