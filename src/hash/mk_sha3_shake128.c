@@ -1,40 +1,58 @@
 #include "mk_sha3_shake128.h"
 
-#include "mk_sha3_detail.h"
-
 #include "../utils/mk_assert.h"
 
-#include "../../../mk_int/src/exact/mk_uint_64.h"
-
-#include <limits.h> /* CHAR_BIT */
-#include <stddef.h> /* size_t */
+#include <string.h> /* memcpy */
 
 
-void mk_sha3_shake128_init(struct mk_sha3_shake128_state_s* self)
+void mk_sha3_shake128_init(struct mk_sha3_shake128_s* sha3_shake128)
 {
-	mk_assert(self);
+	mk_assert(sha3_shake128);
 
-	mk_sha3_detail_init(self->m_state, &self->m_idx);
+	mk_sha3_shake128_base_init(&sha3_shake128->m_state);
+	sha3_shake128->m_idx = 0;
 }
 
-void mk_sha3_shake128_append(struct mk_sha3_shake128_state_s* self, void const* msg, size_t msg_len_bytes)
+void mk_sha3_shake128_append(struct mk_sha3_shake128_s* sha3_shake128, void const* msg, int msg_len)
 {
-	mk_assert(self);
+	unsigned char const* input;
+	int remaining;
+	int idx;
+	int capacity;
+	int blocks;
 
-	mk_sha3_shake128_append_bits(self, msg, msg_len_bytes * CHAR_BIT);
+	mk_assert(sha3_shake128);
+	mk_assert(msg || msg_len == 0);
+	mk_assert(msg_len >= 0);
+
+	input = (unsigned char const*)msg;
+	remaining = msg_len;
+
+	idx = sha3_shake128->m_idx;
+	capacity = sizeof(sha3_shake128->m_block) - idx;
+	if(remaining >= capacity)
+	{
+		if(idx != 0)
+		{
+			memcpy(sha3_shake128->m_block + idx, input, capacity);
+			mk_sha3_shake128_base_append_blocks(&sha3_shake128->m_state, 1, sha3_shake128->m_block);
+			input += capacity;
+			remaining -= capacity;
+			idx = 0;
+		}
+		blocks = remaining / sizeof(sha3_shake128->m_block);
+		mk_sha3_shake128_base_append_blocks(&sha3_shake128->m_state, blocks, input);
+		input += blocks * sizeof(sha3_shake128->m_block);
+		remaining -= blocks * sizeof(sha3_shake128->m_block);
+	}
+	memcpy(sha3_shake128->m_block + idx, input, remaining);
+	sha3_shake128->m_idx = idx + remaining;
 }
 
-void mk_sha3_shake128_append_bits(struct mk_sha3_shake128_state_s* self, void const* msg, size_t msg_len_bits)
+void mk_sha3_shake128_finish(struct mk_sha3_shake128_s* sha3_shake128, int digest_len, void* digest)
 {
-	mk_assert(self);
-
-	mk_sha3_detail_append_bits(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, msg, msg_len_bits);
-}
-
-void mk_sha3_shake128_finish(struct mk_sha3_shake128_state_s* self, void* digest, size_t digest_len_bits)
-{
-	mk_assert(self);
+	mk_assert(sha3_shake128);
 	mk_assert(digest);
 
-	mk_sha3_detail_finish(self->m_state, &self->m_idx, self->m_block, sizeof(self->m_block) * CHAR_BIT, mk_sha3_detail_domain_shake, digest, digest_len_bits);
+	mk_sha3_shake128_base_finish(&sha3_shake128->m_state, sha3_shake128->m_block, sha3_shake128->m_idx, digest_len, digest);
 }

@@ -20,7 +20,6 @@ static mk_inline int mk_fuzz(unsigned char const* data, int size)
 	mk_sha2_256_fuzz(data, size);
 	mk_sha2_384_fuzz(data, size);
 	mk_sha2_512_fuzz(data, size);
-
 	return 0;
 }
 
