@@ -1,11 +1,12 @@
 #include "mk_md5.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy */
 
 
-void mk_md5_init(struct mk_md5_s* md5)
+mk_jumbo void mk_md5_init(struct mk_md5_s* md5)
 {
 	mk_assert(md5);
 
@@ -13,7 +14,7 @@ void mk_md5_init(struct mk_md5_s* md5)
 	md5->m_idx = 0;
 }
 
-void mk_md5_append(struct mk_md5_s* md5, void const* msg, int msg_len)
+mk_jumbo void mk_md5_append(struct mk_md5_s* md5, void const* msg, int msg_len)
 {
 	unsigned char const* input;
 	int remaining;
@@ -49,7 +50,7 @@ void mk_md5_append(struct mk_md5_s* md5, void const* msg, int msg_len)
 	md5->m_idx = idx + remaining;
 }
 
-void mk_md5_finish(struct mk_md5_s* md5, void* digest)
+mk_jumbo void mk_md5_finish(struct mk_md5_s* md5, void* digest)
 {
 	mk_assert(md5);
 	mk_assert(digest);

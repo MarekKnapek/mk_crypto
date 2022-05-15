@@ -131,6 +131,7 @@
     <ClInclude Include="..\..\..\src\hash\mk_win_sha2_512.h" />
     <ClInclude Include="..\..\..\src\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\src\utils\mk_inline.h" />
+    <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
     <ClInclude Include="..\..\..\src\utils\mk_setup.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

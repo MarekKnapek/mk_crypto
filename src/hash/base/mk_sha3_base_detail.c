@@ -2,6 +2,7 @@
 
 #include "../../utils/mk_assert.h"
 #include "../../utils/mk_inline.h"
+#include "../../utils/mk_jumbo.h"
 
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 
@@ -206,7 +207,7 @@ static mk_inline void mk_sha3_base_detail_mix_block(struct mk_uint64_s state[25]
 	}
 }
 
-void mk_sha3_base_detail_init(struct mk_sha3_base_detail_s* sha3_base_detail)
+mk_jumbo void mk_sha3_base_detail_init(struct mk_sha3_base_detail_s* sha3_base_detail)
 {
 	int i;
 
@@ -218,7 +219,7 @@ void mk_sha3_base_detail_init(struct mk_sha3_base_detail_s* sha3_base_detail)
 	}
 }
 
-void mk_sha3_base_detail_append_blocks(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, int nblocks, void const* pblocks)
+mk_jumbo void mk_sha3_base_detail_append_blocks(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, int nblocks, void const* pblocks)
 {
 	unsigned char const* input;
 	int iblock;
@@ -236,7 +237,7 @@ void mk_sha3_base_detail_append_blocks(struct mk_sha3_base_detail_s* sha3_base_d
 	}
 }
 
-void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, void* block, int idx, enum mk_sha3_base_detail_domain_e domain, int digest_len, void* digest)
+mk_jumbo void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, void* block, int idx, enum mk_sha3_base_detail_domain_e domain, int digest_len, void* digest)
 {
 	unsigned char* input;
 	unsigned char* output;

@@ -2,6 +2,8 @@
 #define mk_include_guard_sha2_base_detail_512
 
 
+#include "../../utils/mk_jumbo.h"
+
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 #include "../../../../mk_int/src/exact/mk_uint_128.h"
 
@@ -13,8 +15,8 @@ struct mk_sha2_base_detail_512_s
 };
 
 
-void mk_sha2_base_detail_512_append_blocks(struct mk_sha2_base_detail_512_s* sha2_base_detail_512, int nblocks, void const* pblocks);
-void mk_sha2_base_detail_512_finish(struct mk_sha2_base_detail_512_s* sha2_base_detail_512, void* block, int idx, void* digest);
+mk_jumbo void mk_sha2_base_detail_512_append_blocks(struct mk_sha2_base_detail_512_s* sha2_base_detail_512, int nblocks, void const* pblocks);
+mk_jumbo void mk_sha2_base_detail_512_finish(struct mk_sha2_base_detail_512_s* sha2_base_detail_512, void* block, int idx, void* digest);
 
 
 #endif

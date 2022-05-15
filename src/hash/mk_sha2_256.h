@@ -4,6 +4,8 @@
 
 #include "base/mk_sha2_256_base.h"
 
+#include "../utils/mk_jumbo.h"
+
 
 struct mk_sha2_256_s
 {
@@ -13,9 +15,9 @@ struct mk_sha2_256_s
 };
 
 
-void mk_sha2_256_init(struct mk_sha2_256_s* sha2_256);
-void mk_sha2_256_append(struct mk_sha2_256_s* sha2_256, void const* msg, int msg_len);
-void mk_sha2_256_finish(struct mk_sha2_256_s* sha2_256, void* digest);
+mk_jumbo void mk_sha2_256_init(struct mk_sha2_256_s* sha2_256);
+mk_jumbo void mk_sha2_256_append(struct mk_sha2_256_s* sha2_256, void const* msg, int msg_len);
+mk_jumbo void mk_sha2_256_finish(struct mk_sha2_256_s* sha2_256, void* digest);
 
 
 #endif

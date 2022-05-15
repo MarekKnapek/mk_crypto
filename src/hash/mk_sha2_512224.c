@@ -1,11 +1,12 @@
 #include "mk_sha2_512224.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy */
 
 
-void mk_sha2_512224_init(struct mk_sha2_512224_s* sha2_512224)
+mk_jumbo void mk_sha2_512224_init(struct mk_sha2_512224_s* sha2_512224)
 {
 	mk_assert(sha2_512224);
 
@@ -13,7 +14,7 @@ void mk_sha2_512224_init(struct mk_sha2_512224_s* sha2_512224)
 	sha2_512224->m_idx = 0;
 }
 
-void mk_sha2_512224_append(struct mk_sha2_512224_s* sha2_512224, void const* msg, int msg_len)
+mk_jumbo void mk_sha2_512224_append(struct mk_sha2_512224_s* sha2_512224, void const* msg, int msg_len)
 {
 	unsigned char const* input;
 	int remaining;
@@ -49,7 +50,7 @@ void mk_sha2_512224_append(struct mk_sha2_512224_s* sha2_512224, void const* msg
 	sha2_512224->m_idx = idx + remaining;
 }
 
-void mk_sha2_512224_finish(struct mk_sha2_512224_s* sha2_512224, void* digest)
+mk_jumbo void mk_sha2_512224_finish(struct mk_sha2_512224_s* sha2_512224, void* digest)
 {
 	mk_assert(sha2_512224);
 	mk_assert(digest);

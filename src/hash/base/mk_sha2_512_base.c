@@ -1,6 +1,7 @@
 #include "mk_sha2_512_base.h"
 
 #include "../../utils/mk_assert.h"
+#include "../../utils/mk_jumbo.h"
 
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 #include "../../../../mk_int/src/exact/mk_uint_128.h"
@@ -19,7 +20,7 @@ static struct mk_uint64_s const mk_sha2_512_base_detail_init[8] =
 };
 
 
-void mk_sha2_512_base_init(struct mk_sha2_512_base_s* sha2_512_base)
+mk_jumbo void mk_sha2_512_base_init(struct mk_sha2_512_base_s* sha2_512_base)
 {
 	mk_assert(sha2_512_base);
 
@@ -34,14 +35,14 @@ void mk_sha2_512_base_init(struct mk_sha2_512_base_s* sha2_512_base)
 	mk_uint128_zero(&sha2_512_base->m_512.m_len);
 }
 
-void mk_sha2_512_base_append_blocks(struct mk_sha2_512_base_s* sha2_512_base, int nblocks, void const* pblocks)
+mk_jumbo void mk_sha2_512_base_append_blocks(struct mk_sha2_512_base_s* sha2_512_base, int nblocks, void const* pblocks)
 {
 	mk_assert(sha2_512_base);
 
 	mk_sha2_base_detail_512_append_blocks(&sha2_512_base->m_512, nblocks, pblocks);
 }
 
-void mk_sha2_512_base_finish(struct mk_sha2_512_base_s* sha2_512_base, void* block, int idx, void* digest)
+mk_jumbo void mk_sha2_512_base_finish(struct mk_sha2_512_base_s* sha2_512_base, void* block, int idx, void* digest)
 {
 	mk_assert(sha2_512_base);
 

@@ -1,6 +1,7 @@
 #include "mk_sha2_256_base.h"
 
 #include "../../utils/mk_assert.h"
+#include "../../utils/mk_jumbo.h"
 
 #include "../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
@@ -19,7 +20,7 @@ static struct mk_uint32_s const mk_sha2_256_base_detail_init[8] =
 };
 
 
-void mk_sha2_256_base_init(struct mk_sha2_256_base_s* sha2_256_base)
+mk_jumbo void mk_sha2_256_base_init(struct mk_sha2_256_base_s* sha2_256_base)
 {
 	mk_assert(sha2_256_base);
 
@@ -34,14 +35,14 @@ void mk_sha2_256_base_init(struct mk_sha2_256_base_s* sha2_256_base)
 	mk_uint64_zero(&sha2_256_base->m_256.m_len);
 }
 
-void mk_sha2_256_base_append_blocks(struct mk_sha2_256_base_s* sha2_256_base, int nblocks, void const* pblocks)
+mk_jumbo void mk_sha2_256_base_append_blocks(struct mk_sha2_256_base_s* sha2_256_base, int nblocks, void const* pblocks)
 {
 	mk_assert(sha2_256_base);
 
 	mk_sha2_base_detail_256_append_blocks(&sha2_256_base->m_256, nblocks, pblocks);
 }
 
-void mk_sha2_256_base_finish(struct mk_sha2_256_base_s* sha2_256_base, void* block, int idx, void* digest)
+mk_jumbo void mk_sha2_256_base_finish(struct mk_sha2_256_base_s* sha2_256_base, void* block, int idx, void* digest)
 {
 	mk_assert(sha2_256_base);
 

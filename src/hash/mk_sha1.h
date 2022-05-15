@@ -4,6 +4,8 @@
 
 #include "base/mk_sha1_base.h"
 
+#include "../utils/mk_jumbo.h"
+
 
 struct mk_sha1_s
 {
@@ -13,9 +15,9 @@ struct mk_sha1_s
 };
 
 
-void mk_sha1_init(struct mk_sha1_s* sha1);
-void mk_sha1_append(struct mk_sha1_s* sha1, void const* msg, int msg_len);
-void mk_sha1_finish(struct mk_sha1_s* sha1, void* digest);
+mk_jumbo void mk_sha1_init(struct mk_sha1_s* sha1);
+mk_jumbo void mk_sha1_append(struct mk_sha1_s* sha1, void const* msg, int msg_len);
+mk_jumbo void mk_sha1_finish(struct mk_sha1_s* sha1, void* digest);
 
 
 #endif

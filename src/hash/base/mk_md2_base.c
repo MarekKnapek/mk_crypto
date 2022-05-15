@@ -1,6 +1,7 @@
 #include "mk_md2_base.h"
 
 #include "../../utils/mk_assert.h"
+#include "../../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy memset */
 
@@ -26,7 +27,7 @@ static unsigned char const s_mk_md2_base_detail_table[256] =
 };
 
 
-void mk_md2_base_init(struct mk_md2_base_s* md2_base)
+mk_jumbo void mk_md2_base_init(struct mk_md2_base_s* md2_base)
 {
 	mk_assert(md2_base);
 
@@ -34,7 +35,7 @@ void mk_md2_base_init(struct mk_md2_base_s* md2_base)
 	memset(md2_base->m_checksum, 0, 16);
 }
 
-void mk_md2_base_append_blocks(struct mk_md2_base_s* md2_base, int nblocks, void const* pblocks)
+mk_jumbo void mk_md2_base_append_blocks(struct mk_md2_base_s* md2_base, int nblocks, void const* pblocks)
 {
 	unsigned char const* input;
 	unsigned char x[48];
@@ -72,7 +73,7 @@ void mk_md2_base_append_blocks(struct mk_md2_base_s* md2_base, int nblocks, void
 	memcpy(md2_base->m_state, x + 0 * 16, 16);
 }
 
-void mk_md2_base_finish(struct mk_md2_base_s* md2_base, void* block, int idx, void* digest)
+mk_jumbo void mk_md2_base_finish(struct mk_md2_base_s* md2_base, void* block, int idx, void* digest)
 {
 	unsigned char* input;
 	int capacity;

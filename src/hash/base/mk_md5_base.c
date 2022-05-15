@@ -2,6 +2,7 @@
 
 #include "../../utils/mk_assert.h"
 #include "../../utils/mk_inline.h"
+#include "../../utils/mk_jumbo.h"
 
 #include "../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
@@ -209,7 +210,7 @@ static mk_inline void mk_md5_base_detail_round_4(struct mk_uint32_s* a, struct m
 }
 
 
-void mk_md5_base_init(struct mk_md5_base_s* md5_base)
+mk_jumbo void mk_md5_base_init(struct mk_md5_base_s* md5_base)
 {
 	mk_assert(md5_base);
 
@@ -220,7 +221,7 @@ void mk_md5_base_init(struct mk_md5_base_s* md5_base)
 	mk_uint64_zero(&md5_base->m_len);
 }
 
-void mk_md5_base_append_blocks(struct mk_md5_base_s* md5_base, int nblocks, void const* pblocks)
+mk_jumbo void mk_md5_base_append_blocks(struct mk_md5_base_s* md5_base, int nblocks, void const* pblocks)
 {
 	struct mk_uint64_s len_bytes;
 	unsigned char const* input;
@@ -329,7 +330,7 @@ void mk_md5_base_append_blocks(struct mk_md5_base_s* md5_base, int nblocks, void
 	}
 }
 
-void mk_md5_base_finish(struct mk_md5_base_s* md5_base, void* block, int idx, void* digest)
+mk_jumbo void mk_md5_base_finish(struct mk_md5_base_s* md5_base, void* block, int idx, void* digest)
 {
 	unsigned char* input;
 	unsigned char* output;

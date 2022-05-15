@@ -1,11 +1,12 @@
 #include "mk_sha2_384.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy */
 
 
-void mk_sha2_384_init(struct mk_sha2_384_s* sha2_384)
+mk_jumbo void mk_sha2_384_init(struct mk_sha2_384_s* sha2_384)
 {
 	mk_assert(sha2_384);
 
@@ -13,7 +14,7 @@ void mk_sha2_384_init(struct mk_sha2_384_s* sha2_384)
 	sha2_384->m_idx = 0;
 }
 
-void mk_sha2_384_append(struct mk_sha2_384_s* sha2_384, void const* msg, int msg_len)
+mk_jumbo void mk_sha2_384_append(struct mk_sha2_384_s* sha2_384, void const* msg, int msg_len)
 {
 	unsigned char const* input;
 	int remaining;
@@ -49,7 +50,7 @@ void mk_sha2_384_append(struct mk_sha2_384_s* sha2_384, void const* msg, int msg
 	sha2_384->m_idx = idx + remaining;
 }
 
-void mk_sha2_384_finish(struct mk_sha2_384_s* sha2_384, void* digest)
+mk_jumbo void mk_sha2_384_finish(struct mk_sha2_384_s* sha2_384, void* digest)
 {
 	mk_assert(sha2_384);
 	mk_assert(digest);

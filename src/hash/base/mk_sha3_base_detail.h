@@ -2,6 +2,8 @@
 #define mk_include_guard_sha3_base_detail
 
 
+#include "../../utils/mk_jumbo.h"
+
 #include "../../../../mk_int/src/exact/mk_uint_64.h"
 
 
@@ -20,9 +22,9 @@ enum mk_sha3_base_detail_domain_e
 };
 
 
-void mk_sha3_base_detail_init(struct mk_sha3_base_detail_s* sha3_base_detail);
-void mk_sha3_base_detail_append_blocks(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, int nblocks, void const* pblocks);
-void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, void* block, int idx, enum mk_sha3_base_detail_domain_e domain, int digest_len, void* digest);
+mk_jumbo void mk_sha3_base_detail_init(struct mk_sha3_base_detail_s* sha3_base_detail);
+mk_jumbo void mk_sha3_base_detail_append_blocks(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, int nblocks, void const* pblocks);
+mk_jumbo void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base_detail, int block_len, void* block, int idx, enum mk_sha3_base_detail_domain_e domain, int digest_len, void* digest);
 
 
 #endif

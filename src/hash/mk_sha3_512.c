@@ -1,11 +1,12 @@
 #include "mk_sha3_512.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy */
 
 
-void mk_sha3_512_init(struct mk_sha3_512_s* sha3_512)
+mk_jumbo void mk_sha3_512_init(struct mk_sha3_512_s* sha3_512)
 {
 	mk_assert(sha3_512);
 
@@ -13,7 +14,7 @@ void mk_sha3_512_init(struct mk_sha3_512_s* sha3_512)
 	sha3_512->m_idx = 0;
 }
 
-void mk_sha3_512_append(struct mk_sha3_512_s* sha3_512, void const* msg, int msg_len)
+mk_jumbo void mk_sha3_512_append(struct mk_sha3_512_s* sha3_512, void const* msg, int msg_len)
 {
 	unsigned char const* input;
 	int remaining;
@@ -49,7 +50,7 @@ void mk_sha3_512_append(struct mk_sha3_512_s* sha3_512, void const* msg, int msg
 	sha3_512->m_idx = idx + remaining;
 }
 
-void mk_sha3_512_finish(struct mk_sha3_512_s* sha3_512, void* digest)
+mk_jumbo void mk_sha3_512_finish(struct mk_sha3_512_s* sha3_512, void* digest)
 {
 	mk_assert(sha3_512);
 	mk_assert(digest);

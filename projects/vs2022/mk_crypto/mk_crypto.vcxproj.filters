@@ -356,5 +356,8 @@
     <ClInclude Include="..\..\..\src\hash\mk_sha3_rawshake256.h">
       <Filter>src\hash</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_jumbo.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

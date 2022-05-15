@@ -1,11 +1,12 @@
 #include "mk_sha3_rawshake128.h"
 
 #include "../utils/mk_assert.h"
+#include "../utils/mk_jumbo.h"
 
 #include <string.h> /* memcpy */
 
 
-void mk_sha3_rawshake128_init(struct mk_sha3_rawshake128_s* sha3_rawshake128)
+mk_jumbo void mk_sha3_rawshake128_init(struct mk_sha3_rawshake128_s* sha3_rawshake128)
 {
 	mk_assert(sha3_rawshake128);
 
@@ -13,7 +14,7 @@ void mk_sha3_rawshake128_init(struct mk_sha3_rawshake128_s* sha3_rawshake128)
 	sha3_rawshake128->m_idx = 0;
 }
 
-void mk_sha3_rawshake128_append(struct mk_sha3_rawshake128_s* sha3_rawshake128, void const* msg, int msg_len)
+mk_jumbo void mk_sha3_rawshake128_append(struct mk_sha3_rawshake128_s* sha3_rawshake128, void const* msg, int msg_len)
 {
 	unsigned char const* input;
 	int remaining;
@@ -49,7 +50,7 @@ void mk_sha3_rawshake128_append(struct mk_sha3_rawshake128_s* sha3_rawshake128, 
 	sha3_rawshake128->m_idx = idx + remaining;
 }
 
-void mk_sha3_rawshake128_finish(struct mk_sha3_rawshake128_s* sha3_rawshake128, int digest_len, void* digest)
+mk_jumbo void mk_sha3_rawshake128_finish(struct mk_sha3_rawshake128_s* sha3_rawshake128, int digest_len, void* digest)
 {
 	mk_assert(sha3_rawshake128);
 	mk_assert(digest);
