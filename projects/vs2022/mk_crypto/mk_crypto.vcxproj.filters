@@ -243,6 +243,15 @@
     <ClCompile Include="..\..\..\src\hash\block\mk_sha3_shake256_block.c">
       <Filter>src\hash\block</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash_fn.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash_function.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h">
@@ -469,6 +478,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\block\mk_sha3_shake256_block.h">
       <Filter>src\hash\block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash_fn.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash_function.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

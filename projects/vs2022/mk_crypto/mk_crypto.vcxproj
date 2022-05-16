@@ -92,6 +92,9 @@
     <ClCompile Include="..\..\..\src\hash\mk_win_sha2_256.c" />
     <ClCompile Include="..\..\..\src\hash\mk_win_sha2_384.c" />
     <ClCompile Include="..\..\..\src\hash\mk_win_sha2_512.c" />
+    <ClCompile Include="..\..\..\src\mk_hash.c" />
+    <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
+    <ClCompile Include="..\..\..\src\mk_hash_function.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
@@ -165,6 +168,9 @@
     <ClInclude Include="..\..\..\src\hash\mk_win_sha2_256.h" />
     <ClInclude Include="..\..\..\src\hash\mk_win_sha2_384.h" />
     <ClInclude Include="..\..\..\src\hash\mk_win_sha2_512.h" />
+    <ClInclude Include="..\..\..\src\mk_hash.h" />
+    <ClInclude Include="..\..\..\src\mk_hash_fn.h" />
+    <ClInclude Include="..\..\..\src\mk_hash_function.h" />
     <ClInclude Include="..\..\..\src\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\src\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
