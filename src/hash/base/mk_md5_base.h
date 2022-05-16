@@ -15,6 +15,10 @@ struct mk_md5_base_s
 };
 
 
+enum mk_md5_base_block_len_e{ mk_md5_base_block_len = 64 };
+enum mk_md5_base_digest_len_e{ mk_md5_base_digest_len = 16 };
+
+
 mk_jumbo void mk_md5_base_init(struct mk_md5_base_s* md5_base);
 mk_jumbo void mk_md5_base_append_blocks(struct mk_md5_base_s* md5_base, int nblocks, void const* pblocks);
 mk_jumbo void mk_md5_base_finish(struct mk_md5_base_s* md5_base, void* block, int idx, void* digest);

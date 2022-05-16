@@ -13,6 +13,10 @@ struct mk_sha3_256_base_s
 };
 
 
+enum mk_sha3_256_base_block_len_e{ mk_sha3_256_base_block_len = 136 };
+enum mk_sha3_256_base_digest_len_e{ mk_sha3_256_base_digest_len = 32 };
+
+
 mk_jumbo void mk_sha3_256_base_init(struct mk_sha3_256_base_s* sha3_256_base);
 mk_jumbo void mk_sha3_256_base_append_blocks(struct mk_sha3_256_base_s* sha3_256_base, int nblocks, void const* pblocks);
 mk_jumbo void mk_sha3_256_base_finish(struct mk_sha3_256_base_s* sha3_256_base, void* block, int idx, void* digest);

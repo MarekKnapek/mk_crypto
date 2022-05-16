@@ -8,9 +8,6 @@
 #include <string.h> /* memcpy */
 
 
-#define block_len 104
-
-
 mk_jumbo void mk_sha3_384_block_append(struct mk_sha3_384_base_s* sha3_384_base, void* block, int* pidx, void const* msg, int msg_len)
 {
 	unsigned char* output;
@@ -22,7 +19,7 @@ mk_jumbo void mk_sha3_384_block_append(struct mk_sha3_384_base_s* sha3_384_base,
 
 	mk_assert(sha3_384_base);
 	mk_assert(block);
-	mk_assert(pidx && *pidx >= 0 && *pidx < block_len);
+	mk_assert(pidx && *pidx >= 0 && *pidx < mk_sha3_384_base_block_len);
 	mk_assert(msg || msg_len == 0);
 	mk_assert(msg_len >= 0);
 
@@ -30,7 +27,7 @@ mk_jumbo void mk_sha3_384_block_append(struct mk_sha3_384_base_s* sha3_384_base,
 	idx = *pidx;
 	input = (unsigned char const*)msg;
 	remaining = msg_len;
-	capacity = block_len - idx;
+	capacity = mk_sha3_384_base_block_len - idx;
 	if(remaining >= capacity)
 	{
 		if(idx != 0)
@@ -41,15 +38,12 @@ mk_jumbo void mk_sha3_384_block_append(struct mk_sha3_384_base_s* sha3_384_base,
 			remaining -= capacity;
 			idx = 0;
 		}
-		blocks = remaining / block_len;
+		blocks = remaining / mk_sha3_384_base_block_len;
 		mk_sha3_384_base_append_blocks(sha3_384_base, blocks, input);
-		input += blocks * block_len;
-		remaining -= blocks * block_len;
+		input += blocks * mk_sha3_384_base_block_len;
+		remaining -= blocks * mk_sha3_384_base_block_len;
 	}
 	memcpy(output + idx, input, remaining);
 	idx += remaining;
 	*pidx = idx;
 }
-
-
-#undef block_len

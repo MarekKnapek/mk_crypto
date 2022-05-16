@@ -13,6 +13,9 @@ struct mk_sha3_shake128_base_s
 };
 
 
+enum mk_sha3_shake128_base_block_len_e{ mk_sha3_shake128_base_block_len = 168 };
+
+
 mk_jumbo void mk_sha3_shake128_base_init(struct mk_sha3_shake128_base_s* sha3_shake128_base);
 mk_jumbo void mk_sha3_shake128_base_append_blocks(struct mk_sha3_shake128_base_s* sha3_shake128_base, int nblocks, void const* pblocks);
 mk_jumbo void mk_sha3_shake128_base_finish(struct mk_sha3_shake128_base_s* sha3_shake128_base, void* block, int idx, int digest_len, void* digest);

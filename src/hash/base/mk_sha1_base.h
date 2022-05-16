@@ -15,6 +15,10 @@ struct mk_sha1_base_s
 };
 
 
+enum mk_sha1_base_block_len_e{ mk_sha1_base_block_len = 64 };
+enum mk_sha1_base_digest_len_e{ mk_sha1_base_digest_len = 20 };
+
+
 mk_jumbo void mk_sha1_base_init(struct mk_sha1_base_s* sha1_base);
 mk_jumbo void mk_sha1_base_append_blocks(struct mk_sha1_base_s* sha1_base, int nblocks, void const* pblocks);
 mk_jumbo void mk_sha1_base_finish(struct mk_sha1_base_s* sha1_base, void* block, int idx, void* digest);
