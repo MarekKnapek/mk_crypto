@@ -253,7 +253,7 @@ mk_jumbo void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base
 	mk_assert(block_len == 168 || block_len == 144 || block_len == 136 || block_len == 104 || block_len == 72);
 	mk_assert(block);
 	mk_assert(idx >= 0 && idx < block_len);
-	mk_assert(domain == mk_sha3_base_detail_domain_none || domain == mk_sha3_base_detail_domain_sha3 || domain == mk_sha3_base_detail_domain_shake || domain == mk_sha3_base_detail_domain_rawshake);
+	mk_assert(domain == mk_sha3_base_detail_domain_sha3 || domain == mk_sha3_base_detail_domain_shake || domain == mk_sha3_base_detail_domain_rawshake);
 	mk_assert(digest_len > 0);
 	mk_assert(digest);
 
@@ -262,7 +262,6 @@ mk_jumbo void mk_sha3_base_detail_finish(struct mk_sha3_base_detail_s* sha3_base
 	remaining = digest_len;
 	switch(domain)
 	{
-		case mk_sha3_base_detail_domain_none: break;
 		case mk_sha3_base_detail_domain_sha3: input[idx] = 0x06; break;
 		case mk_sha3_base_detail_domain_shake: input[idx] = 0x1f; break;
 		case mk_sha3_base_detail_domain_rawshake: input[idx] = 0x07; break;

@@ -15,7 +15,6 @@ struct mk_sha3_base_detail_s
 
 enum mk_sha3_base_detail_domain_e
 {
-	mk_sha3_base_detail_domain_none,
 	mk_sha3_base_detail_domain_sha3,
 	mk_sha3_base_detail_domain_shake,
 	mk_sha3_base_detail_domain_rawshake,
