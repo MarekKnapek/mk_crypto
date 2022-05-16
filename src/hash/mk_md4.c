@@ -1,9 +1,10 @@
 #include "mk_md4.h"
 
+#include "base/mk_md4_base.h"
+#include "block/mk_md4_block.h"
+
 #include "../utils/mk_assert.h"
 #include "../utils/mk_jumbo.h"
-
-#include <string.h> /* memcpy */
 
 
 mk_jumbo void mk_md4_init(struct mk_md4_s* md4)
@@ -16,38 +17,11 @@ mk_jumbo void mk_md4_init(struct mk_md4_s* md4)
 
 mk_jumbo void mk_md4_append(struct mk_md4_s* md4, void const* msg, int msg_len)
 {
-	unsigned char const* input;
-	int remaining;
-	int idx;
-	int capacity;
-	int blocks;
-
 	mk_assert(md4);
 	mk_assert(msg || msg_len == 0);
 	mk_assert(msg_len >= 0);
 
-	input = (unsigned char const*)msg;
-	remaining = msg_len;
-
-	idx = md4->m_idx;
-	capacity = sizeof(md4->m_block) - idx;
-	if(remaining >= capacity)
-	{
-		if(idx != 0)
-		{
-			memcpy(md4->m_block + idx, input, capacity);
-			mk_md4_base_append_blocks(&md4->m_state, 1, md4->m_block);
-			input += capacity;
-			remaining -= capacity;
-			idx = 0;
-		}
-		blocks = remaining / sizeof(md4->m_block);
-		mk_md4_base_append_blocks(&md4->m_state, blocks, input);
-		input += blocks * sizeof(md4->m_block);
-		remaining -= blocks * sizeof(md4->m_block);
-	}
-	memcpy(md4->m_block + idx, input, remaining);
-	md4->m_idx = idx + remaining;
+	mk_md4_block_append(&md4->m_state, md4->m_block, &md4->m_idx, msg, msg_len);
 }
 
 mk_jumbo void mk_md4_finish(struct mk_md4_s* md4, void* digest)
