@@ -14,30 +14,30 @@
 
 static mk_inline void mk_sha1_fuzz_basic(void const* data, int size)
 {
-	struct mk_win_sha1_state_s mk_win_sha1_state;
-	unsigned char mk_win_sha1_digest[20];
+	struct mk_win_sha1_s win_sha1;
+	unsigned char win_sha1_digest[20];
 
-	struct mk_sha1_s mk_sha1_state;
-	unsigned char mk_sha1_digest[20];
+	struct mk_sha1_s sha1;
+	unsigned char sha1_digest[20];
 
-	mk_win_sha1_init(&mk_win_sha1_state);
-	mk_win_sha1_append(&mk_win_sha1_state, data, size);
-	mk_win_sha1_finish(&mk_win_sha1_state, &mk_win_sha1_digest);
+	mk_win_sha1_init(&win_sha1);
+	mk_win_sha1_append(&win_sha1, data, size);
+	mk_win_sha1_finish(&win_sha1, &win_sha1_digest);
 
-	mk_sha1_init(&mk_sha1_state);
-	mk_sha1_append(&mk_sha1_state, data, size);
-	mk_sha1_finish(&mk_sha1_state, &mk_sha1_digest);
+	mk_sha1_init(&sha1);
+	mk_sha1_append(&sha1, data, size);
+	mk_sha1_finish(&sha1, &sha1_digest);
 
-	test(memcmp(&mk_sha1_digest, &mk_win_sha1_digest, sizeof(mk_win_sha1_digest)) == 0);
+	test(memcmp(&sha1_digest, &win_sha1_digest, sizeof(win_sha1_digest)) == 0);
 }
 
 static mk_inline void mk_sha1_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_win_sha1_state_s mk_win_sha1_state;
-	unsigned char mk_win_sha1_digest[20];
+	struct mk_win_sha1_s win_sha1;
+	unsigned char win_sha1_digest[20];
 
-	struct mk_sha1_s mk_sha1_state;
-	unsigned char mk_sha1_digest[20];
+	struct mk_sha1_s sha1;
+	unsigned char sha1_digest[20];
 
 	int parts;
 	int i;
@@ -50,8 +50,8 @@ static mk_inline void mk_sha1_fuzz_complex(unsigned char const* data, int size)
 	parts = *data;
 	data++;
 	size--;
-	mk_win_sha1_init(&mk_win_sha1_state);
-	mk_sha1_init(&mk_sha1_state);
+	mk_win_sha1_init(&win_sha1);
+	mk_sha1_init(&sha1);
 	for(i = 0; i != parts; ++i)
 	{
 		if(!(size >= 1))
@@ -65,14 +65,14 @@ static mk_inline void mk_sha1_fuzz_complex(unsigned char const* data, int size)
 		{
 			break;
 		}
-		mk_win_sha1_append(&mk_win_sha1_state, data, part_len);
-		mk_sha1_append(&mk_sha1_state, data, part_len);
+		mk_win_sha1_append(&win_sha1, data, part_len);
+		mk_sha1_append(&sha1, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_win_sha1_finish(&mk_win_sha1_state, &mk_win_sha1_digest);
-	mk_sha1_finish(&mk_sha1_state, &mk_sha1_digest);
-	test(memcmp(&mk_sha1_digest, &mk_win_sha1_digest, sizeof(mk_win_sha1_digest)) == 0);
+	mk_win_sha1_finish(&win_sha1, &win_sha1_digest);
+	mk_sha1_finish(&sha1, &sha1_digest);
+	test(memcmp(&sha1_digest, &win_sha1_digest, sizeof(win_sha1_digest)) == 0);
 }
 
 

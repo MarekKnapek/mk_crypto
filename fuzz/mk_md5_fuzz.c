@@ -14,30 +14,30 @@
 
 static mk_inline void mk_md5_fuzz_basic(void const* data, int size)
 {
-	struct mk_win_md5_state_s mk_win_md5_state;
-	unsigned char mk_win_md5_digest[16];
+	struct mk_win_md5_s win_md5;
+	unsigned char win_md5_digest[16];
 
-	struct mk_md5_s mk_md5_state;
-	unsigned char mk_md5_digest[16];
+	struct mk_md5_s md5;
+	unsigned char md5_digest[16];
 
-	mk_win_md5_init(&mk_win_md5_state);
-	mk_win_md5_append(&mk_win_md5_state, data, size);
-	mk_win_md5_finish(&mk_win_md5_state, &mk_win_md5_digest);
+	mk_win_md5_init(&win_md5);
+	mk_win_md5_append(&win_md5, data, size);
+	mk_win_md5_finish(&win_md5, &win_md5_digest);
 
-	mk_md5_init(&mk_md5_state);
-	mk_md5_append(&mk_md5_state, data, size);
-	mk_md5_finish(&mk_md5_state, &mk_md5_digest);
+	mk_md5_init(&md5);
+	mk_md5_append(&md5, data, size);
+	mk_md5_finish(&md5, &md5_digest);
 
-	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
+	test(memcmp(&md5_digest, &win_md5_digest, sizeof(win_md5_digest)) == 0);
 }
 
 static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_win_md5_state_s mk_win_md5_state;
-	unsigned char mk_win_md5_digest[16];
+	struct mk_win_md5_s win_md5;
+	unsigned char win_md5_digest[16];
 
-	struct mk_md5_s mk_md5_state;
-	unsigned char mk_md5_digest[16];
+	struct mk_md5_s md5;
+	unsigned char md5_digest[16];
 
 	int parts;
 	int i;
@@ -50,8 +50,8 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 	parts = *data;
 	data++;
 	size--;
-	mk_win_md5_init(&mk_win_md5_state);
-	mk_md5_init(&mk_md5_state);
+	mk_win_md5_init(&win_md5);
+	mk_md5_init(&md5);
 	for(i = 0; i != parts; ++i)
 	{
 		if(!(size >= 1))
@@ -65,14 +65,14 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 		{
 			break;
 		}
-		mk_win_md5_append(&mk_win_md5_state, data, part_len);
-		mk_md5_append(&mk_md5_state, data, part_len);
+		mk_win_md5_append(&win_md5, data, part_len);
+		mk_md5_append(&md5, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_win_md5_finish(&mk_win_md5_state, &mk_win_md5_digest);
-	mk_md5_finish(&mk_md5_state, &mk_md5_digest);
-	test(memcmp(&mk_md5_digest, &mk_win_md5_digest, sizeof(mk_win_md5_digest)) == 0);
+	mk_win_md5_finish(&win_md5, &win_md5_digest);
+	mk_md5_finish(&md5, &md5_digest);
+	test(memcmp(&md5_digest, &win_md5_digest, sizeof(win_md5_digest)) == 0);
 }
 
 
