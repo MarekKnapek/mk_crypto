@@ -1,5 +1,5 @@
-#ifndef mk_include_guard_sha2_256_base
-#define mk_include_guard_sha2_256_base
+#ifndef mk_include_guard_base_sha2_256
+#define mk_include_guard_base_sha2_256
 
 
 #include "mk_sha2_base_detail_256.h"

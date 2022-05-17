@@ -1,5 +1,5 @@
-#ifndef mk_include_guard_sha1_base
-#define mk_include_guard_sha1_base
+#ifndef mk_include_guard_base_sha1
+#define mk_include_guard_base_sha1
 
 
 #include "../../utils/mk_jumbo.h"

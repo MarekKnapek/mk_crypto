@@ -1,5 +1,5 @@
-#ifndef mk_include_guard_md4_base
-#define mk_include_guard_md4_base
+#ifndef mk_include_guard_base_md4
+#define mk_include_guard_base_md4
 
 
 #include "../../utils/mk_jumbo.h"
