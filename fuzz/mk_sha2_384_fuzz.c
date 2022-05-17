@@ -1,7 +1,7 @@
 #include "mk_sha2_384_fuzz.h"
 
 #include "../src/hash/mk_hash_sha2_384.h"
-#include "../src/hash/mk_win_sha2_384.h"
+#include "../src/hash/mk_hash_win_sha2_384.h"
 
 #include "../src/utils/mk_inline.h"
 

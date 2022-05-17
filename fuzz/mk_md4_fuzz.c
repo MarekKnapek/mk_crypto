@@ -1,7 +1,7 @@
 #include "mk_md4_fuzz.h"
 
 #include "../src/hash/mk_hash_md4.h"
-#include "../src/hash/mk_win_md4.h"
+#include "../src/hash/mk_hash_win_md4.h"
 
 #include "../src/utils/mk_inline.h"
 
