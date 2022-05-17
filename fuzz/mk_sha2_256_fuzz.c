@@ -1,6 +1,6 @@
 #include "mk_sha2_256_fuzz.h"
 
-#include "../src/hash/mk_sha2_256.h"
+#include "../src/hash/mk_hash_sha2_256.h"
 #include "../src/hash/mk_win_sha2_256.h"
 
 #include "../src/utils/mk_inline.h"
@@ -24,9 +24,9 @@ static mk_inline void mk_sha2_256_fuzz_basic(void const* data, int size)
 	mk_win_sha2_256_append(&win_sha2_256, data, size);
 	mk_win_sha2_256_finish(&win_sha2_256, &win_sha2_256_digest);
 
-	mk_sha2_256_init(&sha2_256);
-	mk_sha2_256_append(&sha2_256, data, size);
-	mk_sha2_256_finish(&sha2_256, &sha2_256_digest);
+	mk_hash_sha2_256_init(&sha2_256);
+	mk_hash_sha2_256_append(&sha2_256, data, size);
+	mk_hash_sha2_256_finish(&sha2_256, &sha2_256_digest);
 
 	test(memcmp(&sha2_256_digest, &win_sha2_256_digest, sizeof(win_sha2_256_digest)) == 0);
 }
@@ -51,7 +51,7 @@ static mk_inline void mk_sha2_256_fuzz_complex(unsigned char const* data, int si
 	data++;
 	size--;
 	mk_win_sha2_256_init(&win_sha2_256);
-	mk_sha2_256_init(&sha2_256);
+	mk_hash_sha2_256_init(&sha2_256);
 	for(i = 0; i != parts; ++i)
 	{
 		if(!(size >= 1))
@@ -66,12 +66,12 @@ static mk_inline void mk_sha2_256_fuzz_complex(unsigned char const* data, int si
 			break;
 		}
 		mk_win_sha2_256_append(&win_sha2_256, data, part_len);
-		mk_sha2_256_append(&sha2_256, data, part_len);
+		mk_hash_sha2_256_append(&sha2_256, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
 	mk_win_sha2_256_finish(&win_sha2_256, &win_sha2_256_digest);
-	mk_sha2_256_finish(&sha2_256, &sha2_256_digest);
+	mk_hash_sha2_256_finish(&sha2_256, &sha2_256_digest);
 	test(memcmp(&sha2_256_digest, &win_sha2_256_digest, sizeof(win_sha2_256_digest)) == 0);
 }
 

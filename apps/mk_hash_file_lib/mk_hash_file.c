@@ -23,50 +23,50 @@
 #include <stdlib.h> /* malloc free */
 
 
-static mk_inline void cast_md2_init(void* self){ mk_md2_init((struct mk_md2_s*)self); }
-static mk_inline void cast_md4_init(void* self){ mk_md4_init((struct mk_md4_s*)self); }
-static mk_inline void cast_md5_init(void* self){ mk_md5_init((struct mk_md5_s*)self); }
-static mk_inline void cast_sha1_init(void* self){ mk_sha1_init((struct mk_sha1_s*)self); }
-static mk_inline void cast_sha2_224_init(void* self){ mk_sha2_224_init((struct mk_sha2_224_s*)self); }
-static mk_inline void cast_sha2_256_init(void* self){ mk_sha2_256_init((struct mk_sha2_256_s*)self); }
-static mk_inline void cast_sha2_384_init(void* self){ mk_sha2_384_init((struct mk_sha2_384_s*)self); }
-static mk_inline void cast_sha2_512_init(void* self){ mk_sha2_512_init((struct mk_sha2_512_s*)self); }
-static mk_inline void cast_sha2_512224_init(void* self){ mk_sha2_512224_init((struct mk_sha2_512224_s*)self); }
-static mk_inline void cast_sha2_512256_init(void* self){ mk_sha2_512256_init((struct mk_sha2_512256_s*)self); }
-static mk_inline void cast_sha3_224_init(void* self){ mk_sha3_224_init((struct mk_sha3_224_s*)self); }
-static mk_inline void cast_sha3_256_init(void* self){ mk_sha3_256_init((struct mk_sha3_256_s*)self); }
-static mk_inline void cast_sha3_384_init(void* self){ mk_sha3_384_init((struct mk_sha3_384_s*)self); }
-static mk_inline void cast_sha3_512_init(void* self){ mk_sha3_512_init((struct mk_sha3_512_s*)self); }
+static mk_inline void cast_md2_init(void* self){ mk_hash_md2_init((struct mk_md2_s*)self); }
+static mk_inline void cast_md4_init(void* self){ mk_hash_md4_init((struct mk_md4_s*)self); }
+static mk_inline void cast_md5_init(void* self){ mk_hash_md5_init((struct mk_md5_s*)self); }
+static mk_inline void cast_sha1_init(void* self){ mk_hash_sha1_init((struct mk_sha1_s*)self); }
+static mk_inline void cast_sha2_224_init(void* self){ mk_hash_sha2_224_init((struct mk_sha2_224_s*)self); }
+static mk_inline void cast_sha2_256_init(void* self){ mk_hash_sha2_256_init((struct mk_sha2_256_s*)self); }
+static mk_inline void cast_sha2_384_init(void* self){ mk_hash_sha2_384_init((struct mk_sha2_384_s*)self); }
+static mk_inline void cast_sha2_512_init(void* self){ mk_hash_sha2_512_init((struct mk_sha2_512_s*)self); }
+static mk_inline void cast_sha2_512224_init(void* self){ mk_hash_sha2_512224_init((struct mk_sha2_512224_s*)self); }
+static mk_inline void cast_sha2_512256_init(void* self){ mk_hash_sha2_512256_init((struct mk_sha2_512256_s*)self); }
+static mk_inline void cast_sha3_224_init(void* self){ mk_hash_sha3_224_init((struct mk_sha3_224_s*)self); }
+static mk_inline void cast_sha3_256_init(void* self){ mk_hash_sha3_256_init((struct mk_sha3_256_s*)self); }
+static mk_inline void cast_sha3_384_init(void* self){ mk_hash_sha3_384_init((struct mk_sha3_384_s*)self); }
+static mk_inline void cast_sha3_512_init(void* self){ mk_hash_sha3_512_init((struct mk_sha3_512_s*)self); }
 
-static mk_inline void cast_md2_append(void* self, void const* msg, int msg_len){ mk_md2_append((struct mk_md2_s*)self, msg, msg_len); }
-static mk_inline void cast_md4_append(void* self, void const* msg, int msg_len){ mk_md4_append((struct mk_md4_s*)self, msg, msg_len); }
-static mk_inline void cast_md5_append(void* self, void const* msg, int msg_len){ mk_md5_append((struct mk_md5_s*)self, msg, msg_len); }
-static mk_inline void cast_sha1_append(void* self, void const* msg, int msg_len){ mk_sha1_append((struct mk_sha1_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_224_append(void* self, void const* msg, int msg_len){ mk_sha2_224_append((struct mk_sha2_224_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_256_append(void* self, void const* msg, int msg_len){ mk_sha2_256_append((struct mk_sha2_256_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_384_append(void* self, void const* msg, int msg_len){ mk_sha2_384_append((struct mk_sha2_384_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_512_append(void* self, void const* msg, int msg_len){ mk_sha2_512_append((struct mk_sha2_512_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_512224_append(void* self, void const* msg, int msg_len){ mk_sha2_512224_append((struct mk_sha2_512224_s*)self, msg, msg_len); }
-static mk_inline void cast_sha2_512256_append(void* self, void const* msg, int msg_len){ mk_sha2_512256_append((struct mk_sha2_512256_s*)self, msg, msg_len); }
-static mk_inline void cast_sha3_224_append(void* self, void const* msg, int msg_len){ mk_sha3_224_append((struct mk_sha3_224_s*)self, msg, msg_len); }
-static mk_inline void cast_sha3_256_append(void* self, void const* msg, int msg_len){ mk_sha3_256_append((struct mk_sha3_256_s*)self, msg, msg_len); }
-static mk_inline void cast_sha3_384_append(void* self, void const* msg, int msg_len){ mk_sha3_384_append((struct mk_sha3_384_s*)self, msg, msg_len); }
-static mk_inline void cast_sha3_512_append(void* self, void const* msg, int msg_len){ mk_sha3_512_append((struct mk_sha3_512_s*)self, msg, msg_len); }
+static mk_inline void cast_md2_append(void* self, void const* msg, int msg_len){ mk_hash_md2_append((struct mk_md2_s*)self, msg, msg_len); }
+static mk_inline void cast_md4_append(void* self, void const* msg, int msg_len){ mk_hash_md4_append((struct mk_md4_s*)self, msg, msg_len); }
+static mk_inline void cast_md5_append(void* self, void const* msg, int msg_len){ mk_hash_md5_append((struct mk_md5_s*)self, msg, msg_len); }
+static mk_inline void cast_sha1_append(void* self, void const* msg, int msg_len){ mk_hash_sha1_append((struct mk_sha1_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_224_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_224_append((struct mk_sha2_224_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_256_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_256_append((struct mk_sha2_256_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_384_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_384_append((struct mk_sha2_384_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_512_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_512_append((struct mk_sha2_512_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_512224_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_512224_append((struct mk_sha2_512224_s*)self, msg, msg_len); }
+static mk_inline void cast_sha2_512256_append(void* self, void const* msg, int msg_len){ mk_hash_sha2_512256_append((struct mk_sha2_512256_s*)self, msg, msg_len); }
+static mk_inline void cast_sha3_224_append(void* self, void const* msg, int msg_len){ mk_hash_sha3_224_append((struct mk_sha3_224_s*)self, msg, msg_len); }
+static mk_inline void cast_sha3_256_append(void* self, void const* msg, int msg_len){ mk_hash_sha3_256_append((struct mk_sha3_256_s*)self, msg, msg_len); }
+static mk_inline void cast_sha3_384_append(void* self, void const* msg, int msg_len){ mk_hash_sha3_384_append((struct mk_sha3_384_s*)self, msg, msg_len); }
+static mk_inline void cast_sha3_512_append(void* self, void const* msg, int msg_len){ mk_hash_sha3_512_append((struct mk_sha3_512_s*)self, msg, msg_len); }
 
-static mk_inline void cast_md2_finish(void* self, void* digest){ mk_md2_finish((struct mk_md2_s*)self, digest); }
-static mk_inline void cast_md4_finish(void* self, void* digest){ mk_md4_finish((struct mk_md4_s*)self, digest); }
-static mk_inline void cast_md5_finish(void* self, void* digest){ mk_md5_finish((struct mk_md5_s*)self, digest); }
-static mk_inline void cast_sha1_finish(void* self, void* digest){ mk_sha1_finish((struct mk_sha1_s*)self, digest); }
-static mk_inline void cast_sha2_224_finish(void* self, void* digest){ mk_sha2_224_finish((struct mk_sha2_224_s*)self, digest); }
-static mk_inline void cast_sha2_256_finish(void* self, void* digest){ mk_sha2_256_finish((struct mk_sha2_256_s*)self, digest); }
-static mk_inline void cast_sha2_384_finish(void* self, void* digest){ mk_sha2_384_finish((struct mk_sha2_384_s*)self, digest); }
-static mk_inline void cast_sha2_512_finish(void* self, void* digest){ mk_sha2_512_finish((struct mk_sha2_512_s*)self, digest); }
-static mk_inline void cast_sha2_512224_finish(void* self, void* digest){ mk_sha2_512224_finish((struct mk_sha2_512224_s*)self, digest); }
-static mk_inline void cast_sha2_512256_finish(void* self, void* digest){ mk_sha2_512256_finish((struct mk_sha2_512256_s*)self, digest); }
-static mk_inline void cast_sha3_224_finish(void* self, void* digest){ mk_sha3_224_finish((struct mk_sha3_224_s*)self, digest); }
-static mk_inline void cast_sha3_256_finish(void* self, void* digest){ mk_sha3_256_finish((struct mk_sha3_256_s*)self, digest); }
-static mk_inline void cast_sha3_384_finish(void* self, void* digest){ mk_sha3_384_finish((struct mk_sha3_384_s*)self, digest); }
-static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_sha3_512_finish((struct mk_sha3_512_s*)self, digest); }
+static mk_inline void cast_md2_finish(void* self, void* digest){ mk_hash_md2_finish((struct mk_md2_s*)self, digest); }
+static mk_inline void cast_md4_finish(void* self, void* digest){ mk_hash_md4_finish((struct mk_md4_s*)self, digest); }
+static mk_inline void cast_md5_finish(void* self, void* digest){ mk_hash_md5_finish((struct mk_md5_s*)self, digest); }
+static mk_inline void cast_sha1_finish(void* self, void* digest){ mk_hash_sha1_finish((struct mk_sha1_s*)self, digest); }
+static mk_inline void cast_sha2_224_finish(void* self, void* digest){ mk_hash_sha2_224_finish((struct mk_sha2_224_s*)self, digest); }
+static mk_inline void cast_sha2_256_finish(void* self, void* digest){ mk_hash_sha2_256_finish((struct mk_sha2_256_s*)self, digest); }
+static mk_inline void cast_sha2_384_finish(void* self, void* digest){ mk_hash_sha2_384_finish((struct mk_sha2_384_s*)self, digest); }
+static mk_inline void cast_sha2_512_finish(void* self, void* digest){ mk_hash_sha2_512_finish((struct mk_sha2_512_s*)self, digest); }
+static mk_inline void cast_sha2_512224_finish(void* self, void* digest){ mk_hash_sha2_512224_finish((struct mk_sha2_512224_s*)self, digest); }
+static mk_inline void cast_sha2_512256_finish(void* self, void* digest){ mk_hash_sha2_512256_finish((struct mk_sha2_512256_s*)self, digest); }
+static mk_inline void cast_sha3_224_finish(void* self, void* digest){ mk_hash_sha3_224_finish((struct mk_sha3_224_s*)self, digest); }
+static mk_inline void cast_sha3_256_finish(void* self, void* digest){ mk_hash_sha3_256_finish((struct mk_sha3_256_s*)self, digest); }
+static mk_inline void cast_sha3_384_finish(void* self, void* digest){ mk_hash_sha3_384_finish((struct mk_sha3_384_s*)self, digest); }
+static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_hash_sha3_512_finish((struct mk_sha3_512_s*)self, digest); }
 
 
 struct hash_states_s

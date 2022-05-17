@@ -127,7 +127,7 @@ int mk_sha2_additional_test_examples_512(void)
 		digest_len = task->m_digest_len;
 		mk_string_hex_to_bytes(pattern, pattern_len, pattern_bin, sizeof(pattern_bin));
 		mk_string_hex_to_bytes(digest, digest_len, digest_bin, sizeof(digest_bin));
-		mk_sha2_512_init(&sha2_512);
+		mk_hash_sha2_512_init(&sha2_512);
 		if(pattern_len / 2 == 1 && repeat >= 1024)
 		{
 			block_len = 16 * 1024;
@@ -137,19 +137,19 @@ int mk_sha2_additional_test_examples_512(void)
 			blocks = repeat / block_len;
 			for(j = 0; j != blocks; ++j)
 			{
-				mk_sha2_512_append(&sha2_512, block, block_len);
+				mk_hash_sha2_512_append(&sha2_512, block, block_len);
 			}
-			mk_sha2_512_append(&sha2_512, block, repeat - blocks * block_len);
+			mk_hash_sha2_512_append(&sha2_512, block, repeat - blocks * block_len);
 			free(block);
 		}
 		else
 		{
 			for(j = 0; j != repeat; ++j)
 			{
-				mk_sha2_512_append(&sha2_512, pattern_bin, pattern_len / 2);
+				mk_hash_sha2_512_append(&sha2_512, pattern_bin, pattern_len / 2);
 			}
 		}
-		mk_sha2_512_finish(&sha2_512, &computed);
+		mk_hash_sha2_512_finish(&sha2_512, &computed);
 		mk_check(memcmp(computed, digest_bin, sizeof(computed)) == 0);
 	}
 	return 0;

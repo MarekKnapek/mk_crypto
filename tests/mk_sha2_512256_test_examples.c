@@ -60,9 +60,9 @@ int mk_sha2_512256_test_examples(void)
 		digest = task->m_digest;
 		digest_len = task->m_digest_len;
 		mk_string_hex_to_bytes(digest, digest_len, digest_bin, sizeof(digest_bin));
-		mk_sha2_512256_init(&mk_sha2_512256);
-		mk_sha2_512256_append(&mk_sha2_512256, msg, msg_len);
-		mk_sha2_512256_finish(&mk_sha2_512256, &computed);
+		mk_hash_sha2_512256_init(&mk_sha2_512256);
+		mk_hash_sha2_512256_append(&mk_sha2_512256, msg, msg_len);
+		mk_hash_sha2_512256_finish(&mk_sha2_512256, &computed);
 		mk_check(memcmp(computed, digest_bin, sizeof(computed)) == 0);
 	}
 	return 0;
