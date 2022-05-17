@@ -488,5 +488,23 @@
     <ClInclude Include="..\..\..\src\mk_hash_function.h">
       <Filter>src</Filter>
     </ClInclude>
+    <None Include="..\..\..\src\hash\block\mk_block.c.inl">
+      <Filter>src\hash\block</Filter>
+    </None>
+    <None Include="..\..\..\src\hash\block\mk_block.h.inl">
+      <Filter>src\hash\block</Filter>
+    </None>
+    <None Include="..\..\..\src\hash\mk.c.inl">
+      <Filter>src\hash</Filter>
+    </None>
+    <None Include="..\..\..\src\hash\mk.h.inl">
+      <Filter>src\hash</Filter>
+    </None>
+    <None Include="..\..\..\src\hash\mk_xof.c.inl">
+      <Filter>src\hash</Filter>
+    </None>
+    <None Include="..\..\..\src\hash\mk_xof.h.inl">
+      <Filter>src\hash</Filter>
+    </None>
   </ItemGroup>
 </Project>

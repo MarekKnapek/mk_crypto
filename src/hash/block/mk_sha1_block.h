@@ -2,12 +2,9 @@
 #define mk_include_guard_sha1_block
 
 
-#include "../base/mk_sha1_base.h"
-
-#include "../../utils/mk_jumbo.h"
-
-
-mk_jumbo void mk_sha1_block_append(struct mk_sha1_base_s* sha1_base, void* block, int* pidx, void const* msg, int msg_len);
+#define alg sha1
+#include "mk_block.h.inl"
+#undef alg
 
 
 #endif
