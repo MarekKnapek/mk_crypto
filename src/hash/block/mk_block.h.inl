@@ -15,7 +15,7 @@
 #define concat3(a, b, c) concat3_impl(a, b, c)
 
 
-mk_jumbo void concat3(mk_, alg, _block_append)(struct concat3(mk_, alg, _base_s)* alg_base, void* block, int* pidx, void const* msg, int msg_len);
+mk_jumbo void concat3(mk_block_, alg, _append)(struct concat3(mk_, alg, _base_s)* alg_base, void* block, int* pidx, void const* msg, int msg_len);
 
 
 #undef stringify
