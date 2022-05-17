@@ -110,7 +110,7 @@ int mk_sha2_additional_test_examples_384(void)
 	int digest_len;
 	unsigned char pattern_bin[4];
 	unsigned char digest_bin[48];
-	struct mk_sha2_384_s sha2_384;
+	struct mk_hash_sha2_384_s sha2_384;
 	int block_len;
 	void* block;
 	long blocks;

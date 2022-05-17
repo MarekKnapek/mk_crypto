@@ -11,7 +11,7 @@
 #define concat3(a, b, c) concat3_impl(a, b, c)
 
 
-mk_jumbo void concat3(mk_win_, alg, _init)(struct concat3(mk_win_, alg, _s)* alg)
+mk_jumbo void concat3(mk_hash_win_, alg, _init)(struct concat3(mk_hash_win_, alg, _s)* alg)
 {
 	BOOL csp_created;
 	HCRYPTPROV csp;
@@ -30,7 +30,7 @@ mk_jumbo void concat3(mk_win_, alg, _init)(struct concat3(mk_win_, alg, _s)* alg
 	alg->m_hash = hash;
 }
 
-mk_jumbo void concat3(mk_win_, alg, _append)(struct concat3(mk_win_, alg, _s)* alg, void const* msg, int msg_len)
+mk_jumbo void concat3(mk_hash_win_, alg, _append)(struct concat3(mk_hash_win_, alg, _s)* alg, void const* msg, int msg_len)
 {
 	BOOL hashed;
 
@@ -42,7 +42,7 @@ mk_jumbo void concat3(mk_win_, alg, _append)(struct concat3(mk_win_, alg, _s)* a
 	mk_assert(hashed != FALSE);
 }
 
-mk_jumbo void concat3(mk_win_, alg, _finish)(struct concat3(mk_win_, alg, _s)* alg, void* digest)
+mk_jumbo void concat3(mk_hash_win_, alg, _finish)(struct concat3(mk_hash_win_, alg, _s)* alg, void* digest)
 {
 	DWORD digest_len;
 	BOOL got_hash;

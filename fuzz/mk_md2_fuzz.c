@@ -14,15 +14,15 @@
 
 static mk_inline void mk_md2_fuzz_basic(void const* data, int size)
 {
-	struct mk_win_md2_s win_md2;
+	struct mk_hash_win_md2_s win_md2;
 	unsigned char win_md2_digest[16];
 
-	struct mk_md2_s md2;
+	struct mk_hash_md2_s md2;
 	unsigned char md2_digest[16];
 
-	mk_win_md2_init(&win_md2);
-	mk_win_md2_append(&win_md2, data, size);
-	mk_win_md2_finish(&win_md2, &win_md2_digest);
+	mk_hash_win_md2_init(&win_md2);
+	mk_hash_win_md2_append(&win_md2, data, size);
+	mk_hash_win_md2_finish(&win_md2, &win_md2_digest);
 
 	mk_hash_md2_init(&md2);
 	mk_hash_md2_append(&md2, data, size);
@@ -33,10 +33,10 @@ static mk_inline void mk_md2_fuzz_basic(void const* data, int size)
 
 static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_win_md2_s win_md2;
+	struct mk_hash_win_md2_s win_md2;
 	unsigned char win_md2_digest[16];
 
-	struct mk_md2_s md2;
+	struct mk_hash_md2_s md2;
 	unsigned char md2_digest[16];
 
 	int parts;
@@ -50,7 +50,7 @@ static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, int size)
 	parts = *data;
 	data++;
 	size--;
-	mk_win_md2_init(&win_md2);
+	mk_hash_win_md2_init(&win_md2);
 	mk_hash_md2_init(&md2);
 	for(i = 0; i != parts; ++i)
 	{
@@ -65,12 +65,12 @@ static mk_inline void mk_md2_fuzz_complex(unsigned char const* data, int size)
 		{
 			break;
 		}
-		mk_win_md2_append(&win_md2, data, part_len);
+		mk_hash_win_md2_append(&win_md2, data, part_len);
 		mk_hash_md2_append(&md2, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_win_md2_finish(&win_md2, &win_md2_digest);
+	mk_hash_win_md2_finish(&win_md2, &win_md2_digest);
 	mk_hash_md2_finish(&md2, &md2_digest);
 	test(memcmp(&md2_digest, &win_md2_digest, sizeof(win_md2_digest)) == 0);
 }

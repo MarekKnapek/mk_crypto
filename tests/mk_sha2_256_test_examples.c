@@ -49,7 +49,7 @@ int mk_sha2_256_test_examples(void)
 	char const* digest;
 	int digest_len;
 	unsigned char digest_bin[32];
-	struct mk_sha2_256_s mk_sha2_256;
+	struct mk_hash_sha2_256_s mk_sha2_256;
 	unsigned char computed[sizeof(digest_bin)];
 
 	for(i = 0; i != sizeof(s_tasks) / sizeof(s_tasks[0]); ++i)

@@ -14,15 +14,15 @@
 
 static mk_inline void mk_sha2_384_fuzz_basic(void const* data, int size)
 {
-	struct mk_win_sha2_384_s win_sha2_384;
+	struct mk_hash_win_sha2_384_s win_sha2_384;
 	unsigned char win_sha2_384_digest[48];
 
-	struct mk_sha2_384_s sha2_384;
+	struct mk_hash_sha2_384_s sha2_384;
 	unsigned char sha2_384_digest[48];
 
-	mk_win_sha2_384_init(&win_sha2_384);
-	mk_win_sha2_384_append(&win_sha2_384, data, size);
-	mk_win_sha2_384_finish(&win_sha2_384, &win_sha2_384_digest);
+	mk_hash_win_sha2_384_init(&win_sha2_384);
+	mk_hash_win_sha2_384_append(&win_sha2_384, data, size);
+	mk_hash_win_sha2_384_finish(&win_sha2_384, &win_sha2_384_digest);
 
 	mk_hash_sha2_384_init(&sha2_384);
 	mk_hash_sha2_384_append(&sha2_384, data, size);
@@ -33,10 +33,10 @@ static mk_inline void mk_sha2_384_fuzz_basic(void const* data, int size)
 
 static mk_inline void mk_sha2_384_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_win_sha2_384_s win_sha2_384;
+	struct mk_hash_win_sha2_384_s win_sha2_384;
 	unsigned char win_sha2_384_digest[48];
 
-	struct mk_sha2_384_s sha2_384;
+	struct mk_hash_sha2_384_s sha2_384;
 	unsigned char sha2_384_digest[48];
 
 	int parts;
@@ -50,7 +50,7 @@ static mk_inline void mk_sha2_384_fuzz_complex(unsigned char const* data, int si
 	parts = *data;
 	data++;
 	size--;
-	mk_win_sha2_384_init(&win_sha2_384);
+	mk_hash_win_sha2_384_init(&win_sha2_384);
 	mk_hash_sha2_384_init(&sha2_384);
 	for(i = 0; i != parts; ++i)
 	{
@@ -65,12 +65,12 @@ static mk_inline void mk_sha2_384_fuzz_complex(unsigned char const* data, int si
 		{
 			break;
 		}
-		mk_win_sha2_384_append(&win_sha2_384, data, part_len);
+		mk_hash_win_sha2_384_append(&win_sha2_384, data, part_len);
 		mk_hash_sha2_384_append(&sha2_384, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_win_sha2_384_finish(&win_sha2_384, &win_sha2_384_digest);
+	mk_hash_win_sha2_384_finish(&win_sha2_384, &win_sha2_384_digest);
 	mk_hash_sha2_384_finish(&sha2_384, &sha2_384_digest);
 	test(memcmp(&sha2_384_digest, &win_sha2_384_digest, sizeof(win_sha2_384_digest)) == 0);
 }

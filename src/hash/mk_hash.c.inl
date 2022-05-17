@@ -17,7 +17,7 @@
 #define concat3(a, b, c) concat3_impl(a, b, c)
 
 
-mk_jumbo void concat3(mk_hash_, alg, _init)(struct concat3(mk_, alg, _s)* alg)
+mk_jumbo void concat3(mk_hash_, alg, _init)(struct concat3(mk_hash_, alg, _s)* alg)
 {
 	mk_assert(alg);
 
@@ -25,7 +25,7 @@ mk_jumbo void concat3(mk_hash_, alg, _init)(struct concat3(mk_, alg, _s)* alg)
 	alg->m_idx = 0;
 }
 
-mk_jumbo void concat3(mk_hash_, alg, _append)(struct concat3(mk_, alg, _s)* alg, void const* msg, int msg_len)
+mk_jumbo void concat3(mk_hash_, alg, _append)(struct concat3(mk_hash_, alg, _s)* alg, void const* msg, int msg_len)
 {
 	mk_assert(alg);
 	mk_assert(msg || msg_len == 0);
@@ -34,7 +34,7 @@ mk_jumbo void concat3(mk_hash_, alg, _append)(struct concat3(mk_, alg, _s)* alg,
 	concat3(mk_block_, alg, _append)(&alg->m_base, alg->m_block, &alg->m_idx, msg, msg_len);
 }
 
-mk_jumbo void concat3(mk_hash_, alg, _finish)(struct concat3(mk_, alg, _s)* alg, void* digest)
+mk_jumbo void concat3(mk_hash_, alg, _finish)(struct concat3(mk_hash_, alg, _s)* alg, void* digest)
 {
 	mk_assert(alg);
 	mk_assert(digest);

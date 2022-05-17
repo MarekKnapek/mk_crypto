@@ -40,20 +40,20 @@ enum mk_hash_fn_e
 
 union mk_hash_fn_u
 {
-	struct mk_md2_s m_md2;
-	struct mk_md4_s m_md4;
-	struct mk_md5_s m_md5;
-	struct mk_sha1_s m_sha1;
-	struct mk_sha2_224_s m_sha2_224;
-	struct mk_sha2_256_s m_sha2_256;
-	struct mk_sha2_384_s m_sha2_384;
-	struct mk_sha2_512_s m_sha2_512;
-	struct mk_sha2_512224_s m_sha2_512224;
-	struct mk_sha2_512256_s m_sha2_512256;
-	struct mk_sha3_224_s m_sha3_224;
-	struct mk_sha3_256_s m_sha3_256;
-	struct mk_sha3_384_s m_sha3_384;
-	struct mk_sha3_512_s m_sha3_512;
+	struct mk_hash_md2_s m_md2;
+	struct mk_hash_md4_s m_md4;
+	struct mk_hash_md5_s m_md5;
+	struct mk_hash_sha1_s m_sha1;
+	struct mk_hash_sha2_224_s m_sha2_224;
+	struct mk_hash_sha2_256_s m_sha2_256;
+	struct mk_hash_sha2_384_s m_sha2_384;
+	struct mk_hash_sha2_512_s m_sha2_512;
+	struct mk_hash_sha2_512224_s m_sha2_512224;
+	struct mk_hash_sha2_512256_s m_sha2_512256;
+	struct mk_hash_sha3_224_s m_sha3_224;
+	struct mk_hash_sha3_256_s m_sha3_256;
+	struct mk_hash_sha3_384_s m_sha3_384;
+	struct mk_hash_sha3_512_s m_sha3_512;
 };
 
 struct mk_hash_fn_s
