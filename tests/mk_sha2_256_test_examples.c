@@ -4,7 +4,7 @@
 
 #include "../src/utils/mk_assert.h"
 
-#include "../src/hash/mk_sha2_256.h"
+#include "../src/hash/mk_hash_sha2_256.h"
 
 #include <string.h> /* memcmp */
 

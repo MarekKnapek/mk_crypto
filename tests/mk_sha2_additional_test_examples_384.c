@@ -2,7 +2,7 @@
 
 #include "mk_test_utils.h"
 
-#include "../src/hash/mk_sha2_384.h"
+#include "../src/hash/mk_hash_sha2_384.h"
 
 #include "../src/utils/mk_assert.h"
 
