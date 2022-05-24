@@ -1,7 +1,7 @@
 #include "mk_md5_fuzz.h"
 
-#include "../src/hash/mk_hash_md5.h"
-#include "../src/hash/mk_hash_win_md5.h"
+#include "../src/hash/hash/mk_hash_hash_md5.h"
+#include "../src/hash/hash/mk_hash_hash_win_md5.h"
 
 #include "../src/utils/mk_inline.h"
 
@@ -14,29 +14,29 @@
 
 static mk_inline void mk_md5_fuzz_basic(void const* data, int size)
 {
-	struct mk_hash_win_md5_s win_md5;
+	struct mk_hash_hash_win_md5_s win_md5;
 	unsigned char win_md5_digest[16];
 
-	struct mk_hash_md5_s md5;
+	struct mk_hash_hash_md5_s md5;
 	unsigned char md5_digest[16];
 
-	mk_hash_win_md5_init(&win_md5);
-	mk_hash_win_md5_append(&win_md5, data, size);
-	mk_hash_win_md5_finish(&win_md5, &win_md5_digest);
+	mk_hash_hash_win_md5_init(&win_md5);
+	mk_hash_hash_win_md5_append(&win_md5, data, size);
+	mk_hash_hash_win_md5_finish(&win_md5, &win_md5_digest);
 
-	mk_hash_md5_init(&md5);
-	mk_hash_md5_append(&md5, data, size);
-	mk_hash_md5_finish(&md5, &md5_digest);
+	mk_hash_hash_md5_init(&md5);
+	mk_hash_hash_md5_append(&md5, data, size);
+	mk_hash_hash_md5_finish(&md5, &md5_digest);
 
 	test(memcmp(&md5_digest, &win_md5_digest, sizeof(win_md5_digest)) == 0);
 }
 
 static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_hash_win_md5_s win_md5;
+	struct mk_hash_hash_win_md5_s win_md5;
 	unsigned char win_md5_digest[16];
 
-	struct mk_hash_md5_s md5;
+	struct mk_hash_hash_md5_s md5;
 	unsigned char md5_digest[16];
 
 	int parts;
@@ -50,8 +50,8 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 	parts = *data;
 	data++;
 	size--;
-	mk_hash_win_md5_init(&win_md5);
-	mk_hash_md5_init(&md5);
+	mk_hash_hash_win_md5_init(&win_md5);
+	mk_hash_hash_md5_init(&md5);
 	for(i = 0; i != parts; ++i)
 	{
 		if(!(size >= 1))
@@ -65,13 +65,13 @@ static mk_inline void mk_md5_fuzz_complex(unsigned char const* data, int size)
 		{
 			break;
 		}
-		mk_hash_win_md5_append(&win_md5, data, part_len);
-		mk_hash_md5_append(&md5, data, part_len);
+		mk_hash_hash_win_md5_append(&win_md5, data, part_len);
+		mk_hash_hash_md5_append(&md5, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_hash_win_md5_finish(&win_md5, &win_md5_digest);
-	mk_hash_md5_finish(&md5, &md5_digest);
+	mk_hash_hash_win_md5_finish(&win_md5, &win_md5_digest);
+	mk_hash_hash_md5_finish(&md5, &md5_digest);
 	test(memcmp(&md5_digest, &win_md5_digest, sizeof(win_md5_digest)) == 0);
 }
 

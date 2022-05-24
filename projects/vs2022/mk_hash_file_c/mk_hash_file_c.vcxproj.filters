@@ -18,7 +18,9 @@
     <ClCompile Include="..\..\..\apps\mk_hash_file_c\mk_hash_file_c.c">
       <Filter>apps\mk_hash_file_c</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\apps\all.c" />
+    <ClCompile Include="..\..\..\apps\all.c">
+      <Filter>apps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\apps\mk_hash_file_lib\mk_hash_file.h">

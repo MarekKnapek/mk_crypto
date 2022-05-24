@@ -4,9 +4,9 @@
 #endif
 
 
-#include "../../../apps/mk_hash_file_c/mk_hash_file_c.c"
-#include "../../../apps/mk_hash_file_lib/mk_hash_file.c"
 #include "../../../apps/all.c"
+#include "../../../apps/mk_hash_file_lib/mk_hash_file.c"
+#include "../../../apps/mk_hash_file_c/mk_hash_file_c.c"
 
 
 #if defined(_MSC_VER)

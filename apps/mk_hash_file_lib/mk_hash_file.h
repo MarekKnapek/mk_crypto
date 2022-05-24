@@ -2,6 +2,9 @@
 #define mk_include_guard_hash_file
 
 
+#include "../../src/utils/mk_jumbo.h"
+
+
 typedef void* mk_hash_file_handle;
 
 struct mk_hash_file_digests_s
@@ -23,11 +26,11 @@ struct mk_hash_file_digests_s
 };
 
 
-mk_hash_file_handle mk_hash_file_create(char const* file_name);
-int mk_hash_file_step(mk_hash_file_handle hash_file);
-int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress);
-int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result);
-int mk_hash_file_destroy(mk_hash_file_handle hash_file);
+mk_jumbo mk_hash_file_handle mk_hash_file_create(char const* file_name);
+mk_jumbo int mk_hash_file_step(mk_hash_file_handle hash_file);
+mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress);
+mk_jumbo int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result);
+mk_jumbo int mk_hash_file_destroy(mk_hash_file_handle hash_file);
 
 
 #endif

@@ -1,7 +1,7 @@
 #include "mk_md4_fuzz.h"
 
-#include "../src/hash/mk_hash_md4.h"
-#include "../src/hash/mk_hash_win_md4.h"
+#include "../src/hash/hash/mk_hash_hash_md4.h"
+#include "../src/hash/hash/mk_hash_hash_win_md4.h"
 
 #include "../src/utils/mk_inline.h"
 
@@ -14,29 +14,29 @@
 
 static mk_inline void mk_md4_fuzz_basic(void const* data, int size)
 {
-	struct mk_hash_win_md4_s win_md4;
+	struct mk_hash_hash_win_md4_s win_md4;
 	unsigned char win_md4_digest[16];
 
-	struct mk_hash_md4_s md4;
+	struct mk_hash_hash_md4_s md4;
 	unsigned char md4_digest[16];
 
-	mk_hash_win_md4_init(&win_md4);
-	mk_hash_win_md4_append(&win_md4, data, size);
-	mk_hash_win_md4_finish(&win_md4, &win_md4_digest);
+	mk_hash_hash_win_md4_init(&win_md4);
+	mk_hash_hash_win_md4_append(&win_md4, data, size);
+	mk_hash_hash_win_md4_finish(&win_md4, &win_md4_digest);
 
-	mk_hash_md4_init(&md4);
-	mk_hash_md4_append(&md4, data, size);
-	mk_hash_md4_finish(&md4, &md4_digest);
+	mk_hash_hash_md4_init(&md4);
+	mk_hash_hash_md4_append(&md4, data, size);
+	mk_hash_hash_md4_finish(&md4, &md4_digest);
 
 	test(memcmp(&md4_digest, &win_md4_digest, sizeof(win_md4_digest)) == 0);
 }
 
 static mk_inline void mk_md4_fuzz_complex(unsigned char const* data, int size)
 {
-	struct mk_hash_win_md4_s win_md4;
+	struct mk_hash_hash_win_md4_s win_md4;
 	unsigned char win_md4_digest[16];
 
-	struct mk_hash_md4_s md4;
+	struct mk_hash_hash_md4_s md4;
 	unsigned char md4_digest[16];
 
 	int parts;
@@ -50,8 +50,8 @@ static mk_inline void mk_md4_fuzz_complex(unsigned char const* data, int size)
 	parts = *data;
 	data++;
 	size--;
-	mk_hash_win_md4_init(&win_md4);
-	mk_hash_md4_init(&md4);
+	mk_hash_hash_win_md4_init(&win_md4);
+	mk_hash_hash_md4_init(&md4);
 	for(i = 0; i != parts; ++i)
 	{
 		if(!(size >= 1))
@@ -65,13 +65,13 @@ static mk_inline void mk_md4_fuzz_complex(unsigned char const* data, int size)
 		{
 			break;
 		}
-		mk_hash_win_md4_append(&win_md4, data, part_len);
-		mk_hash_md4_append(&md4, data, part_len);
+		mk_hash_hash_win_md4_append(&win_md4, data, part_len);
+		mk_hash_hash_md4_append(&md4, data, part_len);
 		data += part_len;
 		size -= part_len;
 	}
-	mk_hash_win_md4_finish(&win_md4, &win_md4_digest);
-	mk_hash_md4_finish(&md4, &md4_digest);
+	mk_hash_hash_win_md4_finish(&win_md4, &win_md4_digest);
+	mk_hash_hash_md4_finish(&md4, &md4_digest);
 	test(memcmp(&md4_digest, &win_md4_digest, sizeof(win_md4_digest)) == 0);
 }
 

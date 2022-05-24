@@ -223,7 +223,7 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 	atom = RegisterClass(&wc);
 	mk_check(atom != 0);
 
-	hwnd = CreateWindow(wc.lpszClassName, TEXT("mk win hash file, progress..."), WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 300, 30, 0, 0, inst, NULL);
+	hwnd = CreateWindow(wc.lpszClassName, TEXT("0.00 %"), WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 300, 30, 0, 0, inst, NULL);
 	mk_check(hwnd != 0);
 
 	prev_time = 0;
@@ -344,64 +344,10 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 }
 
 
+#undef mk_check
+#undef mk_try
+
+
 #include "../../../apps/mk_hash_file_lib/mk_hash_file.c"
 
-#include "../../../libs/mk_int.c"
-
-#include "../../../src/hash/base/mk_md2_base.c"
-#include "../../../src/hash/base/mk_md4_base.c"
-#include "../../../src/hash/base/mk_md5_base.c"
-#include "../../../src/hash/base/mk_sha1_base.c"
-#include "../../../src/hash/base/mk_sha2_224_base.c"
-#include "../../../src/hash/base/mk_sha2_256_base.c"
-#include "../../../src/hash/base/mk_sha2_384_base.c"
-#include "../../../src/hash/base/mk_sha2_512_base.c"
-#include "../../../src/hash/base/mk_sha2_512224_base.c"
-#include "../../../src/hash/base/mk_sha2_512256_base.c"
-#include "../../../src/hash/base/mk_sha2_base_detail_256.c"
-#include "../../../src/hash/base/mk_sha2_base_detail_512.c"
-#include "../../../src/hash/base/mk_sha3_224_base.c"
-#include "../../../src/hash/base/mk_sha3_256_base.c"
-#include "../../../src/hash/base/mk_sha3_384_base.c"
-#include "../../../src/hash/base/mk_sha3_512_base.c"
-#include "../../../src/hash/base/mk_sha3_base_detail.c"
-#include "../../../src/hash/base/mk_sha3_rawshake128_base.c"
-#include "../../../src/hash/base/mk_sha3_rawshake256_base.c"
-#include "../../../src/hash/base/mk_sha3_shake128_base.c"
-#include "../../../src/hash/base/mk_sha3_shake256_base.c"
-#include "../../../src/hash/block/mk_block_md2.c"
-#include "../../../src/hash/block/mk_block_md4.c"
-#include "../../../src/hash/block/mk_block_md5.c"
-#include "../../../src/hash/block/mk_block_sha1.c"
-#include "../../../src/hash/block/mk_block_sha2_224.c"
-#include "../../../src/hash/block/mk_block_sha2_256.c"
-#include "../../../src/hash/block/mk_block_sha2_384.c"
-#include "../../../src/hash/block/mk_block_sha2_512.c"
-#include "../../../src/hash/block/mk_block_sha2_512224.c"
-#include "../../../src/hash/block/mk_block_sha2_512256.c"
-#include "../../../src/hash/block/mk_block_sha3_224.c"
-#include "../../../src/hash/block/mk_block_sha3_256.c"
-#include "../../../src/hash/block/mk_block_sha3_384.c"
-#include "../../../src/hash/block/mk_block_sha3_512.c"
-#include "../../../src/hash/block/mk_block_sha3_rawshake128.c"
-#include "../../../src/hash/block/mk_block_sha3_rawshake256.c"
-#include "../../../src/hash/block/mk_block_sha3_shake128.c"
-#include "../../../src/hash/block/mk_block_sha3_shake256.c"
-#include "../../../src/hash/mk_hash_md2.c"
-#include "../../../src/hash/mk_hash_md4.c"
-#include "../../../src/hash/mk_hash_md5.c"
-#include "../../../src/hash/mk_hash_sha1.c"
-#include "../../../src/hash/mk_hash_sha2_224.c"
-#include "../../../src/hash/mk_hash_sha2_256.c"
-#include "../../../src/hash/mk_hash_sha2_384.c"
-#include "../../../src/hash/mk_hash_sha2_512.c"
-#include "../../../src/hash/mk_hash_sha2_512224.c"
-#include "../../../src/hash/mk_hash_sha2_512256.c"
-#include "../../../src/hash/mk_hash_sha3_224.c"
-#include "../../../src/hash/mk_hash_sha3_256.c"
-#include "../../../src/hash/mk_hash_sha3_384.c"
-#include "../../../src/hash/mk_hash_sha3_512.c"
-#include "../../../src/hash/mk_hash_sha3_rawshake128.c"
-#include "../../../src/hash/mk_hash_sha3_rawshake256.c"
-#include "../../../src/hash/mk_hash_sha3_shake128.c"
-#include "../../../src/hash/mk_hash_sha3_shake256.c"
+#include "../../../apps/all.c"

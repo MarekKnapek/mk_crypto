@@ -2,7 +2,7 @@
 
 #include "mk_test_utils.h"
 
-#include "../src/hash/mk_hash_sha2_256.h"
+#include "../src/hash/hash/mk_hash_hash_sha2_256.h"
 
 #include "../src/utils/mk_assert.h"
 
@@ -115,7 +115,7 @@ int mk_sha2_additional_test_examples_256(void)
 	int digest_len;
 	unsigned char pattern_bin[4];
 	unsigned char digest_bin[32];
-	struct mk_hash_sha2_256_s sha2_256;
+	struct mk_hash_hash_sha2_256_s sha2_256;
 	int block_len;
 	void* block;
 	long blocks;
@@ -132,7 +132,7 @@ int mk_sha2_additional_test_examples_256(void)
 		digest_len = task->m_digest_len;
 		mk_string_hex_to_bytes(pattern, pattern_len, pattern_bin, sizeof(pattern_bin));
 		mk_string_hex_to_bytes(digest, digest_len, digest_bin, sizeof(digest_bin));
-		mk_hash_sha2_256_init(&sha2_256);
+		mk_hash_hash_sha2_256_init(&sha2_256);
 		if(pattern_len / 2 == 1 && repeat >= 1024)
 		{
 			block_len = 16 * 1024;
@@ -142,19 +142,19 @@ int mk_sha2_additional_test_examples_256(void)
 			blocks = repeat / block_len;
 			for(j = 0; j != blocks; ++j)
 			{
-				mk_hash_sha2_256_append(&sha2_256, block, block_len);
+				mk_hash_hash_sha2_256_append(&sha2_256, block, block_len);
 			}
-			mk_hash_sha2_256_append(&sha2_256, block, repeat - blocks * block_len);
+			mk_hash_hash_sha2_256_append(&sha2_256, block, repeat - blocks * block_len);
 			free(block);
 		}
 		else
 		{
 			for(j = 0; j != repeat; ++j)
 			{
-				mk_hash_sha2_256_append(&sha2_256, pattern_bin, pattern_len / 2);
+				mk_hash_hash_sha2_256_append(&sha2_256, pattern_bin, pattern_len / 2);
 			}
 		}
-		mk_hash_sha2_256_finish(&sha2_256, &computed);
+		mk_hash_hash_sha2_256_finish(&sha2_256, &computed);
 		mk_check(memcmp(computed, digest_bin, sizeof(computed)) == 0);
 	}
 	return 0;

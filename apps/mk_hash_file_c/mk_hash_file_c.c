@@ -9,7 +9,7 @@
 #include <string.h> /* memcpy */
 
 
-#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
+#define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
 #define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
 
 
@@ -150,6 +150,7 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 		err = mk_hash_file_step(hf);
 		mk_check(err == 0 || err == 1);
 		mk_try(mk_hash_file_get_progress(hf, &progress_curr));
+		mk_assert(progress_curr >= progress_last);
 		progress_delta = progress_curr - progress_last;
 		progress_delta /= 500;
 		if(progress_delta != 0)

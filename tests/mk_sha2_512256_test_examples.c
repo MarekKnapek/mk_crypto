@@ -4,7 +4,7 @@
 
 #include "../src/utils/mk_assert.h"
 
-#include "../src/hash/mk_hash_sha2_512256.h"
+#include "../src/hash/hash/mk_hash_hash_sha2_512256.h"
 
 #include <string.h> /* memcmp */
 
@@ -49,7 +49,7 @@ int mk_sha2_512256_test_examples(void)
 	char const* digest;
 	int digest_len;
 	unsigned char digest_bin[32];
-	struct mk_hash_sha2_512256_s mk_sha2_512256;
+	struct mk_hash_hash_sha2_512256_s mk_sha2_512256;
 	unsigned char computed[sizeof(digest_bin)];
 
 	for(i = 0; i != sizeof(s_tasks) / sizeof(s_tasks[0]); ++i)
@@ -60,9 +60,9 @@ int mk_sha2_512256_test_examples(void)
 		digest = task->m_digest;
 		digest_len = task->m_digest_len;
 		mk_string_hex_to_bytes(digest, digest_len, digest_bin, sizeof(digest_bin));
-		mk_hash_sha2_512256_init(&mk_sha2_512256);
-		mk_hash_sha2_512256_append(&mk_sha2_512256, msg, msg_len);
-		mk_hash_sha2_512256_finish(&mk_sha2_512256, &computed);
+		mk_hash_hash_sha2_512256_init(&mk_sha2_512256);
+		mk_hash_hash_sha2_512256_append(&mk_sha2_512256, msg, msg_len);
+		mk_hash_hash_sha2_512256_finish(&mk_sha2_512256, &computed);
 		mk_check(memcmp(computed, digest_bin, sizeof(computed)) == 0);
 	}
 	return 0;
