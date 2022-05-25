@@ -371,17 +371,17 @@ mk_jumbo int mk_hash_file_is_done(mk_hash_file_handle hash_file)
 	return self->m_state == mk_hash_file_state_done;
 }
 
-mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress)
+mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file)
 {
 	struct mk_hash_file_s const* self;
 	int alg_count;
 	int chunk_count;
 	unsigned long steps;
+	int progress;
 	struct mk_uint64_s a;
 	struct mk_uint64_s b;
 
 	mk_assert(hash_file);
-	mk_assert(progress);
 
 	self = (struct mk_hash_file_s const*)hash_file;
 	mk_assert
@@ -409,7 +409,7 @@ mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progr
 
 	if(steps <= ULONG_MAX / 10000)
 	{
-		*progress = (int)((steps * 10000) / self->m_steps_total);
+		progress = (int)((steps * 10000) / self->m_steps_total);
 	}
 	else
 	{
@@ -418,9 +418,9 @@ mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progr
 		mk_uint64_mul(&a, &a, &b);
 		mk_uint64_from_long(&b, self->m_steps_total);
 		mk_uint64_div(&a, &a, &b);
-		*progress = mk_uint64_to_int(&a);
+		progress = mk_uint64_to_int(&a);
 	}
-	return 0;
+	return progress;
 }
 
 mk_jumbo int mk_hash_file_get_result(mk_hash_file_handle hash_file, struct mk_hash_file_digests_s** result)

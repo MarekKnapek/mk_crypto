@@ -153,7 +153,7 @@ static mk_inline int mk_hash_file_c_process(mk_hash_file_handle hf)
 	do
 	{
 		mk_try(mk_hash_file_step(hf));
-		mk_try(mk_hash_file_get_progress(hf, &progress_curr));
+		progress_curr = mk_hash_file_get_progress(hf);
 		mk_assert(progress_curr >= progress_last);
 		progress_delta = progress_curr - progress_last;
 		progress_delta /= 500;

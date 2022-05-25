@@ -253,7 +253,7 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 			curr_time = GetTickCount();
 			if(curr_time - prev_time >= 200)
 			{
-				mk_try(mk_hash_file_get_progress(hash_file, &progress));
+				progress = mk_hash_file_get_progress(hash_file);
 				_stprintf(text, TEXT("%.2f %%"), (float)progress / 100.0f);
 				sent = SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)text);
 				(void)sent;
