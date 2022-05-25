@@ -37,7 +37,7 @@ static mk_inline void mk_bytes_to_string(void const* input, int count, void* out
 	}
 }
 
-static mk_inline int mk_hash_file_c_make_text(struct mk_hash_file_digests_s const* digests, char** text)
+static mk_inline int mk_hash_file_c_text_create(char** text, struct mk_hash_file_digests_s const* digests)
 {
 	struct alg_descr_s
 	{
@@ -88,8 +88,8 @@ static mk_inline int mk_hash_file_c_make_text(struct mk_hash_file_digests_s cons
 	char* ptr;
 	int j;
 
-	mk_assert(digests);
 	mk_assert(text);
+	mk_assert(digests);
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
 	longest_name = 0;
@@ -130,6 +130,15 @@ static mk_inline int mk_hash_file_c_make_text(struct mk_hash_file_digests_s cons
 	return 0;
 }
 
+static mk_inline int mk_hash_file_c_text_destroy(char* text)
+{
+	mk_assert(text);
+	
+	free(text);
+	
+	return 0;
+}
+
 static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 {
 	static char const s_progress[] = "....................";
@@ -166,9 +175,9 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 	fprintf(stderr, "\n");
 	mk_check(fflush(stderr) == 0);
 	mk_try(mk_hash_file_get_result(hf, &digests));
-	mk_try(mk_hash_file_c_make_text(digests, &text));
+	mk_try(mk_hash_file_c_text_create(&text, digests));
 	printf("%s\n", text);
-	free(text);
+	mk_try(mk_hash_file_c_text_destroy(text));
 	mk_try(mk_hash_file_destroy(hf));
 	return 0;
 }
