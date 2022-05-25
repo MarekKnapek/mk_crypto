@@ -144,7 +144,11 @@ static struct alg_descr_s const s_alg_descrs[] =
 };
 
 
+#ifdef NDEBUG
+#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
+#else
 #define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
+#endif
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
@@ -233,7 +237,7 @@ static mk_inline int mk_hash_file_step_finish(struct mk_hash_file_s* self)
 }
 
 
-mk_jumbo mk_hash_file_handle mk_hash_file_create(char const* file_name)
+mk_jumbo int mk_hash_file_create(mk_hash_file_handle* hf, char const* file_name)
 {
 	FILE* file;
 	long file_len;
@@ -241,24 +245,22 @@ mk_jumbo mk_hash_file_handle mk_hash_file_create(char const* file_name)
 	long chunk_count;
 	long steps_total;
 	struct mk_hash_file_s* self;
-	mk_hash_file_handle handle;
-	int closed;
 
+	mk_assert(hf);
 	mk_assert(file_name && *file_name);
 
 	file = fopen(file_name, "rb");
-	if(!(file))
-	{
-		goto cleanup_null;
-	}
+	mk_check(file);
 	if(!(fseek(file, 0, SEEK_END) == 0))
 	{
-		goto cleanup_file;
+		mk_check(fclose(file) == 0);
+		mk_check(0);
 	}
 	file_len = ftell(file);
 	if(!(file_len != -1))
 	{
-		goto cleanup_file;
+		mk_check(fclose(file) == 0);
+		mk_check(0);
 	}
 	rewind(file);
 
@@ -270,7 +272,8 @@ mk_jumbo mk_hash_file_handle mk_hash_file_create(char const* file_name)
 	self = (struct mk_hash_file_s*)malloc(sizeof(struct mk_hash_file_s));
 	if(!(self))
 	{
-		goto cleanup_file;
+		mk_check(fclose(file) == 0);
+		mk_check(0);
 	}
 
 	self->m_state = mk_hash_file_state_init;
@@ -279,14 +282,8 @@ mk_jumbo mk_hash_file_handle mk_hash_file_create(char const* file_name)
 	self->m_cur_alg = 0;
 	self->m_steps_total = steps_total;
 
-	handle = (mk_hash_file_handle)self;
-	return handle;
-
-cleanup_file:
-	closed = fclose(file);
-	(void)closed;
-cleanup_null:
-	return NULL;
+	*hf = (mk_hash_file_handle)self;
+	return 0;
 }
 
 mk_jumbo int mk_hash_file_step(mk_hash_file_handle hash_file)

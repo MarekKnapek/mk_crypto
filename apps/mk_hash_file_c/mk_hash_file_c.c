@@ -5,11 +5,15 @@
 
 #include <stddef.h> /* offsetof */
 #include <stdio.h> /* printf fprintf stderr fflush */
-#include <stdlib.h> /* EXIT_SUCCESS EXIT_FAILURE malloc free */
+#include <stdlib.h> /* EXIT_SUCCESS malloc free */
 #include <string.h> /* memcpy */
 
 
+#ifdef NDEBUG
+#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
+#else
 #define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
+#endif
 #define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
 
 
@@ -142,8 +146,7 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 	mk_check(argc == 2);
 
 	file_name = argv[1];
-	hf = mk_hash_file_create(file_name);
-	mk_check(hf);
+	mk_try(mk_hash_file_create(&hf, file_name));
 	progress_last = 0;
 	for(;;)
 	{
@@ -180,9 +183,9 @@ int main(int argc, char const* const* argv)
 	int err = mk_hash_file_c(argc, argv);
 	if(err != 0)
 	{
-		fprintf(stderr, "Error at line %d.\n", err);
+		fprintf(stderr, "Failed!\n");
 		mk_check(fflush(stderr) == 0);
-		return EXIT_FAILURE;
+		return err;
 	}
 	return EXIT_SUCCESS;
 }

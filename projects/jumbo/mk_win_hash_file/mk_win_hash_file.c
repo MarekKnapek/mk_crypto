@@ -30,7 +30,11 @@ typedef char const* LPCTSTR;
 #endif
 
 
-#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
+#ifdef NDEBUG
+#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
+#else
+#define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
+#endif
 #define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
@@ -307,8 +311,7 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 	file_name_a = file_name_t;
 #endif
 
-	hash_file = mk_hash_file_create(file_name_a);
-	mk_check(hash_file);
+	mk_check(mk_hash_file_create(&hash_file, file_name_a));
 
 	start_time = GetTickCount();
 	for(;;)
