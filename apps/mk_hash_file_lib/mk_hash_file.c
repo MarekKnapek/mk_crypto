@@ -313,53 +313,6 @@ mk_jumbo int mk_hash_file_step(mk_hash_file_handle hash_file)
 	return 0;
 }
 
-static mk_inline int progress_div(unsigned long a, long b)
-{
-	unsigned long uahi;
-	unsigned long ualo;
-	unsigned long ub;
-	unsigned long ahi;
-	unsigned long alo;
-	int i;
-	unsigned long t;
-
-	mk_assert(a <= (unsigned long)b);
-
-	uahi = 0;
-	ualo = a;
-	ub = (unsigned long)b;
-	ahi = 0;
-	alo = ualo;
-	for(i = 0; i != 4; ++i)
-	{
-		ahi = (ahi << 2) | (alo >> (32 - 2));
-		alo = alo << 2;
-		ahi = ahi + uahi;
-		t = alo + ualo;
-		if(t < alo || t < ualo)
-		{
-			++ahi;
-		}
-		alo = t;
-		ahi = (ahi << 1) | (alo >> (32 - 1));
-		alo = alo << 1;
-		uahi = ahi;
-		ualo = alo;
-	}
-	for(i = 0; i != 32; ++i)
-	{
-		t = ahi >> 31;
-		ahi = (ahi << 1) | (alo >> (32 - 1));
-		alo = alo << 1;
-		if((ahi | t) >= ub)
-		{
-			ahi = ahi - ub;
-			alo = alo + 1;
-		}
-	}
-	return (int)alo;
-}
-
 mk_jumbo int mk_hash_file_is_done(mk_hash_file_handle hash_file)
 {
 	struct mk_hash_file_s const* self;
