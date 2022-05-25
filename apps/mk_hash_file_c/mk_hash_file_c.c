@@ -148,7 +148,7 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 	file_name = argv[1];
 	mk_try(mk_hash_file_create(&hf, file_name));
 	progress_last = 0;
-	for(;;)
+	do
 	{
 		err = mk_hash_file_step(hf);
 		mk_check(err == 0 || err == 1);
@@ -162,11 +162,7 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 			mk_check(fflush(stderr) == 0);
 			progress_last = progress_curr;
 		}
-		if(err == 1)
-		{
-			break;
-		}
-	}
+	}while(err == 0);
 	fprintf(stderr, "\n");
 	mk_check(fflush(stderr) == 0);
 	mk_try(mk_hash_file_get_result(hf, &digests));
