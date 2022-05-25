@@ -144,7 +144,6 @@ static mk_inline int mk_hash_file_c_process(mk_hash_file_handle hf)
 	static char const s_progress[] = "....................";
 
 	int progress_last;
-	int err;
 	int progress_curr;
 	int progress_delta;
 
@@ -153,8 +152,7 @@ static mk_inline int mk_hash_file_c_process(mk_hash_file_handle hf)
 	progress_last = 0;
 	do
 	{
-		err = mk_hash_file_step(hf);
-		mk_check(err == 0 || err == 1);
+		mk_try(mk_hash_file_step(hf));
 		mk_try(mk_hash_file_get_progress(hf, &progress_curr));
 		mk_assert(progress_curr >= progress_last);
 		progress_delta = progress_curr - progress_last;
@@ -165,7 +163,7 @@ static mk_inline int mk_hash_file_c_process(mk_hash_file_handle hf)
 			mk_check(fflush(stderr) == 0);
 			progress_last = progress_curr;
 		}
-	}while(err == 0);
+	}while(mk_hash_file_is_done(hf) == 0);
 	fprintf(stderr, "\n");
 	mk_check(fflush(stderr) == 0);
 	return 0;

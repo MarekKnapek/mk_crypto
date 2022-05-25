@@ -308,7 +308,7 @@ mk_jumbo int mk_hash_file_step(mk_hash_file_handle hash_file)
 		case mk_hash_file_state_read:   return mk_hash_file_step_read(self);   break;
 		case mk_hash_file_state_append: return mk_hash_file_step_append(self); break;
 		case mk_hash_file_state_finish: return mk_hash_file_step_finish(self); break;
-		case mk_hash_file_state_done:   return 1;                              break;
+		case mk_hash_file_state_done:   return 0;                              break;
 	};
 	return 0;
 }
@@ -358,6 +358,17 @@ static mk_inline int progress_div(unsigned long a, long b)
 		}
 	}
 	return (int)alo;
+}
+
+mk_jumbo int mk_hash_file_is_done(mk_hash_file_handle hash_file)
+{
+	struct mk_hash_file_s const* self;
+
+	mk_assert(hash_file);
+
+	self = (struct mk_hash_file_s const*)hash_file;
+
+	return self->m_state == mk_hash_file_state_done;
 }
 
 mk_jumbo int mk_hash_file_get_progress(mk_hash_file_handle hash_file, int* progress)

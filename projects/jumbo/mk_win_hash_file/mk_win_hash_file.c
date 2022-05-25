@@ -202,7 +202,6 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 	BOOL translated;
 	LRESULT dispatched;
 	BOOL unregistered;
-	int step;
 	DWORD prev_time;
 	DWORD curr_time;
 	int progress;
@@ -260,9 +259,8 @@ static mk_inline int mk_gui_run(HINSTANCE inst, mk_hash_file_handle hash_file)
 				(void)sent;
 				prev_time = curr_time;
 			}
-			step = mk_hash_file_step(hash_file);
-			mk_check(step == 0 || step == 1);
-			if(step == 1)
+			mk_try(mk_hash_file_step(hash_file));
+			if(mk_hash_file_is_done(hash_file) != 0)
 			{
 				posted = PostMessage(hwnd, WM_CLOSE, 0, 0);
 				(void)posted;
@@ -283,7 +281,6 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 	mk_hash_file_handle hash_file;
 	struct mk_hash_file_digests_s* digests;
 	char* file_name_a;
-	int step_res;
 	DWORD start_time;
 	DWORD curr_time;
 #if defined(UNICODE)
@@ -311,14 +308,13 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 	file_name_a = file_name_t;
 #endif
 
-	mk_check(mk_hash_file_create(&hash_file, file_name_a));
+	mk_try(mk_hash_file_create(&hash_file, file_name_a));
 
 	start_time = GetTickCount();
 	for(;;)
 	{
-		step_res = mk_hash_file_step(hash_file);
-		mk_check(step_res == 0 || step_res == 1);
-		if(step_res == 1)
+		mk_try(mk_hash_file_step(hash_file));
+		if(mk_hash_file_is_done(hash_file) != 0)
 		{
 			break;
 		}
@@ -330,8 +326,7 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 		}
 	}
 
-	step_res = mk_hash_file_step(hash_file);
-	mk_check(step_res == 1);
+	mk_check(mk_hash_file_is_done(hash_file) != 0);
 
 	mk_try(mk_hash_file_get_result(hash_file, &digests));
 
