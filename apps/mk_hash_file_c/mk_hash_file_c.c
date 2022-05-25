@@ -139,23 +139,17 @@ static mk_inline int mk_hash_file_c_text_destroy(char* text)
 	return 0;
 }
 
-static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
+static mk_inline int mk_hash_file_c_process(mk_hash_file_handle hf)
 {
 	static char const s_progress[] = "....................";
 
-	char const* file_name;
-	mk_hash_file_handle hf;
 	int progress_last;
 	int err;
 	int progress_curr;
 	int progress_delta;
-	struct mk_hash_file_digests_s* digests;
-	char* text;
 
-	mk_check(argc == 2);
+	mk_assert(hf);
 
-	file_name = argv[1];
-	mk_try(mk_hash_file_create(&hf, file_name));
 	progress_last = 0;
 	do
 	{
@@ -174,6 +168,21 @@ static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
 	}while(err == 0);
 	fprintf(stderr, "\n");
 	mk_check(fflush(stderr) == 0);
+	return 0;
+}
+
+static mk_inline int mk_hash_file_c(int argc, char const* const* argv)
+{
+	char const* file_name;
+	mk_hash_file_handle hf;
+	struct mk_hash_file_digests_s* digests;
+	char* text;
+
+	mk_check(argc == 2);
+
+	file_name = argv[1];
+	mk_try(mk_hash_file_create(&hf, file_name));
+	mk_try(mk_hash_file_c_process(hf));
 	mk_try(mk_hash_file_get_result(hf, &digests));
 	mk_try(mk_hash_file_c_text_create(&text, digests));
 	printf("%s\n", text);
