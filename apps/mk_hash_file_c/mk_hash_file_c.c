@@ -61,8 +61,8 @@ static mk_inline int mk_hash_file_c_text_create(char** text, struct mk_hash_file
 	static char const s_alg_name_11[] = "SHA3-256";
 	static char const s_alg_name_12[] = "SHA3-384";
 	static char const s_alg_name_13[] = "SHA3-512";
-
-	static struct alg_descr_s const s_alg_descrs[] =
+	
+	static struct alg_descr_s const s_alg_descriptions[] =
 	{
 		{s_alg_name_00, sizeof(s_alg_name_00) - 1, sizeof(((struct mk_hash_file_digests_s*)0)->m_md2),         offsetof(struct mk_hash_file_digests_s, m_md2)         },
 		{s_alg_name_01, sizeof(s_alg_name_01) - 1, sizeof(((struct mk_hash_file_digests_s*)0)->m_md4),         offsetof(struct mk_hash_file_digests_s, m_md4)         },
@@ -91,18 +91,18 @@ static mk_inline int mk_hash_file_c_text_create(char** text, struct mk_hash_file
 	mk_assert(text);
 	mk_assert(digests);
 
-	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
+	alg_count = sizeof(s_alg_descriptions) / sizeof(s_alg_descriptions[0]);
 	longest_name = 0;
 	for(i = 0; i != alg_count; ++i)
 	{
-		longest_name = s_alg_descrs[i].m_name_len > longest_name ? s_alg_descrs[i].m_name_len : longest_name;
+		longest_name = s_alg_descriptions[i].m_name_len > longest_name ? s_alg_descriptions[i].m_name_len : longest_name;
 	}
 
 	string_len = 0;
 	string_len += alg_count * (longest_name + 2);
 	for(i = 0; i != alg_count; ++i)
 	{
-		string_len += s_alg_descrs[i].m_digest_len * 2;
+		string_len += s_alg_descriptions[i].m_digest_len * 2;
 	}
 
 	string = (char*)malloc(string_len);
@@ -111,15 +111,15 @@ static mk_inline int mk_hash_file_c_text_create(char** text, struct mk_hash_file
 	ptr = string;
 	for(i = 0; i != alg_count; ++i)
 	{
-		memcpy(ptr, s_alg_descrs[i].m_name, s_alg_descrs[i].m_name_len);
-		ptr += s_alg_descrs[i].m_name_len;
-		for(j = 0; j != longest_name - s_alg_descrs[i].m_name_len + 1; ++j)
+		memcpy(ptr, s_alg_descriptions[i].m_name, s_alg_descriptions[i].m_name_len);
+		ptr += s_alg_descriptions[i].m_name_len;
+		for(j = 0; j != longest_name - s_alg_descriptions[i].m_name_len + 1; ++j)
 		{
 			*ptr = ' ';
 			++ptr;
 		}
-		mk_bytes_to_string((unsigned char const*)digests + s_alg_descrs[i].m_digest_offset, s_alg_descrs[i].m_digest_len, ptr);
-		ptr += s_alg_descrs[i].m_digest_len * 2;
+		mk_bytes_to_string((unsigned char const*)digests + s_alg_descriptions[i].m_digest_offset, s_alg_descriptions[i].m_digest_len, ptr);
+		ptr += s_alg_descriptions[i].m_digest_len * 2;
 		*ptr = '\n';
 		++ptr;
 	}
