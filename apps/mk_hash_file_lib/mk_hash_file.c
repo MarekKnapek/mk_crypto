@@ -298,19 +298,18 @@ mk_jumbo int mk_hash_file_step(mk_hash_file_handle hash_file)
 		self->m_state == mk_hash_file_state_init ||
 		self->m_state == mk_hash_file_state_read ||
 		self->m_state == mk_hash_file_state_append ||
-		self->m_state == mk_hash_file_state_finish ||
-		self->m_state == mk_hash_file_state_done
+		self->m_state == mk_hash_file_state_finish
 	);
 
 	switch(self->m_state)
 	{
-		case mk_hash_file_state_init:   return mk_hash_file_step_init(self);   break;
-		case mk_hash_file_state_read:   return mk_hash_file_step_read(self);   break;
+		case mk_hash_file_state_init: return mk_hash_file_step_init(self); break;
+		case mk_hash_file_state_read: return mk_hash_file_step_read(self); break;
 		case mk_hash_file_state_append: return mk_hash_file_step_append(self); break;
 		case mk_hash_file_state_finish: return mk_hash_file_step_finish(self); break;
-		case mk_hash_file_state_done:   return 0;                              break;
+		case mk_hash_file_state_done: mk_assert(0); break;
 	};
-	return 0;
+	mk_check(0);
 }
 
 mk_jumbo int mk_hash_file_is_done(mk_hash_file_handle hash_file)
