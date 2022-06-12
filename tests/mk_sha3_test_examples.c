@@ -95,10 +95,10 @@ int mk_sha3_test_examples(void)
 
 	static struct alg_descr_s const s_alg_descrs[] =
 	{
-		{28, &cast_sha3_224_init, &cast_sha3_224_append, &cast_sha3_224_finish},
-		{32, &cast_sha3_256_init, &cast_sha3_256_append, &cast_sha3_256_finish},
-		{48, &cast_sha3_384_init, &cast_sha3_384_append, &cast_sha3_384_finish},
-		{64, &cast_sha3_512_init, &cast_sha3_512_append, &cast_sha3_512_finish},
+		{mk_hash_base_hash_sha3_224_digest_len, &cast_sha3_224_init, &cast_sha3_224_append, &cast_sha3_224_finish},
+		{mk_hash_base_hash_sha3_256_digest_len, &cast_sha3_256_init, &cast_sha3_256_append, &cast_sha3_256_finish},
+		{mk_hash_base_hash_sha3_384_digest_len, &cast_sha3_384_init, &cast_sha3_384_append, &cast_sha3_384_finish},
+		{mk_hash_base_hash_sha3_512_digest_len, &cast_sha3_512_init, &cast_sha3_512_append, &cast_sha3_512_finish},
 		{512, &cast_sha3_shake128_init, &cast_sha3_shake128_append, &cast_sha3_shake128_finish},
 		{512, &cast_sha3_shake256_init, &cast_sha3_shake256_append, &cast_sha3_shake256_finish},
 	};
