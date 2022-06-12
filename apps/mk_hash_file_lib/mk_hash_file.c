@@ -182,7 +182,7 @@ enum mk_hash_file_state_e
 	mk_hash_file_state_read,
 	mk_hash_file_state_append,
 	mk_hash_file_state_finish,
-	mk_hash_file_state_done,
+	mk_hash_file_state_done
 };
 
 struct mk_hash_file_s
