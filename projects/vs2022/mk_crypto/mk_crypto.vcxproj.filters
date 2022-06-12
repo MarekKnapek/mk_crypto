@@ -267,6 +267,9 @@
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.c">
       <Filter>src\hash\xof</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\utils\mk_try.c">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h">
@@ -508,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.h">
       <Filter>src\hash\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_try.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 
 #include "../../../src/utils/mk_assert.h"
 #include "../../../src/utils/mk_inline.h"
+#include "../../../src/utils/mk_try.h"
 
 #include <stddef.h> /* NULL size_t */
 #include <stdio.h> /* fseek SEEK_END ftell rewind fclose fread feof */
@@ -28,14 +29,6 @@ typedef char const* LPCTSTR;
 #endif
 #define _tWinMain WinMain
 #endif
-
-
-#ifdef NDEBUG
-#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
-#else
-#define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
-#endif
-#define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
 struct thread_param_s
@@ -340,10 +333,6 @@ int WINAPI _tWinMain(HINSTANCE inst, HINSTANCE prev_inst, LPTSTR cmd_line, int c
 
 	return 0;
 }
-
-
-#undef mk_check
-#undef mk_try
 
 
 #include "../../../apps/mk_hash_file_lib/mk_hash_file.c"

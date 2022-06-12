@@ -11,6 +11,8 @@
 #include "../../mk_int/src/exact/mk_uint_64.c"
 #include "../../mk_int/src/exact/mk_uint_128.c"
 
+#include "../src/utils/mk_try.c"
+
 #include "../src/hash/base/detail/mk_hash_base_detail_sha2_256.c"
 #include "../src/hash/base/detail/mk_hash_base_detail_sha2_512.c"
 #include "../src/hash/base/detail/mk_hash_base_detail_sha3.c"

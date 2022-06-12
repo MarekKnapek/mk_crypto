@@ -5,6 +5,7 @@
 #include "../src/hash/hash/mk_hash_hash_sha2_256.h"
 
 #include "../src/utils/mk_assert.h"
+#include "../src/utils/mk_try.h"
 
 #include <stdlib.h> /* malloc free */
 #include <string.h> /* memset memcmp */
@@ -16,10 +17,6 @@ https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-va
 https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA2_Additional.pdf
 
 */
-
-
-#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
-#define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
 
 
 int mk_sha2_additional_test_examples_256(void)
@@ -159,7 +156,3 @@ int mk_sha2_additional_test_examples_256(void)
 	}
 	return 0;
 }
-
-
-#undef mk_check
-#undef mk_try

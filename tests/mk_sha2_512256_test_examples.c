@@ -3,6 +3,7 @@
 #include "mk_test_utils.h"
 
 #include "../src/utils/mk_assert.h"
+#include "../src/utils/mk_try.h"
 
 #include "../src/hash/hash/mk_hash_hash_sha2_512256.h"
 
@@ -15,9 +16,6 @@ https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-va
 https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA512_256.pdf
 
 */
-
-
-#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
 
 
 int mk_sha2_512256_test_examples(void)
@@ -67,6 +65,3 @@ int mk_sha2_512256_test_examples(void)
 	}
 	return 0;
 }
-
-
-#undef mk_check

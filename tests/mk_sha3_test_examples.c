@@ -11,6 +11,7 @@
 
 #include "../src/utils/mk_assert.h"
 #include "../src/utils/mk_inline.h"
+#include "../src/utils/mk_try.h"
 
 #include <string.h> /* memcmp */
 
@@ -49,10 +50,6 @@ static mk_inline void cast_sha3_384_finish(void* self, void* digest){ mk_hash_ha
 static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_hash_hash_sha3_512_finish((struct mk_hash_hash_sha3_512_s*)self, digest); }
 static mk_inline void cast_sha3_shake128_finish(void* self, void* digest){ mk_hash_xof_sha3_shake128_finish((struct mk_hash_xof_sha3_shake128_s*)self, 4096 / 8, digest); }
 static mk_inline void cast_sha3_shake256_finish(void* self, void* digest){ mk_hash_xof_sha3_shake256_finish((struct mk_hash_xof_sha3_shake256_s*)self, 4096 / 8, digest); }
-
-
-#define mk_check(x) do{ if(!(x)){ return __LINE__; } }while(0)
-#define mk_try(x) do{ int err_; err_ = (x); if(err_ != 0){ return err; } }while(0)
 
 
 int mk_sha3_test_examples(void)
@@ -134,7 +131,3 @@ int mk_sha3_test_examples(void)
 	}
 	return 0;
 }
-
-
-#undef mk_check
-#undef mk_try

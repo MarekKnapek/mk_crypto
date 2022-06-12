@@ -95,6 +95,7 @@
     <ClCompile Include="..\..\..\src\mk_hash.c" />
     <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
     <ClCompile Include="..\..\..\src\mk_hash_function.c" />
+    <ClCompile Include="..\..\..\src\utils\mk_try.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="..\..\..\src\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
     <ClInclude Include="..\..\..\src\utils\mk_setup.h" />
+    <ClInclude Include="..\..\..\src\utils\mk_try.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\hash\base\mk_hash_base_hash.h.inl" />

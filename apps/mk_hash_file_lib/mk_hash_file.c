@@ -18,6 +18,7 @@
 #include "../../src/utils/mk_assert.h"
 #include "../../src/utils/mk_inline.h"
 #include "../../src/utils/mk_jumbo.h"
+#include "../../src/utils/mk_try.h"
 
 #include <stddef.h> /* NULL */
 #include <stdio.h> /* fopen fseek SEEK_END ftell rewind fread feof fclose */
@@ -216,14 +217,6 @@ static struct alg_descr_s const s_alg_descrs[] =
 	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_384),    offsetof(struct hash_states_s, m_sha3_384),    offsetof(struct mk_hash_file_digests_s, m_sha3_384),  },
 	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_512),    offsetof(struct hash_states_s, m_sha3_512),    offsetof(struct mk_hash_file_digests_s, m_sha3_512),  },
 };
-
-
-#ifdef NDEBUG
-#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
-#else
-#define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
-#endif
-#define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
 
 
 static mk_inline int mk_hash_file_step_init(struct mk_hash_file_s* self)
@@ -480,7 +473,3 @@ mk_jumbo int mk_hash_file_destroy(mk_hash_file_handle hash_file)
 
 	return 0;
 }
-
-
-#undef mk_check
-#undef mk_try

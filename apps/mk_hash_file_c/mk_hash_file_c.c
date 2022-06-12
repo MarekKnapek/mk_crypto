@@ -2,19 +2,12 @@
 
 #include "../../src/utils/mk_assert.h"
 #include "../../src/utils/mk_inline.h"
+#include "../../src/utils/mk_try.h"
 
 #include <stddef.h> /* offsetof */
 #include <stdio.h> /* printf fprintf stderr fflush */
 #include <stdlib.h> /* EXIT_SUCCESS malloc free */
 #include <string.h> /* memcpy */
-
-
-#ifdef NDEBUG
-#define mk_check(x) do{ if(!(x)){ return 1; } }while(0)
-#else
-#define mk_check(x) do{ if(!(x)){ return (int)__LINE__; } }while(0)
-#endif
-#define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
 
 
 static mk_inline void mk_bytes_to_string(void const* input, int count, void* output)
@@ -201,7 +194,3 @@ int main(int argc, char const* const* argv)
 	}
 	return EXIT_SUCCESS;
 }
-
-
-#undef mk_check
-#undef mk_try

@@ -8,8 +8,7 @@
 #include "mk_sha2_512256_test_examples.h"
 #include "mk_sha2_additional_test_examples.h"
 
-
-#define mk_try(x) do{ int err; err = (x); if(err != 0){ return err; } }while(0)
+#include "../src/utils/mk_try.h"
 
 
 int mk_sha2_test_examples(void)
@@ -23,6 +22,3 @@ int mk_sha2_test_examples(void)
 	mk_try(mk_sha2_additional_test_examples());
 	return 0;
 }
-
-
-#undef mk_try

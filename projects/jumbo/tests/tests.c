@@ -2,11 +2,9 @@
 #include "../../../tests/mk_sha3_test_examples.h"
 
 #include "../../../src/utils/mk_inline.h"
+#include "../../../src/utils/mk_try.h"
 
 #include <stdio.h> /* printf */
-
-
-#define mk_try(x) do{ int err_ = (x); if(err_ != 0){ return err_; } }while(0)
 
 
 static mk_inline int test_all(void)
@@ -34,9 +32,6 @@ int main(void)
 }
 
 
-#undef mk_try
-
-
 #include "../../../../mk_int/src/base/mk_uint_base_int.c"
 #include "../../../../mk_int/src/base/mk_uint_base_long.c"
 #include "../../../../mk_int/src/base/mk_uint_base_llong.c"
@@ -45,6 +40,8 @@ int main(void)
 #include "../../../../mk_int/src/exact/mk_uint_32.c"
 #include "../../../../mk_int/src/exact/mk_uint_64.c"
 #include "../../../../mk_int/src/exact/mk_uint_128.c"
+
+#include "../../../src/utils/mk_try.c"
 
 #include "../../../tests/mk_sha2_224_test_examples.c"
 #include "../../../tests/mk_sha2_256_test_examples.c"
