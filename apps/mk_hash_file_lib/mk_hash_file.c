@@ -69,6 +69,87 @@ static mk_inline void cast_sha3_256_finish(void* self, void* digest){ mk_hash_ha
 static mk_inline void cast_sha3_384_finish(void* self, void* digest){ mk_hash_hash_sha3_384_finish((struct mk_hash_hash_sha3_384_s*)self, digest); }
 static mk_inline void cast_sha3_512_finish(void* self, void* digest){ mk_hash_hash_sha3_512_finish((struct mk_hash_hash_sha3_512_s*)self, digest); }
 
+enum hash_id_e
+{
+	hash_id_md2,
+	hash_id_md4,
+	hash_id_md5,
+	hash_id_sha1,
+	hash_id_sha2_224,
+	hash_id_sha2_256,
+	hash_id_sha2_384,
+	hash_id_sha2_512,
+	hash_id_sha2_512224,
+	hash_id_sha2_512256,
+	hash_id_sha3_224,
+	hash_id_sha3_256,
+	hash_id_sha3_384,
+	hash_id_sha3_512
+};
+
+static mk_inline void hash_init(enum hash_id_e hash_id, void* self)
+{
+	switch(hash_id)
+	{
+		case hash_id_md2: cast_md2_init(self); break;
+		case hash_id_md4: cast_md4_init(self); break;
+		case hash_id_md5: cast_md5_init(self); break;
+		case hash_id_sha1: cast_sha1_init(self); break;
+		case hash_id_sha2_224: cast_sha2_224_init(self); break;
+		case hash_id_sha2_256: cast_sha2_256_init(self); break;
+		case hash_id_sha2_384: cast_sha2_384_init(self); break;
+		case hash_id_sha2_512: cast_sha2_512_init(self); break;
+		case hash_id_sha2_512224: cast_sha2_512224_init(self); break;
+		case hash_id_sha2_512256: cast_sha2_512256_init(self); break;
+		case hash_id_sha3_224: cast_sha3_224_init(self); break;
+		case hash_id_sha3_256: cast_sha3_256_init(self); break;
+		case hash_id_sha3_384: cast_sha3_384_init(self); break;
+		case hash_id_sha3_512: cast_sha3_512_init(self); break;
+	}
+}
+
+static mk_inline void hash_append(enum hash_id_e hash_id, void* self, void const* msg, int msg_len)
+{
+	switch(hash_id)
+	{
+		case hash_id_md2: cast_md2_append(self, msg, msg_len); break;
+		case hash_id_md4: cast_md4_append(self, msg, msg_len); break;
+		case hash_id_md5: cast_md5_append(self, msg, msg_len); break;
+		case hash_id_sha1: cast_sha1_append(self, msg, msg_len); break;
+		case hash_id_sha2_224: cast_sha2_224_append(self, msg, msg_len); break;
+		case hash_id_sha2_256: cast_sha2_256_append(self, msg, msg_len); break;
+		case hash_id_sha2_384: cast_sha2_384_append(self, msg, msg_len); break;
+		case hash_id_sha2_512: cast_sha2_512_append(self, msg, msg_len); break;
+		case hash_id_sha2_512224: cast_sha2_512224_append(self, msg, msg_len); break;
+		case hash_id_sha2_512256: cast_sha2_512256_append(self, msg, msg_len); break;
+		case hash_id_sha3_224: cast_sha3_224_append(self, msg, msg_len); break;
+		case hash_id_sha3_256: cast_sha3_256_append(self, msg, msg_len); break;
+		case hash_id_sha3_384: cast_sha3_384_append(self, msg, msg_len); break;
+		case hash_id_sha3_512: cast_sha3_512_append(self, msg, msg_len); break;
+	}
+}
+
+static mk_inline void hash_finish(enum hash_id_e hash_id, void* self, void* digest)
+{
+	switch(hash_id)
+	{
+		case hash_id_md2: cast_md2_finish(self, digest); break;
+		case hash_id_md4: cast_md4_finish(self, digest); break;
+		case hash_id_md5: cast_md5_finish(self, digest); break;
+		case hash_id_sha1: cast_sha1_finish(self, digest); break;
+		case hash_id_sha2_224: cast_sha2_224_finish(self, digest); break;
+		case hash_id_sha2_256: cast_sha2_256_finish(self, digest); break;
+		case hash_id_sha2_384: cast_sha2_384_finish(self, digest); break;
+		case hash_id_sha2_512: cast_sha2_512_finish(self, digest); break;
+		case hash_id_sha2_512224: cast_sha2_512224_finish(self, digest); break;
+		case hash_id_sha2_512256: cast_sha2_512256_finish(self, digest); break;
+		case hash_id_sha3_224: cast_sha3_224_finish(self, digest); break;
+		case hash_id_sha3_256: cast_sha3_256_finish(self, digest); break;
+		case hash_id_sha3_384: cast_sha3_384_finish(self, digest); break;
+		case hash_id_sha3_512: cast_sha3_512_finish(self, digest); break;
+	}
+}
+
 
 struct hash_states_s
 {
@@ -88,18 +169,11 @@ struct hash_states_s
 	struct mk_hash_hash_sha3_512_s m_sha3_512;
 };
 
-typedef void(*init_t)(void* state);
-typedef void(*append_t)(void* state, void const* msg, int msg_len);
-typedef void(*finish_t)(void* state, void* digest);
-
 struct alg_descr_s
 {
 	int m_digest_len;
 	int m_offset;
 	int m_digest_offset;
-	init_t m_init;
-	append_t m_append;
-	finish_t m_finish;
 };
 
 enum mk_hash_file_state_e
@@ -127,20 +201,20 @@ struct mk_hash_file_s
 
 static struct alg_descr_s const s_alg_descrs[] =
 {
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md2),         offsetof(struct hash_states_s, m_md2),         offsetof(struct mk_hash_file_digests_s, m_md2),         &cast_md2_init,         &cast_md2_append,         &cast_md2_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md4),         offsetof(struct hash_states_s, m_md4),         offsetof(struct mk_hash_file_digests_s, m_md4),         &cast_md4_init,         &cast_md4_append,         &cast_md4_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md5),         offsetof(struct hash_states_s, m_md5),         offsetof(struct mk_hash_file_digests_s, m_md5),         &cast_md5_init,         &cast_md5_append,         &cast_md5_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha1),        offsetof(struct hash_states_s, m_sha1),        offsetof(struct mk_hash_file_digests_s, m_sha1),        &cast_sha1_init,        &cast_sha1_append,        &cast_sha1_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_224),    offsetof(struct hash_states_s, m_sha2_224),    offsetof(struct mk_hash_file_digests_s, m_sha2_224),    &cast_sha2_224_init,    &cast_sha2_224_append,    &cast_sha2_224_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_256),    offsetof(struct hash_states_s, m_sha2_256),    offsetof(struct mk_hash_file_digests_s, m_sha2_256),    &cast_sha2_256_init,    &cast_sha2_256_append,    &cast_sha2_256_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_384),    offsetof(struct hash_states_s, m_sha2_384),    offsetof(struct mk_hash_file_digests_s, m_sha2_384),    &cast_sha2_384_init,    &cast_sha2_384_append,    &cast_sha2_384_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512),    offsetof(struct hash_states_s, m_sha2_512),    offsetof(struct mk_hash_file_digests_s, m_sha2_512),    &cast_sha2_512_init,    &cast_sha2_512_append,    &cast_sha2_512_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512224), offsetof(struct hash_states_s, m_sha2_512224), offsetof(struct mk_hash_file_digests_s, m_sha2_512224), &cast_sha2_512224_init, &cast_sha2_512224_append, &cast_sha2_512224_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512256), offsetof(struct hash_states_s, m_sha2_512256), offsetof(struct mk_hash_file_digests_s, m_sha2_512256), &cast_sha2_512256_init, &cast_sha2_512256_append, &cast_sha2_512256_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_224),    offsetof(struct hash_states_s, m_sha3_224),    offsetof(struct mk_hash_file_digests_s, m_sha3_224),    &cast_sha3_224_init,    &cast_sha3_224_append,    &cast_sha3_224_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_256),    offsetof(struct hash_states_s, m_sha3_256),    offsetof(struct mk_hash_file_digests_s, m_sha3_256),    &cast_sha3_256_init,    &cast_sha3_256_append,    &cast_sha3_256_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_384),    offsetof(struct hash_states_s, m_sha3_384),    offsetof(struct mk_hash_file_digests_s, m_sha3_384),    &cast_sha3_384_init,    &cast_sha3_384_append,    &cast_sha3_384_finish},
-	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_512),    offsetof(struct hash_states_s, m_sha3_512),    offsetof(struct mk_hash_file_digests_s, m_sha3_512),    &cast_sha3_512_init,    &cast_sha3_512_append,    &cast_sha3_512_finish},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md2),         offsetof(struct hash_states_s, m_md2),         offsetof(struct mk_hash_file_digests_s, m_md2),       },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md4),         offsetof(struct hash_states_s, m_md4),         offsetof(struct mk_hash_file_digests_s, m_md4),       },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_md5),         offsetof(struct hash_states_s, m_md5),         offsetof(struct mk_hash_file_digests_s, m_md5),       },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha1),        offsetof(struct hash_states_s, m_sha1),        offsetof(struct mk_hash_file_digests_s, m_sha1),      },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_224),    offsetof(struct hash_states_s, m_sha2_224),    offsetof(struct mk_hash_file_digests_s, m_sha2_224),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_256),    offsetof(struct hash_states_s, m_sha2_256),    offsetof(struct mk_hash_file_digests_s, m_sha2_256),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_384),    offsetof(struct hash_states_s, m_sha2_384),    offsetof(struct mk_hash_file_digests_s, m_sha2_384),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512),    offsetof(struct hash_states_s, m_sha2_512),    offsetof(struct mk_hash_file_digests_s, m_sha2_512),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512224), offsetof(struct hash_states_s, m_sha2_512224), offsetof(struct mk_hash_file_digests_s, m_sha2_512224)},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha2_512256), offsetof(struct hash_states_s, m_sha2_512256), offsetof(struct mk_hash_file_digests_s, m_sha2_512256)},
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_224),    offsetof(struct hash_states_s, m_sha3_224),    offsetof(struct mk_hash_file_digests_s, m_sha3_224),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_256),    offsetof(struct hash_states_s, m_sha3_256),    offsetof(struct mk_hash_file_digests_s, m_sha3_256),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_384),    offsetof(struct hash_states_s, m_sha3_384),    offsetof(struct mk_hash_file_digests_s, m_sha3_384),  },
+	{sizeof(((struct mk_hash_file_digests_s*)0)->m_sha3_512),    offsetof(struct hash_states_s, m_sha3_512),    offsetof(struct mk_hash_file_digests_s, m_sha3_512),  },
 };
 
 
@@ -161,7 +235,7 @@ static mk_inline int mk_hash_file_step_init(struct mk_hash_file_s* self)
 	mk_assert(self->m_state == mk_hash_file_state_init);
 
 	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
-	s_alg_descrs[self->m_cur_alg].m_init(hash_state);
+	hash_init((enum hash_id_e)self->m_cur_alg, hash_state);
 	++self->m_cur_alg;
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
@@ -203,7 +277,7 @@ static mk_inline int mk_hash_file_step_append(struct mk_hash_file_s* self)
 	mk_assert(self->m_state == mk_hash_file_state_append);
 
 	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
-	s_alg_descrs[self->m_cur_alg].m_append(hash_state, self->m_buff, self->m_buff_len);
+	hash_append((enum hash_id_e)self->m_cur_alg, hash_state, self->m_buff, self->m_buff_len);
 	++self->m_cur_alg;
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
@@ -225,7 +299,7 @@ static mk_inline int mk_hash_file_step_finish(struct mk_hash_file_s* self)
 
 	hash_state = (unsigned char*)&self->m_hash_states + s_alg_descrs[self->m_cur_alg].m_offset;
 	digest = (unsigned char*)&self->m_digests + s_alg_descrs[self->m_cur_alg].m_digest_offset;
-	s_alg_descrs[self->m_cur_alg].m_finish(hash_state, digest);
+	hash_finish((enum hash_id_e)self->m_cur_alg, hash_state, digest);
 	++self->m_cur_alg;
 
 	alg_count = sizeof(s_alg_descrs) / sizeof(s_alg_descrs[0]);
