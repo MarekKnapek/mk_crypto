@@ -9,6 +9,35 @@
 #include <string.h> /* memcpy memset */
 
 
+static struct mk_uint64_s const mk_sha3_base_detail_rc_numbers[24] =
+{
+	mk_uint64_c(0x00000000, 0x00000001),
+	mk_uint64_c(0x00000000, 0x00008082),
+	mk_uint64_c(0x80000000, 0x0000808a),
+	mk_uint64_c(0x80000000, 0x80008000),
+	mk_uint64_c(0x00000000, 0x0000808b),
+	mk_uint64_c(0x00000000, 0x80000001),
+	mk_uint64_c(0x80000000, 0x80008081),
+	mk_uint64_c(0x80000000, 0x00008009),
+	mk_uint64_c(0x00000000, 0x0000008a),
+	mk_uint64_c(0x00000000, 0x00000088),
+	mk_uint64_c(0x00000000, 0x80008009),
+	mk_uint64_c(0x00000000, 0x8000000a),
+	mk_uint64_c(0x00000000, 0x8000808b),
+	mk_uint64_c(0x80000000, 0x0000008b),
+	mk_uint64_c(0x80000000, 0x00008089),
+	mk_uint64_c(0x80000000, 0x00008003),
+	mk_uint64_c(0x80000000, 0x00008002),
+	mk_uint64_c(0x80000000, 0x00000080),
+	mk_uint64_c(0x00000000, 0x0000800a),
+	mk_uint64_c(0x80000000, 0x8000000a),
+	mk_uint64_c(0x80000000, 0x80008081),
+	mk_uint64_c(0x80000000, 0x00008080),
+	mk_uint64_c(0x00000000, 0x80000001),
+	mk_uint64_c(0x80000000, 0x80008008)
+};
+
+
 static mk_inline void mk_hash_base_detail_sha3_theta(struct mk_uint64_s state[25])
 {
 	int x;
@@ -104,79 +133,36 @@ static mk_inline void mk_hash_base_detail_sha3_chi(struct mk_uint64_s in[25], st
 	}
 }
 
-static mk_inline unsigned mk_hash_base_detail_sha3_rc_next_bit(unsigned* rc)
+static mk_inline void mk_hash_base_detail_sha3_iota(struct mk_uint64_s state[25], int rc_idx)
 {
-	unsigned r;
-	unsigned ret;
-
-	mk_assert(rc);
-
-	r = *rc;
-	ret = r & 0x01;
-
-	r <<= 1;
-	r = (r & ~(1u << 0)) | ((((r >> 0) & 0x1) ^ ((r >> 8) & 0x1)) << 0);
-	r = (r & ~(1u << 4)) | ((((r >> 4) & 0x1) ^ ((r >> 8) & 0x1)) << 4);
-	r = (r & ~(1u << 5)) | ((((r >> 5) & 0x1) ^ ((r >> 8) & 0x1)) << 5);
-	r = (r & ~(1u << 6)) | ((((r >> 6) & 0x1) ^ ((r >> 8) & 0x1)) << 6);
-
-	*rc = r;
-	return ret;
-}
-
-static mk_inline void mk_hash_base_detail_sha3_rc_next_num(struct mk_uint64_s* out, unsigned* rc)
-{
-	struct mk_uint64_s tmp;
-
-	mk_assert(out);
-	mk_assert(rc);
-
-	mk_uint64_zero(out);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp,  0); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp,  1); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp,  3); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp,  7); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp, 15); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp, 31); mk_uint64_or(out, out, &tmp);
-	mk_uint64_from_int(&tmp, mk_hash_base_detail_sha3_rc_next_bit(rc)); mk_uint64_shl(&tmp, &tmp, 63); mk_uint64_or(out, out, &tmp);
-}
-
-static mk_inline void mk_hash_base_detail_sha3_iota(struct mk_uint64_s state[25], unsigned* rc)
-{
-	struct mk_uint64_s rc_num;
-
 	mk_assert(state);
-	mk_assert(rc);
+	mk_assert(rc_idx >= 0 && rc_idx < 24);
 
-	mk_hash_base_detail_sha3_rc_next_num(&rc_num, rc);
-	mk_uint64_xor(&state[0], &state[0], &rc_num);
+	mk_uint64_xor(&state[0], &state[0], &mk_sha3_base_detail_rc_numbers[rc_idx]);
 }
 
-static mk_inline void mk_hash_base_detail_sha3_rnd(struct mk_uint64_s state[25], unsigned* rc)
+static mk_inline void mk_hash_base_detail_sha3_rnd(struct mk_uint64_s state[25], int rc_idx)
 {
 	struct mk_uint64_s tmp[25];
 
 	mk_assert(state);
-	mk_assert(rc);
 
 	mk_hash_base_detail_sha3_theta(state);
 	mk_hash_base_detail_sha3_rho(state);
 	mk_hash_base_detail_sha3_pi(state, tmp);
 	mk_hash_base_detail_sha3_chi(tmp, state);
-	mk_hash_base_detail_sha3_iota(state, rc);
+	mk_hash_base_detail_sha3_iota(state, rc_idx);
 }
 
 static mk_inline void mk_hash_base_detail_sha3_keccak_p(struct mk_uint64_s state[25])
 {
-	unsigned rc;
 	int ir;
 
 	mk_assert(state);
 
-	rc = 1;
 	for(ir = 0; ir != 24; ++ir)
 	{
-		mk_hash_base_detail_sha3_rnd(state, &rc);
+		mk_hash_base_detail_sha3_rnd(state, ir);
 	}
 }
 
@@ -206,6 +192,7 @@ static mk_inline void mk_hash_base_detail_sha3_mix_block(struct mk_uint64_s stat
 		mk_uint64_xor(&state[i], &state[i], &element);
 	}
 }
+
 
 mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3)
 {
