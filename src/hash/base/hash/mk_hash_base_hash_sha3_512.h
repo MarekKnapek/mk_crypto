@@ -15,6 +15,8 @@ struct mk_hash_base_hash_sha3_512_s
 
 enum mk_hash_base_hash_sha3_512_block_len_e { mk_hash_base_hash_sha3_512_block_len = 72 };
 enum mk_hash_base_hash_sha3_512_digest_len_e { mk_hash_base_hash_sha3_512_digest_len = 64 };
+static char const mk_hash_base_hash_sha3_512_name[] = "SHA3-512";
+static int const mk_hash_base_hash_sha3_512_name_len = (int)sizeof(mk_hash_base_hash_sha3_512_name) - 1;
 
 
 mk_jumbo void mk_hash_base_hash_sha3_512_init(struct mk_hash_base_hash_sha3_512_s* self);

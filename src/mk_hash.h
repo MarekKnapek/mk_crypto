@@ -26,6 +26,8 @@ enum mk_hash_e
 
 mk_jumbo int mk_hash_get_block_len(enum mk_hash_e type);
 mk_jumbo int mk_hash_get_digest_len(enum mk_hash_e type);
+mk_jumbo char const* mk_hash_get_name(enum mk_hash_e type);
+mk_jumbo int mk_hash_get_name_len(enum mk_hash_e type);
 
 
 #endif

@@ -17,6 +17,8 @@ struct mk_hash_base_hash_md4_s
 
 enum mk_hash_base_hash_md4_block_len_e { mk_hash_base_hash_md4_block_len = 64 };
 enum mk_hash_base_hash_md4_digest_len_e { mk_hash_base_hash_md4_digest_len = 16 };
+static char const mk_hash_base_hash_md4_name[] = "MD4";
+static int const mk_hash_base_hash_md4_name_len = (int)sizeof(mk_hash_base_hash_md4_name) - 1;
 
 
 mk_jumbo void mk_hash_base_hash_md4_init(struct mk_hash_base_hash_md4_s* self);

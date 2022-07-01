@@ -15,6 +15,8 @@ struct mk_hash_base_hash_sha2_224_s
 
 enum mk_hash_base_hash_sha2_224_block_len_e { mk_hash_base_hash_sha2_224_block_len = 64 };
 enum mk_hash_base_hash_sha2_224_digest_len_e { mk_hash_base_hash_sha2_224_digest_len = 28 };
+static char const mk_hash_base_hash_sha2_224_name[] = "SHA-224";
+static int const mk_hash_base_hash_sha2_224_name_len = (int)sizeof(mk_hash_base_hash_sha2_224_name) - 1;
 
 
 mk_jumbo void mk_hash_base_hash_sha2_224_init(struct mk_hash_base_hash_sha2_224_s* self);

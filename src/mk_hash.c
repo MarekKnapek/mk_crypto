@@ -85,5 +85,52 @@ mk_jumbo int mk_hash_get_digest_len(enum mk_hash_e type)
 	return 0;
 }
 
+mk_jumbo char const* mk_hash_get_name(enum mk_hash_e type)
+{
+	mk_assert_type(type);
+
+	switch(type)
+	{
+		case mk_hash_md2: return mk_hash_base_hash_md2_name; break;
+		case mk_hash_md4: return mk_hash_base_hash_md4_name; break;
+		case mk_hash_md5: return mk_hash_base_hash_md5_name; break;
+		case mk_hash_sha1: return mk_hash_base_hash_sha1_name; break;
+		case mk_hash_sha2_224: return mk_hash_base_hash_sha2_224_name; break;
+		case mk_hash_sha2_256: return mk_hash_base_hash_sha2_256_name; break;
+		case mk_hash_sha2_384: return mk_hash_base_hash_sha2_384_name; break;
+		case mk_hash_sha2_512: return mk_hash_base_hash_sha2_512_name; break;
+		case mk_hash_sha2_512224: return mk_hash_base_hash_sha2_512224_name; break;
+		case mk_hash_sha2_512256: return mk_hash_base_hash_sha2_512256_name; break;
+		case mk_hash_sha3_224: return mk_hash_base_hash_sha3_224_name; break;
+		case mk_hash_sha3_256: return mk_hash_base_hash_sha3_256_name; break;
+		case mk_hash_sha3_384: return mk_hash_base_hash_sha3_384_name; break;
+		case mk_hash_sha3_512: return mk_hash_base_hash_sha3_512_name; break;
+	}
+	return NULL;
+}
+
+mk_jumbo int mk_hash_get_name_len(enum mk_hash_e type)
+{
+	mk_assert_type(type);
+
+	switch(type)
+	{
+		case mk_hash_md2: return mk_hash_base_hash_md2_name_len; break;
+		case mk_hash_md4: return mk_hash_base_hash_md4_name_len; break;
+		case mk_hash_md5: return mk_hash_base_hash_md5_name_len; break;
+		case mk_hash_sha1: return mk_hash_base_hash_sha1_name_len; break;
+		case mk_hash_sha2_224: return mk_hash_base_hash_sha2_224_name_len; break;
+		case mk_hash_sha2_256: return mk_hash_base_hash_sha2_256_name_len; break;
+		case mk_hash_sha2_384: return mk_hash_base_hash_sha2_384_name_len; break;
+		case mk_hash_sha2_512: return mk_hash_base_hash_sha2_512_name_len; break;
+		case mk_hash_sha2_512224: return mk_hash_base_hash_sha2_512224_name_len; break;
+		case mk_hash_sha2_512256: return mk_hash_base_hash_sha2_512256_name_len; break;
+		case mk_hash_sha3_224: return mk_hash_base_hash_sha3_224_name_len; break;
+		case mk_hash_sha3_256: return mk_hash_base_hash_sha3_256_name_len; break;
+		case mk_hash_sha3_384: return mk_hash_base_hash_sha3_384_name_len; break;
+		case mk_hash_sha3_512: return mk_hash_base_hash_sha3_512_name_len; break;
+	}
+	return 0;
+}
 
 #undef mk_assert_type
