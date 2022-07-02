@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c" />
+    <ClCompile Include="..\..\..\fuzz\mk_mac_hmac_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md5_fuzz.c" />
@@ -92,12 +93,30 @@
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_rawshake256.c" />
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake128.c" />
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md2.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md4.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md5.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha1.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_224.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_256.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_384.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512224.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512256.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_224.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_256.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_384.c" />
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_512.c" />
+    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac.c" />
+    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac_obj.c" />
     <ClCompile Include="..\..\..\src\mk_hash.c" />
     <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
     <ClCompile Include="..\..\..\src\mk_hash_function.c" />
     <ClCompile Include="..\..\..\src\utils\mk_try.c" />
+    <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\fuzz\mk_mac_hmac_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md5_fuzz.h" />
@@ -114,6 +133,7 @@
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha1.h" />
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_224.h" />
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_256.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac.h" />
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_384.h" />
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512.h" />
     <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512224.h" />
@@ -177,6 +197,22 @@
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_rawshake256.h" />
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md2.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md4.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md5.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha1.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_224.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_256.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_384.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512224.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha2_512256.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_224.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_256.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_384.h" />
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_sha3_512.h" />
+    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac.h" />
+    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac_obj.h" />
     <ClInclude Include="..\..\..\src\mk_hash.h" />
     <ClInclude Include="..\..\..\src\mk_hash_fn.h" />
     <ClInclude Include="..\..\..\src\mk_hash_function.h" />
@@ -185,6 +221,7 @@
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
     <ClInclude Include="..\..\..\src\utils\mk_setup.h" />
     <ClInclude Include="..\..\..\src\utils\mk_try.h" />
+    <ClInclude Include="..\..\..\win\mk_win_mac_hmac.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\hash\block\hash\mk_hash_block_hash.c.inl" />
@@ -197,6 +234,8 @@
     <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.h.inl" />
     <None Include="..\..\..\src\hash\xof\mk_hash_xof.c.inl" />
     <None Include="..\..\..\src\hash\xof\mk_hash_xof.h.inl" />
+    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac.c.inl" />
+    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac.h.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
