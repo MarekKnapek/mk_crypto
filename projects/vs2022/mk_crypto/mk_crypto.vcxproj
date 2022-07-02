@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\..\src\hash\block\xof\mk_hash_block_xof_sha3_rawshake256.h" />
     <ClInclude Include="..\..\..\src\hash\block\xof\mk_hash_block_xof_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\hash\block\xof\mk_hash_block_xof_sha3_shake256.h" />
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash.h" />
     <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_md2.h" />
     <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_md4.h" />
     <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_md5.h" />

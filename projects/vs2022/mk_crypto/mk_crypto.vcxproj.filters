@@ -536,6 +536,9 @@
     <ClInclude Include="..\..\..\src\hash\block\mk_hash_block_xof.h">
       <Filter>src\hash\block</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash.h">
+      <Filter>src\hash\hash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\hash\hash\mk_hash_hash.c.inl">
