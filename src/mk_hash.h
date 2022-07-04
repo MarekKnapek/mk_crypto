@@ -20,7 +20,7 @@ enum mk_hash_e
 	mk_hash_sha3_224,
 	mk_hash_sha3_256,
 	mk_hash_sha3_384,
-	mk_hash_sha3_512,
+	mk_hash_sha3_512
 };
 
 

@@ -35,7 +35,7 @@ enum mk_hash_fn_e
 	mk_hash_fn_sha3_224,
 	mk_hash_fn_sha3_256,
 	mk_hash_fn_sha3_384,
-	mk_hash_fn_sha3_512,
+	mk_hash_fn_sha3_512
 };
 
 union mk_hash_fn_u
