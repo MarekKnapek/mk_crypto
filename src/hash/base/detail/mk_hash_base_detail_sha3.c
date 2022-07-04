@@ -38,7 +38,7 @@ static struct mk_uint64_s const mk_sha3_base_detail_rc_numbers[24] =
 };
 
 
-static mk_inline void mk_hash_base_detail_sha3_theta(struct mk_uint64_s state[25])
+static mk_inline void mk_hash_base_detail_sha3_theta(struct mk_uint64_s* state)
 {
 	int x;
 	struct mk_uint64_s tmp_1;
@@ -70,7 +70,7 @@ static mk_inline void mk_hash_base_detail_sha3_theta(struct mk_uint64_s state[25
 	}
 }
 
-static mk_inline void mk_hash_base_detail_sha3_rho(struct mk_uint64_s state[25])
+static mk_inline void mk_hash_base_detail_sha3_rho(struct mk_uint64_s* state)
 {
 	int x;
 	int y;
@@ -90,7 +90,7 @@ static mk_inline void mk_hash_base_detail_sha3_rho(struct mk_uint64_s state[25])
 	}
 }
 
-static mk_inline void mk_hash_base_detail_sha3_pi(struct mk_uint64_s in[25], struct mk_uint64_s out[25])
+static mk_inline void mk_hash_base_detail_sha3_pi(struct mk_uint64_s* in, struct mk_uint64_s* out)
 {
 	int x;
 	int y;
@@ -112,7 +112,7 @@ static mk_inline void mk_hash_base_detail_sha3_pi(struct mk_uint64_s in[25], str
 	}
 }
 
-static mk_inline void mk_hash_base_detail_sha3_chi(struct mk_uint64_s in[25], struct mk_uint64_s out[25])
+static mk_inline void mk_hash_base_detail_sha3_chi(struct mk_uint64_s* in, struct mk_uint64_s* out)
 {
 	int y;
 	int x;
@@ -133,7 +133,7 @@ static mk_inline void mk_hash_base_detail_sha3_chi(struct mk_uint64_s in[25], st
 	}
 }
 
-static mk_inline void mk_hash_base_detail_sha3_iota(struct mk_uint64_s state[25], int rc_idx)
+static mk_inline void mk_hash_base_detail_sha3_iota(struct mk_uint64_s* state, int rc_idx)
 {
 	mk_assert(state);
 	mk_assert(rc_idx >= 0 && rc_idx < 24);
@@ -141,7 +141,7 @@ static mk_inline void mk_hash_base_detail_sha3_iota(struct mk_uint64_s state[25]
 	mk_uint64_xor(&state[0], &state[0], &mk_sha3_base_detail_rc_numbers[rc_idx]);
 }
 
-static mk_inline void mk_hash_base_detail_sha3_rnd(struct mk_uint64_s state[25], int rc_idx)
+static mk_inline void mk_hash_base_detail_sha3_rnd(struct mk_uint64_s* state, int rc_idx)
 {
 	struct mk_uint64_s tmp[25];
 
@@ -154,7 +154,7 @@ static mk_inline void mk_hash_base_detail_sha3_rnd(struct mk_uint64_s state[25],
 	mk_hash_base_detail_sha3_iota(state, rc_idx);
 }
 
-static mk_inline void mk_hash_base_detail_sha3_keccak_p(struct mk_uint64_s state[25])
+static mk_inline void mk_hash_base_detail_sha3_keccak_p(struct mk_uint64_s* state)
 {
 	int ir;
 
@@ -166,14 +166,14 @@ static mk_inline void mk_hash_base_detail_sha3_keccak_p(struct mk_uint64_s state
 	}
 }
 
-static mk_inline void mk_hash_base_detail_sha3_keccak_f(struct mk_uint64_s state[25])
+static mk_inline void mk_hash_base_detail_sha3_keccak_f(struct mk_uint64_s* state)
 {
 	mk_assert(state);
 
 	mk_hash_base_detail_sha3_keccak_p(state);
 }
 
-static mk_inline void mk_hash_base_detail_sha3_mix_block(struct mk_uint64_s state[25], int block_len, void const* block)
+static mk_inline void mk_hash_base_detail_sha3_mix_block(struct mk_uint64_s* state, int block_len, void const* block)
 {
 	unsigned char const* input;
 	int elements;
