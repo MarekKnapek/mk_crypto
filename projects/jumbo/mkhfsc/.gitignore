@@ -1,0 +1,7 @@
+/mkhfsc.obj
+/mkhfsc.exe
+/mkhfsc.orig.exe
+/mkhfsc.pgo_train.exe
+/mkhfsc.pgo_use.exe
+/*.pgc
+/*.pgd
