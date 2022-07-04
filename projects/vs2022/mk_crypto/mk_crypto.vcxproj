@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\fuzz\mk_crypto_fuzz.c" />
+    <ClCompile Include="..\..\..\fuzz\mk_kdf_pbkdf2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_mac_hmac_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md2_fuzz.c" />
     <ClCompile Include="..\..\..\fuzz\mk_md4_fuzz.c" />
@@ -93,6 +94,21 @@
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_rawshake256.c" />
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake128.c" />
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.c" />
+    <ClCompile Include="..\..\..\src\kdf\mk_kdf_pbkdf2.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md2.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md4.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md5.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha1.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_224.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_256.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_384.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512224.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512256.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_224.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_256.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_384.c" />
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_512.c" />
     <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md2.c" />
     <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md4.c" />
     <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_md5.c" />
@@ -113,9 +129,11 @@
     <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
     <ClCompile Include="..\..\..\src\mk_hash_function.c" />
     <ClCompile Include="..\..\..\src\utils\mk_try.c" />
+    <ClCompile Include="..\..\..\win\mk_win_kdf_pbkdf2.c" />
     <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\fuzz\mk_kdf_pbkdf2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_mac_hmac_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md2_fuzz.h" />
     <ClInclude Include="..\..\..\fuzz\mk_md4_fuzz.h" />
@@ -197,6 +215,21 @@
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_rawshake256.h" />
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake128.h" />
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof_sha3_shake256.h" />
+    <ClInclude Include="..\..\..\src\kdf\mk_kdf_pbkdf2.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md2.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md4.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_md5.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha1.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_224.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_256.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_384.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512224.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha2_512256.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_224.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_256.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_384.h" />
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_sha3_512.h" />
     <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md2.h" />
     <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md4.h" />
     <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_md5.h" />
@@ -221,6 +254,7 @@
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
     <ClInclude Include="..\..\..\src\utils\mk_setup.h" />
     <ClInclude Include="..\..\..\src\utils\mk_try.h" />
+    <ClInclude Include="..\..\..\win\mk_win_kdf_pbkdf2.h" />
     <ClInclude Include="..\..\..\win\mk_win_mac_hmac.h" />
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +268,8 @@
     <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.h.inl" />
     <None Include="..\..\..\src\hash\xof\mk_hash_xof.c.inl" />
     <None Include="..\..\..\src\hash\xof\mk_hash_xof.h.inl" />
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2.c.inl" />
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2.h.inl" />
     <None Include="..\..\..\src\mac\hmac\mk_mac_hmac.c.inl" />
     <None Include="..\..\..\src\mac\hmac\mk_mac_hmac.h.inl" />
   </ItemGroup>
@@ -322,6 +358,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -341,6 +378,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -356,6 +394,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -375,6 +414,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>bcrypt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,6 +6,7 @@
 #include "mk_sha2_384_fuzz.h"
 #include "mk_sha2_512_fuzz.h"
 #include "mk_mac_hmac_fuzz.h"
+#include "mk_kdf_pbkdf2_fuzz.h"
 
 #include "../src/utils/mk_inline.h"
 
@@ -22,6 +23,7 @@ static mk_inline int mk_fuzz(unsigned char const* data, int size)
 	mk_sha2_384_fuzz(data, size);
 	mk_sha2_512_fuzz(data, size);
 	mk_mac_hmac_fuzz(data, size);
+	mk_kdf_pbkdf2_fuzz(data, size);
 	return 0;
 }
 
