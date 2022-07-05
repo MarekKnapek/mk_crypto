@@ -1,7 +1,9 @@
 #include "../base/mk_hash_base_alg_id.h"
 
 
-#if alg_id == alg_id_hash_md2
+#if alg_id == alg_id_hash_crc32
+#include "mk_hash_hash_crc32.h"
+#elif alg_id == alg_id_hash_md2
 #include "mk_hash_hash_md2.h"
 #elif alg_id == alg_id_hash_md4
 #include "mk_hash_hash_md4.h"

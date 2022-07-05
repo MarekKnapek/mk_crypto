@@ -10,6 +10,7 @@
 
 
 #define mk_assert_type(type) mk_assert( \
+	(type) == mk_hash_function_crc32 || \
 	(type) == mk_hash_function_md2 || \
 	(type) == mk_hash_function_md4 || \
 	(type) == mk_hash_function_md5 || \

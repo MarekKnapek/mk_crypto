@@ -1,5 +1,6 @@
 #include "mk_hash.h"
 
+#include "hash/base/hash/mk_hash_base_hash_crc32.h"
 #include "hash/base/hash/mk_hash_base_hash_md2.h"
 #include "hash/base/hash/mk_hash_base_hash_md4.h"
 #include "hash/base/hash/mk_hash_base_hash_md5.h"
@@ -20,6 +21,7 @@
 
 
 #define mk_assert_type(type) mk_assert( \
+	(type) == mk_hash_crc32 || \
 	(type) == mk_hash_md2 || \
 	(type) == mk_hash_md4 || \
 	(type) == mk_hash_md5 || \
@@ -43,6 +45,7 @@ mk_jumbo int mk_hash_get_block_len(enum mk_hash_e type)
 
 	switch(type)
 	{
+		case mk_hash_crc32: return mk_hash_base_hash_crc32_block_len; break;
 		case mk_hash_md2: return mk_hash_base_hash_md2_block_len; break;
 		case mk_hash_md4: return mk_hash_base_hash_md4_block_len; break;
 		case mk_hash_md5: return mk_hash_base_hash_md5_block_len; break;
@@ -67,6 +70,7 @@ mk_jumbo int mk_hash_get_digest_len(enum mk_hash_e type)
 
 	switch(type)
 	{
+		case mk_hash_crc32: return mk_hash_base_hash_crc32_digest_len; break;
 		case mk_hash_md2: return mk_hash_base_hash_md2_digest_len; break;
 		case mk_hash_md4: return mk_hash_base_hash_md4_digest_len; break;
 		case mk_hash_md5: return mk_hash_base_hash_md5_digest_len; break;
@@ -91,6 +95,7 @@ mk_jumbo char const* mk_hash_get_name(enum mk_hash_e type)
 
 	switch(type)
 	{
+		case mk_hash_crc32: return mk_hash_base_hash_crc32_name; break;
 		case mk_hash_md2: return mk_hash_base_hash_md2_name; break;
 		case mk_hash_md4: return mk_hash_base_hash_md4_name; break;
 		case mk_hash_md5: return mk_hash_base_hash_md5_name; break;
@@ -115,6 +120,7 @@ mk_jumbo int mk_hash_get_name_len(enum mk_hash_e type)
 
 	switch(type)
 	{
+		case mk_hash_crc32: return mk_hash_base_hash_crc32_name_len; break;
 		case mk_hash_md2: return mk_hash_base_hash_md2_name_len; break;
 		case mk_hash_md4: return mk_hash_base_hash_md4_name_len; break;
 		case mk_hash_md5: return mk_hash_base_hash_md5_name_len; break;

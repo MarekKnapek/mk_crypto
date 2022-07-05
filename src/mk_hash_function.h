@@ -7,6 +7,7 @@
 
 enum mk_hash_function_e
 {
+	mk_hash_function_crc32,
 	mk_hash_function_md2,
 	mk_hash_function_md4,
 	mk_hash_function_md5,

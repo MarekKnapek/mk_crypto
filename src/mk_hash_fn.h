@@ -2,6 +2,7 @@
 #define mk_include_guard_hash_fn
 
 
+#include "hash/hash/mk_hash_hash_crc32.h"
 #include "hash/hash/mk_hash_hash_md2.h"
 #include "hash/hash/mk_hash_hash_md4.h"
 #include "hash/hash/mk_hash_hash_md5.h"
@@ -22,6 +23,7 @@
 
 enum mk_hash_fn_e
 {
+	mk_hash_fn_crc32,
 	mk_hash_fn_md2,
 	mk_hash_fn_md4,
 	mk_hash_fn_md5,
@@ -40,6 +42,7 @@ enum mk_hash_fn_e
 
 union mk_hash_fn_u
 {
+	struct mk_hash_hash_crc32_s m_crc32;
 	struct mk_hash_hash_md2_s m_md2;
 	struct mk_hash_hash_md4_s m_md4;
 	struct mk_hash_hash_md5_s m_md5;

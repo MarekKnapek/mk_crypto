@@ -15,6 +15,7 @@
 
 static enum mk_hash_e const hashes[] =
 {
+	mk_hash_crc32,
 	mk_hash_md2,
 	mk_hash_md4,
 	mk_hash_md5,

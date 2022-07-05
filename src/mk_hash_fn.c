@@ -1,5 +1,6 @@
 #include "mk_hash_fn.h"
 
+#include "hash/hash/mk_hash_hash_crc32.h"
 #include "hash/hash/mk_hash_hash_md2.h"
 #include "hash/hash/mk_hash_hash_md4.h"
 #include "hash/hash/mk_hash_hash_md5.h"
@@ -20,6 +21,7 @@
 
 
 #define mk_assert_type(type) mk_assert( \
+	(type) == mk_hash_fn_crc32 || \
 	(type) == mk_hash_fn_md2 || \
 	(type) == mk_hash_fn_md4 || \
 	(type) == mk_hash_fn_md5 || \
@@ -45,6 +47,7 @@ mk_jumbo void mk_hash_fn_init(struct mk_hash_fn_s* hash_fn, enum mk_hash_fn_e ty
 	hash_fn->m_type = type;
 	switch(type)
 	{
+		case mk_hash_fn_crc32: mk_hash_hash_crc32_init(&hash_fn->m_state.m_crc32); break;
 		case mk_hash_fn_md2: mk_hash_hash_md2_init(&hash_fn->m_state.m_md2); break;
 		case mk_hash_fn_md4: mk_hash_hash_md4_init(&hash_fn->m_state.m_md4); break;
 		case mk_hash_fn_md5: mk_hash_hash_md5_init(&hash_fn->m_state.m_md5); break;
@@ -79,6 +82,7 @@ mk_jumbo void mk_hash_fn_append(struct mk_hash_fn_s* hash_fn, void const* msg, i
 
 	switch(hash_fn->m_type)
 	{
+		case mk_hash_fn_crc32: mk_hash_hash_crc32_append(&hash_fn->m_state.m_crc32, msg, msg_len); break;
 		case mk_hash_fn_md2: mk_hash_hash_md2_append(&hash_fn->m_state.m_md2, msg, msg_len); break;
 		case mk_hash_fn_md4: mk_hash_hash_md4_append(&hash_fn->m_state.m_md4, msg, msg_len); break;
 		case mk_hash_fn_md5: mk_hash_hash_md5_append(&hash_fn->m_state.m_md5, msg, msg_len); break;
@@ -104,6 +108,7 @@ mk_jumbo void mk_hash_fn_finish(struct mk_hash_fn_s* hash_fn, void* digest)
 
 	switch(hash_fn->m_type)
 	{
+		case mk_hash_fn_crc32: mk_hash_hash_crc32_finish(&hash_fn->m_state.m_crc32, digest); break;
 		case mk_hash_fn_md2: mk_hash_hash_md2_finish(&hash_fn->m_state.m_md2, digest); break;
 		case mk_hash_fn_md4: mk_hash_hash_md4_finish(&hash_fn->m_state.m_md4, digest); break;
 		case mk_hash_fn_md5: mk_hash_hash_md5_finish(&hash_fn->m_state.m_md5, digest); break;
