@@ -81,4 +81,5 @@
 #include "../src/hash/xof/mk_hash_xof_sha3_rawshake256.c"
 #include "../src/hash/xof/mk_hash_xof_sha3_shake128.c"
 #include "../src/hash/xof/mk_hash_xof_sha3_shake256.c"
+#include "../src/utils/mk_clobber.c"
 #include "../src/utils/mk_try.c"

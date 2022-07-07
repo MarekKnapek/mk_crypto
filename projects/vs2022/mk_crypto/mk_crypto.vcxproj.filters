@@ -134,6 +134,7 @@
     <ClCompile Include="..\..\..\src\mk_hash.c"><Filter>src</Filter></ClCompile>
     <ClCompile Include="..\..\..\src\mk_hash_fn.c"><Filter>src</Filter></ClCompile>
     <ClCompile Include="..\..\..\src\mk_hash_function.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\utils\mk_clobber.c"><Filter>src\utils</Filter></ClCompile>
     <ClCompile Include="..\..\..\src\utils\mk_try.c"><Filter>src\utils</Filter></ClCompile>
     <ClCompile Include="..\..\..\win\mk_win_kdf_pbkdf2.c"><Filter>win</Filter></ClCompile>
     <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c"><Filter>win</Filter></ClCompile>
@@ -259,6 +260,7 @@
     <ClInclude Include="..\..\..\src\mk_hash_fn.h"><Filter>src</Filter></ClInclude>
     <ClInclude Include="..\..\..\src\mk_hash_function.h"><Filter>src</Filter></ClInclude>
     <ClInclude Include="..\..\..\src\utils\mk_assert.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_clobber.h"><Filter>src\utils</Filter></ClInclude>
     <ClInclude Include="..\..\..\src\utils\mk_inline.h"><Filter>src\utils</Filter></ClInclude>
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h"><Filter>src\utils</Filter></ClInclude>
     <ClInclude Include="..\..\..\src\utils\mk_setup.h"><Filter>src\utils</Filter></ClInclude>

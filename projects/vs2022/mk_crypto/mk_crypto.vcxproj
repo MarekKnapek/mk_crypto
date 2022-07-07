@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\..\src\mk_hash.c" />
     <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
     <ClCompile Include="..\..\..\src\mk_hash_function.c" />
+    <ClCompile Include="..\..\..\src\utils\mk_clobber.c" />
     <ClCompile Include="..\..\..\src\utils\mk_try.c" />
     <ClCompile Include="..\..\..\win\mk_win_kdf_pbkdf2.c" />
     <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\..\..\src\mk_hash_fn.h" />
     <ClInclude Include="..\..\..\src\mk_hash_function.h" />
     <ClInclude Include="..\..\..\src\utils\mk_assert.h" />
+    <ClInclude Include="..\..\..\src\utils\mk_clobber.h" />
     <ClInclude Include="..\..\..\src\utils\mk_inline.h" />
     <ClInclude Include="..\..\..\src\utils\mk_jumbo.h" />
     <ClInclude Include="..\..\..\src\utils\mk_setup.h" />
