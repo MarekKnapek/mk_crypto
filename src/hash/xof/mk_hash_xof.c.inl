@@ -1,15 +1,20 @@
+#define alg_id mk_hash_xof_alg_id
 #include "../base/mk_hash_base_xof.h"
-#include "../block/xof/mk_hash_block_xof.h.inl"
+#undef alg_id
+
+#define mk_hash_block_xof_alg_id mk_hash_xof_alg_id
+#include "../../hash/block/mk_hash_block_xof.h.inl"
+#undef mk_hash_block_xof_alg_id
 
 #include "../../utils/mk_assert.h"
 #include "../../utils/mk_jumbo.h"
 
 
+#define alg_id mk_hash_xof_alg_id
 #include "../base/mk_hash_base_alg_name_def.h"
+#undef alg_id
+#include "../../utils/mk_concat_def.h"
 
-
-#define concat_(a, b) a ## b
-#define concat(a, b) concat_(a, b)
 
 #define base_s concat(concat(struct mk_hash_base_hash_, alg_name), _s)
 #define block_len concat(concat(mk_hash_base_hash_, alg_name), _block_len)
@@ -64,3 +69,4 @@ mk_jumbo void finish(xof_s* self, int digest_len, void* digest)
 
 
 #include "../base/mk_hash_base_alg_name_undef.h"
+#include "../../utils/mk_concat_undef.h"

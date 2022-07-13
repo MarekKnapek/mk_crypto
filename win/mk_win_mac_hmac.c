@@ -1,6 +1,7 @@
 #include "mk_win_mac_hmac.h"
 
 #include "../src/utils/mk_assert.h"
+#include "../src/utils/mk_clobber.h"
 #include "../src/utils/mk_jumbo.h"
 
 #include <stddef.h> /* NULL */
@@ -10,14 +11,16 @@
 #include <wincrypt.h>
 
 
-#define mk_assert_type(type) mk_assert( \
-	(type) == mk_win_mac_hmac_md2 || \
-	(type) == mk_win_mac_hmac_md4 || \
-	(type) == mk_win_mac_hmac_md5 || \
-	(type) == mk_win_mac_hmac_sha1 || \
-	(type) == mk_win_mac_hmac_sha2_256 || \
-	(type) == mk_win_mac_hmac_sha2_384 || \
-	(type) == mk_win_mac_hmac_sha2_512)
+#define is_type_good(type) \
+	( \
+		(type) == mk_win_mac_hmac_e_md2 || \
+		(type) == mk_win_mac_hmac_e_md4 || \
+		(type) == mk_win_mac_hmac_e_md5 || \
+		(type) == mk_win_mac_hmac_e_sha1 || \
+		(type) == mk_win_mac_hmac_e_sha2_256 || \
+		(type) == mk_win_mac_hmac_e_sha2_384 || \
+		(type) == mk_win_mac_hmac_e_sha2_512 \
+	)
 
 
 struct mk_win_mac_hmac_s
@@ -52,7 +55,7 @@ mk_jumbo void mk_win_mac_hmac_init(mk_win_mac_hmac_h* hmac, enum mk_win_mac_hmac
 	struct mk_win_mac_hmac_s* self;
 
 	mk_assert(hmac);
-	mk_assert_type(type);
+	mk_assert(is_type_good(type));
 	mk_assert(key || key_len == 0);
 	mk_assert(key_len >= 0);
 
@@ -76,16 +79,16 @@ mk_jumbo void mk_win_mac_hmac_init(mk_win_mac_hmac_h* hmac, enum mk_win_mac_hmac
 	created = CryptCreateHash(prov, CALG_HMAC, hkey, 0, &hash);
 	mk_assert(created != 0);
 
-	alg = 0;
+	mk_clobber(&alg);
 	switch(type)
 	{
-		case mk_win_mac_hmac_md2: alg = CALG_MD2; break;
-		case mk_win_mac_hmac_md4: alg = CALG_MD4; break;
-		case mk_win_mac_hmac_md5: alg = CALG_MD5; break;
-		case mk_win_mac_hmac_sha1: alg = CALG_SHA1; break;
-		case mk_win_mac_hmac_sha2_256: alg = CALG_SHA_256; break;
-		case mk_win_mac_hmac_sha2_384: alg = CALG_SHA_384; break;
-		case mk_win_mac_hmac_sha2_512: alg = CALG_SHA_512; break;
+		case mk_win_mac_hmac_e_md2: alg = CALG_MD2; break;
+		case mk_win_mac_hmac_e_md4: alg = CALG_MD4; break;
+		case mk_win_mac_hmac_e_md5: alg = CALG_MD5; break;
+		case mk_win_mac_hmac_e_sha1: alg = CALG_SHA1; break;
+		case mk_win_mac_hmac_e_sha2_256: alg = CALG_SHA_256; break;
+		case mk_win_mac_hmac_e_sha2_384: alg = CALG_SHA_384; break;
+		case mk_win_mac_hmac_e_sha2_512: alg = CALG_SHA_512; break;
 	}
 	mac.HashAlgid = alg;
 	mac.pbInnerString = NULL;
@@ -101,7 +104,7 @@ mk_jumbo void mk_win_mac_hmac_init(mk_win_mac_hmac_h* hmac, enum mk_win_mac_hmac
 	self->m_prov = prov;
 	self->m_key = hkey;
 	self->m_hash = hash;
-	hmac->m_val = (void*)self;
+	hmac->m_val = mem2;
 }
 
 mk_jumbo void mk_win_mac_hmac_append(mk_win_mac_hmac_h hmac, void const* msg, int msg_len)
@@ -120,34 +123,36 @@ mk_jumbo void mk_win_mac_hmac_append(mk_win_mac_hmac_h hmac, void const* msg, in
 
 mk_jumbo void mk_win_mac_hmac_finish(mk_win_mac_hmac_h hmac, void* digest)
 {
+	void* mem;
 	struct mk_win_mac_hmac_s* self;
 	BOOL got1;
 	DWORD len;
 	BOOL got2;
-	BOOL destroyed;
+	BOOL destroyedh;
 	BOOL destroyedk;
 	BOOL destroyedc;
-	void* mem;
 
 	mk_assert(hmac.m_val);
 	mk_assert(digest);
-	
-	self = (struct mk_win_mac_hmac_s*)hmac.m_val;
+
+	mem = hmac.m_val;
+	self = (struct mk_win_mac_hmac_s*)mem;
+
+	mk_clobber(&len);
 	got1 = CryptGetHashParam(self->m_hash, HP_HASHVAL, NULL, &len, 0);
 	mk_assert(got1 != 0);
 	got2 = CryptGetHashParam(self->m_hash, HP_HASHVAL, (BYTE*)digest, &len, 0);
 	mk_assert(got2 != 0);
 
-	destroyed = CryptDestroyHash(self->m_hash);
-	mk_assert(destroyed != 0);
+	destroyedh = CryptDestroyHash(self->m_hash);
+	mk_assert(destroyedh != 0);
 	destroyedk = CryptDestroyKey(self->m_key);
 	mk_assert(destroyedk != 0);
 	destroyedc = CryptReleaseContext(self->m_prov, 0);
 	mk_assert(destroyedc != 0);
 
-	mem = (void*)self;
 	free(mem);
 }
 
 
-#undef mk_assert_type
+#undef is_type_good

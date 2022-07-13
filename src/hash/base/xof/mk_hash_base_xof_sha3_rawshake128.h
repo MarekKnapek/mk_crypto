@@ -17,7 +17,7 @@ enum mk_hash_base_xof_sha3_rawshake128_block_len_e{ mk_hash_base_xof_sha3_rawsha
 
 
 mk_jumbo void mk_hash_base_xof_sha3_rawshake128_init(struct mk_hash_base_xof_sha3_rawshake128_s* hash_base_xof_sha3_rawshake128);
-mk_jumbo void mk_hash_base_xof_sha3_rawshake128_append_blocks(struct mk_hash_base_xof_sha3_rawshake128_s* hash_base_xof_sha3_rawshake128, int nblocks, void const* pblocks);
+mk_jumbo void mk_hash_base_xof_sha3_rawshake128_append_blocks(struct mk_hash_base_xof_sha3_rawshake128_s* hash_base_xof_sha3_rawshake128, void const* pblocks, int nblocks);
 mk_jumbo void mk_hash_base_xof_sha3_rawshake128_finish(struct mk_hash_base_xof_sha3_rawshake128_s* hash_base_xof_sha3_rawshake128, void* block, int idx, int digest_len, void* digest);
 
 

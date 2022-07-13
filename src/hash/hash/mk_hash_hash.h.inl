@@ -1,13 +1,15 @@
+#define alg_id mk_hash_hash_alg_id
 #include "../base/mk_hash_base_hash.h"
+#undef alg_id
 
 #include "../../utils/mk_jumbo.h"
 
 
+#define alg_id mk_hash_hash_alg_id
 #include "../base/mk_hash_base_alg_name_def.h"
+#undef alg_id
+#include "../../utils/mk_concat_def.h"
 
-
-#define concat_(a, b) a ## b
-#define concat(a, b) concat_(a, b)
 
 #define base_s concat(concat(struct mk_hash_base_hash_, alg_name), _s)
 #define block_len concat(concat(mk_hash_base_hash_, alg_name), _block_len)
@@ -20,8 +22,10 @@
 hash_s
 {
 	base_s m_base;
-	int m_idx;
-	unsigned char m_block[block_len];
+	#if block_len != 1
+		int m_idx;
+		unsigned char m_block[block_len];
+	#endif
 };
 
 
@@ -37,8 +41,6 @@ mk_jumbo void finish(hash_s* self, void* digest);
 #undef append
 #undef finish
 
-#undef concat_
-#undef concat
-
 
 #include "../base/mk_hash_base_alg_name_undef.h"
+#include "../../utils/mk_concat_undef.h"

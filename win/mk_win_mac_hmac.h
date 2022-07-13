@@ -7,13 +7,13 @@
 
 enum mk_win_mac_hmac_e
 {
-	mk_win_mac_hmac_md2,
-	mk_win_mac_hmac_md4,
-	mk_win_mac_hmac_md5,
-	mk_win_mac_hmac_sha1,
-	mk_win_mac_hmac_sha2_256,
-	mk_win_mac_hmac_sha2_384,
-	mk_win_mac_hmac_sha2_512
+	mk_win_mac_hmac_e_md2,
+	mk_win_mac_hmac_e_md4,
+	mk_win_mac_hmac_e_md5,
+	mk_win_mac_hmac_e_sha1,
+	mk_win_mac_hmac_e_sha2_256,
+	mk_win_mac_hmac_e_sha2_384,
+	mk_win_mac_hmac_e_sha2_512
 };
 
 

@@ -5,7 +5,7 @@
 #include "../src/utils/mk_assert.h"
 #include "../src/utils/mk_try.h"
 
-#include "../src/hash/hash/mk_hash_hash_sha2_512256.h"
+#include "../src/hash/hash/mk_hash_hash.h"
 
 #include <string.h> /* memcmp */
 

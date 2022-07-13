@@ -2,34 +2,21 @@
 #define mk_include_guard_mac_hmac_obj
 
 
+#include "../hash/base/mk_hash_base_enum.h"
+
 #include "../utils/mk_jumbo.h"
 
 
-enum mk_mac_hmac_obj_e
-{
-	mk_mac_hmac_obj_md2,
-	mk_mac_hmac_obj_md4,
-	mk_mac_hmac_obj_md5,
-	mk_mac_hmac_obj_sha1,
-	mk_mac_hmac_obj_sha2_224,
-	mk_mac_hmac_obj_sha2_256,
-	mk_mac_hmac_obj_sha2_384,
-	mk_mac_hmac_obj_sha2_512,
-	mk_mac_hmac_obj_sha2_512224,
-	mk_mac_hmac_obj_sha2_512256,
-	mk_mac_hmac_obj_sha3_224,
-	mk_mac_hmac_obj_sha3_256,
-	mk_mac_hmac_obj_sha3_384,
-	mk_mac_hmac_obj_sha3_512
-};
+typedef struct mk_mac_hmac_obj_s { void* m_val; } mk_mac_hmac_obj_h;
 
 
-typedef struct { void* m_val; } mk_mac_hmac_obj_h;
-
-
-mk_jumbo void mk_mac_hmac_obj_init(mk_mac_hmac_obj_h* hmac, enum mk_mac_hmac_obj_e type, void const* key, int key_len);
+mk_jumbo mk_mac_hmac_obj_h mk_mac_hmac_obj_create(enum mk_hash_e type, void const* key, int key_len);
+mk_jumbo int mk_mac_hmac_obj_is_good(mk_mac_hmac_obj_h hmac);
+mk_jumbo enum mk_hash_e mk_mac_hmac_obj_get_type(mk_mac_hmac_obj_h hmac);
+mk_jumbo void mk_mac_hmac_obj_reinit(mk_mac_hmac_obj_h hmac, void const* key, int key_len);
 mk_jumbo void mk_mac_hmac_obj_append(mk_mac_hmac_obj_h hmac, void const* msg, int msg_len);
 mk_jumbo void mk_mac_hmac_obj_finish(mk_mac_hmac_obj_h hmac, void* digest);
+mk_jumbo void mk_mac_hmac_obj_destroy(mk_mac_hmac_obj_h hmac);
 
 
 #endif
