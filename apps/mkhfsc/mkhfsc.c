@@ -1,4 +1,5 @@
 #include "../../src/mk_hash.h"
+#include "../../src/hash/base/mk_hash_base_enum.h"
 #include "../../src/mk_hash_function.h"
 #include "../../src/utils/mk_assert.h"
 #include "../../src/utils/mk_try.h"
@@ -15,21 +16,11 @@
 
 static enum mk_hash_e const hashes[] =
 {
-	mk_hash_crc32,
-	mk_hash_md2,
-	mk_hash_md4,
-	mk_hash_md5,
-	mk_hash_sha1,
-	mk_hash_sha2_224,
-	mk_hash_sha2_256,
-	mk_hash_sha2_384,
-	mk_hash_sha2_512,
-	mk_hash_sha2_512224,
-	mk_hash_sha2_512256,
-	mk_hash_sha3_224,
-	mk_hash_sha3_256,
-	mk_hash_sha3_384,
-	mk_hash_sha3_512,
+	#include "../../src/hash/base/mk_hash_base_xmacro_def.h"
+	#define xcontent(alg) concat(mk_hash_e_, alg),
+	xmacro
+	#undef xcontent
+	#include "../../src/hash/base/mk_hash_base_xmacro_undef.h"
 };
 static int const nhashses = sizeof(hashes) / sizeof(hashes[0]);
 
@@ -88,7 +79,7 @@ static mk_inline int mkhfsc_bussiness(int argc, char const* const* argv)
 		}
 	}
 	mk_check(i != nhashses);
-	hf = mk_hash_function_create((enum mk_hash_function_e)h);
+	hf = mk_hash_function_create(h);
 	mk_check(mk_hash_function_is_good(hf));
 	file_name = argv[2];
 	file = fopen(file_name, "rb");

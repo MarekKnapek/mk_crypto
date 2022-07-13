@@ -1,6 +1,7 @@
 #include "mk_win_kdf_pbkdf2.h"
 
 #include "../src/utils/mk_assert.h"
+#include "../src/utils/mk_clobber.h"
 #include "../src/utils/mk_jumbo.h"
 
 #include <stddef.h> /* NULL */
@@ -9,25 +10,27 @@
 #include <bcrypt.h>
 
 
-#define mk_assert_type(type) mk_assert( \
-	(type) == mk_win_kdf_pbkdf2_e_md2 || \
-	(type) == mk_win_kdf_pbkdf2_e_md4 || \
-	(type) == mk_win_kdf_pbkdf2_e_md5 || \
-	(type) == mk_win_kdf_pbkdf2_e_sha1 || \
-	(type) == mk_win_kdf_pbkdf2_e_sha2_256 || \
-	(type) == mk_win_kdf_pbkdf2_e_sha2_384 || \
-	(type) == mk_win_kdf_pbkdf2_e_sha2_512)
+#define is_type_good(type) \
+	( \
+		(type) == mk_win_kdf_pbkdf2_e_md2 || \
+		(type) == mk_win_kdf_pbkdf2_e_md4 || \
+		(type) == mk_win_kdf_pbkdf2_e_md5 || \
+		(type) == mk_win_kdf_pbkdf2_e_sha1 || \
+		(type) == mk_win_kdf_pbkdf2_e_sha2_256 || \
+		(type) == mk_win_kdf_pbkdf2_e_sha2_384 || \
+		(type) == mk_win_kdf_pbkdf2_e_sha2_512 \
+	)
 
 
 mk_jumbo void mk_win_kdf_pbkdf2(enum mk_win_kdf_pbkdf2_e prf, void const* password, int password_len, void const* salt, int salt_len, long iterations, int key_len, void* key)
 {
 	wchar_t const* alg_name;
-	NTSTATUS prov_st;
+	NTSTATUS opened_st;
 	BCRYPT_ALG_HANDLE alg;
 	NTSTATUS derived_st;
-	NTSTATUS close_st;
+	NTSTATUS closed_st;
 
-	mk_assert_type(prf);
+	mk_assert(is_type_good(prf));
 	mk_assert(password || password_len == 0);
 	mk_assert(password_len >= 0);
 	mk_assert(salt || salt_len == 0);
@@ -36,7 +39,7 @@ mk_jumbo void mk_win_kdf_pbkdf2(enum mk_win_kdf_pbkdf2_e prf, void const* passwo
 	mk_assert(key_len > 0);
 	mk_assert(key);
 
-	alg_name = NULL;
+	mk_clobber(&alg_name);
 	switch(prf)
 	{
 		case mk_win_kdf_pbkdf2_e_md2: alg_name = BCRYPT_MD2_ALGORITHM; break;
@@ -47,15 +50,15 @@ mk_jumbo void mk_win_kdf_pbkdf2(enum mk_win_kdf_pbkdf2_e prf, void const* passwo
 		case mk_win_kdf_pbkdf2_e_sha2_384: alg_name = BCRYPT_SHA384_ALGORITHM; break;
 		case mk_win_kdf_pbkdf2_e_sha2_512: alg_name = BCRYPT_SHA512_ALGORITHM; break;
 	}
-	prov_st = BCryptOpenAlgorithmProvider(&alg, alg_name, MS_PRIMITIVE_PROVIDER, BCRYPT_ALG_HANDLE_HMAC_FLAG);
-	mk_assert(prov_st == 0);
+	opened_st = BCryptOpenAlgorithmProvider(&alg, alg_name, MS_PRIMITIVE_PROVIDER, BCRYPT_ALG_HANDLE_HMAC_FLAG);
+	mk_assert(opened_st == 0);
 
 	derived_st = BCryptDeriveKeyPBKDF2(alg, (PUCHAR)password, (ULONG)password_len, (PUCHAR)salt, (ULONG)salt_len, (ULONGLONG)iterations, (PUCHAR)key, (ULONG)key_len, 0);
 	mk_assert(derived_st == 0);
 
-	close_st = BCryptCloseAlgorithmProvider(alg, 0);
-	mk_assert(close_st == 0);
+	closed_st = BCryptCloseAlgorithmProvider(alg, 0);
+	mk_assert(closed_st == 0);
 }
 
 
-#undef mk_assert_type
+#undef is_type_good

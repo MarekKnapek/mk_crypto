@@ -2,12 +2,8 @@
 
 #include "mk_test_utils.h"
 
-#include "../src/hash/hash/mk_hash_hash_sha3_224.h"
-#include "../src/hash/hash/mk_hash_hash_sha3_256.h"
-#include "../src/hash/hash/mk_hash_hash_sha3_384.h"
-#include "../src/hash/hash/mk_hash_hash_sha3_512.h"
-#include "../src/hash/xof/mk_hash_xof_sha3_shake128.h"
-#include "../src/hash/xof/mk_hash_xof_sha3_shake256.h"
+#include "../src/hash/hash/mk_hash_hash.h"
+#include "../src/hash/xof/mk_hash_xof.h"
 
 #include "../src/utils/mk_assert.h"
 #include "../src/utils/mk_inline.h"

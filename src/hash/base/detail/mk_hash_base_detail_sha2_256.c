@@ -7,28 +7,30 @@
 #include "../../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../../mk_int/src/exact/mk_uint_64.h"
 
+#include <limits.h> /* LONG_MAX */
 #include <string.h> /* memset */
 
 
 static struct mk_uint32_s const mk_hash_base_detail_sha2_256_table[64] =
 {
-	mk_uint32_c(0x428a2f98), mk_uint32_c(0x71374491), mk_uint32_c(0xb5c0fbcf), mk_uint32_c(0xe9b5dba5),
-	mk_uint32_c(0x3956c25b), mk_uint32_c(0x59f111f1), mk_uint32_c(0x923f82a4), mk_uint32_c(0xab1c5ed5),
-	mk_uint32_c(0xd807aa98), mk_uint32_c(0x12835b01), mk_uint32_c(0x243185be), mk_uint32_c(0x550c7dc3),
-	mk_uint32_c(0x72be5d74), mk_uint32_c(0x80deb1fe), mk_uint32_c(0x9bdc06a7), mk_uint32_c(0xc19bf174),
-	mk_uint32_c(0xe49b69c1), mk_uint32_c(0xefbe4786), mk_uint32_c(0x0fc19dc6), mk_uint32_c(0x240ca1cc),
-	mk_uint32_c(0x2de92c6f), mk_uint32_c(0x4a7484aa), mk_uint32_c(0x5cb0a9dc), mk_uint32_c(0x76f988da),
-	mk_uint32_c(0x983e5152), mk_uint32_c(0xa831c66d), mk_uint32_c(0xb00327c8), mk_uint32_c(0xbf597fc7),
-	mk_uint32_c(0xc6e00bf3), mk_uint32_c(0xd5a79147), mk_uint32_c(0x06ca6351), mk_uint32_c(0x14292967),
-	mk_uint32_c(0x27b70a85), mk_uint32_c(0x2e1b2138), mk_uint32_c(0x4d2c6dfc), mk_uint32_c(0x53380d13),
-	mk_uint32_c(0x650a7354), mk_uint32_c(0x766a0abb), mk_uint32_c(0x81c2c92e), mk_uint32_c(0x92722c85),
-	mk_uint32_c(0xa2bfe8a1), mk_uint32_c(0xa81a664b), mk_uint32_c(0xc24b8b70), mk_uint32_c(0xc76c51a3),
-	mk_uint32_c(0xd192e819), mk_uint32_c(0xd6990624), mk_uint32_c(0xf40e3585), mk_uint32_c(0x106aa070),
-	mk_uint32_c(0x19a4c116), mk_uint32_c(0x1e376c08), mk_uint32_c(0x2748774c), mk_uint32_c(0x34b0bcb5),
-	mk_uint32_c(0x391c0cb3), mk_uint32_c(0x4ed8aa4a), mk_uint32_c(0x5b9cca4f), mk_uint32_c(0x682e6ff3),
-	mk_uint32_c(0x748f82ee), mk_uint32_c(0x78a5636f), mk_uint32_c(0x84c87814), mk_uint32_c(0x8cc70208),
-	mk_uint32_c(0x90befffa), mk_uint32_c(0xa4506ceb), mk_uint32_c(0xbef9a3f7), mk_uint32_c(0xc67178f2),
+	mk_uint32_c(0x428a2f98ul), mk_uint32_c(0x71374491ul), mk_uint32_c(0xb5c0fbcful), mk_uint32_c(0xe9b5dba5ul),
+	mk_uint32_c(0x3956c25bul), mk_uint32_c(0x59f111f1ul), mk_uint32_c(0x923f82a4ul), mk_uint32_c(0xab1c5ed5ul),
+	mk_uint32_c(0xd807aa98ul), mk_uint32_c(0x12835b01ul), mk_uint32_c(0x243185beul), mk_uint32_c(0x550c7dc3ul),
+	mk_uint32_c(0x72be5d74ul), mk_uint32_c(0x80deb1feul), mk_uint32_c(0x9bdc06a7ul), mk_uint32_c(0xc19bf174ul),
+	mk_uint32_c(0xe49b69c1ul), mk_uint32_c(0xefbe4786ul), mk_uint32_c(0x0fc19dc6ul), mk_uint32_c(0x240ca1ccul),
+	mk_uint32_c(0x2de92c6ful), mk_uint32_c(0x4a7484aaul), mk_uint32_c(0x5cb0a9dcul), mk_uint32_c(0x76f988daul),
+	mk_uint32_c(0x983e5152ul), mk_uint32_c(0xa831c66dul), mk_uint32_c(0xb00327c8ul), mk_uint32_c(0xbf597fc7ul),
+	mk_uint32_c(0xc6e00bf3ul), mk_uint32_c(0xd5a79147ul), mk_uint32_c(0x06ca6351ul), mk_uint32_c(0x14292967ul),
+	mk_uint32_c(0x27b70a85ul), mk_uint32_c(0x2e1b2138ul), mk_uint32_c(0x4d2c6dfcul), mk_uint32_c(0x53380d13ul),
+	mk_uint32_c(0x650a7354ul), mk_uint32_c(0x766a0abbul), mk_uint32_c(0x81c2c92eul), mk_uint32_c(0x92722c85ul),
+	mk_uint32_c(0xa2bfe8a1ul), mk_uint32_c(0xa81a664bul), mk_uint32_c(0xc24b8b70ul), mk_uint32_c(0xc76c51a3ul),
+	mk_uint32_c(0xd192e819ul), mk_uint32_c(0xd6990624ul), mk_uint32_c(0xf40e3585ul), mk_uint32_c(0x106aa070ul),
+	mk_uint32_c(0x19a4c116ul), mk_uint32_c(0x1e376c08ul), mk_uint32_c(0x2748774cul), mk_uint32_c(0x34b0bcb5ul),
+	mk_uint32_c(0x391c0cb3ul), mk_uint32_c(0x4ed8aa4aul), mk_uint32_c(0x5b9cca4ful), mk_uint32_c(0x682e6ff3ul),
+	mk_uint32_c(0x748f82eeul), mk_uint32_c(0x78a5636ful), mk_uint32_c(0x84c87814ul), mk_uint32_c(0x8cc70208ul),
+	mk_uint32_c(0x90befffaul), mk_uint32_c(0xa4506cebul), mk_uint32_c(0xbef9a3f7ul), mk_uint32_c(0xc67178f2ul),
 };
+static struct mk_uint64_s const mk_hash_base_detail_sha2_256_max_bytes = mk_uint64_c(0x1ffffffful, 0xfffffffful);
 
 
 static mk_inline void mk_hash_base_detail_sha2_256_ch(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
@@ -142,26 +144,28 @@ static mk_inline void mk_hash_base_detail_sha2_256_sig1(struct mk_uint32_s* out,
 }
 
 
-mk_jumbo void mk_hash_base_detail_sha2_256_init(struct mk_hash_base_detail_sha2_256_s* hash_base_detail_sha2_256, struct mk_uint32_s const* iv)
+mk_jumbo void mk_hash_base_detail_sha2_256_init(struct mk_hash_base_detail_sha2_256_s* self, struct mk_uint32_s const* iv)
 {
-	mk_assert(hash_base_detail_sha2_256);
+	mk_assert(self);
 	mk_assert(iv);
 
-	hash_base_detail_sha2_256->m_state[0] = iv[0];
-	hash_base_detail_sha2_256->m_state[1] = iv[1];
-	hash_base_detail_sha2_256->m_state[2] = iv[2];
-	hash_base_detail_sha2_256->m_state[3] = iv[3];
-	hash_base_detail_sha2_256->m_state[4] = iv[4];
-	hash_base_detail_sha2_256->m_state[5] = iv[5];
-	hash_base_detail_sha2_256->m_state[6] = iv[6];
-	hash_base_detail_sha2_256->m_state[7] = iv[7];
-	mk_uint64_zero(&hash_base_detail_sha2_256->m_len);
+	self->m_state[0] = iv[0];
+	self->m_state[1] = iv[1];
+	self->m_state[2] = iv[2];
+	self->m_state[3] = iv[3];
+	self->m_state[4] = iv[4];
+	self->m_state[5] = iv[5];
+	self->m_state[6] = iv[6];
+	self->m_state[7] = iv[7];
+	mk_uint64_zero(&self->m_len);
 }
 
-mk_jumbo void mk_hash_base_detail_sha2_256_append_blocks(struct mk_hash_base_detail_sha2_256_s* hash_base_detail_sha2_256, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_detail_sha2_256_append_blocks(struct mk_hash_base_detail_sha2_256_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint64_s len_bytes;
+	struct mk_uint64_s new_len;
 	unsigned char const* input;
+	struct mk_uint32_s oldh[8];
 	struct mk_uint32_s hh[8];
 	struct mk_uint32_s* a;
 	struct mk_uint32_s* b;
@@ -179,18 +183,29 @@ mk_jumbo void mk_hash_base_detail_sha2_256_append_blocks(struct mk_hash_base_det
 	struct mk_uint32_s tmp1;
 	struct mk_uint32_s tmp2;
 
-	mk_assert(hash_base_detail_sha2_256);
-	mk_assert(nblocks >= 0);
+	mk_assert(self);
 	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	if(nblocks == 0)
 	{
 		return;
 	}
 
-	mk_uint64_from_int(&len_bytes, 64 * nblocks);
-	mk_uint64_add(&hash_base_detail_sha2_256->m_len, &hash_base_detail_sha2_256->m_len, &len_bytes);
+	mk_assert(nblocks <= LONG_MAX / 64);
+	mk_uint64_from_long(&len_bytes, 64 * (long)nblocks);
+	mk_uint64_add(&new_len, &self->m_len, &len_bytes);
+	mk_assert(mk_uint64_le(&new_len, &mk_hash_base_detail_sha2_256_max_bytes));
+	mk_assert(mk_uint64_ge(&new_len, &self->m_len) && mk_uint64_ge(&new_len, &len_bytes));
 	input = (unsigned char const*)pblocks;
+	oldh[0] = self->m_state[0];
+	oldh[1] = self->m_state[1];
+	oldh[2] = self->m_state[2];
+	oldh[3] = self->m_state[3];
+	oldh[4] = self->m_state[4];
+	oldh[5] = self->m_state[5];
+	oldh[6] = self->m_state[6];
+	oldh[7] = self->m_state[7];
 	a = &hh[0];
 	b = &hh[1];
 	c = &hh[2];
@@ -199,19 +214,19 @@ mk_jumbo void mk_hash_base_detail_sha2_256_append_blocks(struct mk_hash_base_det
 	f = &hh[5];
 	g = &hh[6];
 	h = &hh[7];
-	for(iblock = 0; iblock != nblocks; ++iblock, input += 64)
+	for(iblock = 0; iblock != nblocks; ++iblock)
 	{
-		hh[0] = hash_base_detail_sha2_256->m_state[0];
-		hh[1] = hash_base_detail_sha2_256->m_state[1];
-		hh[2] = hash_base_detail_sha2_256->m_state[2];
-		hh[3] = hash_base_detail_sha2_256->m_state[3];
-		hh[4] = hash_base_detail_sha2_256->m_state[4];
-		hh[5] = hash_base_detail_sha2_256->m_state[5];
-		hh[6] = hash_base_detail_sha2_256->m_state[6];
-		hh[7] = hash_base_detail_sha2_256->m_state[7];
-		for(i = 0; i != 16; ++i)
+		hh[0] = oldh[0];
+		hh[1] = oldh[1];
+		hh[2] = oldh[2];
+		hh[3] = oldh[3];
+		hh[4] = oldh[4];
+		hh[5] = oldh[5];
+		hh[6] = oldh[6];
+		hh[7] = oldh[7];
+		for(i = 0; i != 16; ++i, input += 4)
 		{
-			mk_uint32_from_buff_be(&w[i], input + i * 4);
+			mk_uint32_from_buff_be(&w[i], input);
 		}
 		for(i = 16; i != 64; ++i)
 		{
@@ -244,25 +259,34 @@ mk_jumbo void mk_hash_base_detail_sha2_256_append_blocks(struct mk_hash_base_det
 			*b = *a;
 			mk_uint32_add(a, &t1, &t2);
 		}
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[0], &hash_base_detail_sha2_256->m_state[0], &hh[0]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[1], &hash_base_detail_sha2_256->m_state[1], &hh[1]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[2], &hash_base_detail_sha2_256->m_state[2], &hh[2]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[3], &hash_base_detail_sha2_256->m_state[3], &hh[3]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[4], &hash_base_detail_sha2_256->m_state[4], &hh[4]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[5], &hash_base_detail_sha2_256->m_state[5], &hh[5]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[6], &hash_base_detail_sha2_256->m_state[6], &hh[6]);
-		mk_uint32_add(&hash_base_detail_sha2_256->m_state[7], &hash_base_detail_sha2_256->m_state[7], &hh[7]);
+		mk_uint32_add(&oldh[0], &oldh[0], &hh[0]);
+		mk_uint32_add(&oldh[1], &oldh[1], &hh[1]);
+		mk_uint32_add(&oldh[2], &oldh[2], &hh[2]);
+		mk_uint32_add(&oldh[3], &oldh[3], &hh[3]);
+		mk_uint32_add(&oldh[4], &oldh[4], &hh[4]);
+		mk_uint32_add(&oldh[5], &oldh[5], &hh[5]);
+		mk_uint32_add(&oldh[6], &oldh[6], &hh[6]);
+		mk_uint32_add(&oldh[7], &oldh[7], &hh[7]);
 	}
+	self->m_state[0] = oldh[0];
+	self->m_state[1] = oldh[1];
+	self->m_state[2] = oldh[2];
+	self->m_state[3] = oldh[3];
+	self->m_state[4] = oldh[4];
+	self->m_state[5] = oldh[5];
+	self->m_state[6] = oldh[6];
+	self->m_state[7] = oldh[7];
+	self->m_len = new_len;
 }
 
-mk_jumbo void mk_hash_base_detail_sha2_256_finish(struct mk_hash_base_detail_sha2_256_s* hash_base_detail_sha2_256, void* block, int idx, void* digest)
+mk_jumbo void mk_hash_base_detail_sha2_256_finish(struct mk_hash_base_detail_sha2_256_s* self, void* block, int idx, void* digest)
 {
 	unsigned char* input;
 	unsigned char* output;
 	struct mk_uint64_s len;
 	int capacity;
 
-	mk_assert(hash_base_detail_sha2_256);
+	mk_assert(self);
 	mk_assert(block);
 	mk_assert(idx >= 0 && idx < 64);
 	mk_assert(digest);
@@ -270,7 +294,7 @@ mk_jumbo void mk_hash_base_detail_sha2_256_finish(struct mk_hash_base_detail_sha
 	input = (unsigned char*)block;
 	output = (unsigned char*)digest;
 	mk_uint64_from_int(&len, idx);
-	mk_uint64_add(&len, &len, &hash_base_detail_sha2_256->m_len);
+	mk_uint64_add(&len, &len, &self->m_len);
 	mk_uint64_shl(&len, &len, 3);
 	input[idx] = 0x80;
 	capacity = 64 - idx - 1;
@@ -281,17 +305,17 @@ mk_jumbo void mk_hash_base_detail_sha2_256_finish(struct mk_hash_base_detail_sha
 	else
 	{
 		memset(input + idx + 1, 0, capacity);
-		mk_hash_base_detail_sha2_256_append_blocks(hash_base_detail_sha2_256, 1, input);
+		mk_hash_base_detail_sha2_256_append_blocks(self, input, 1);
 		memset(input, 0, 64 - 8);
 	}
 	mk_uint64_to_buff_be(&len, input + 64 - 8);
-	mk_hash_base_detail_sha2_256_append_blocks(hash_base_detail_sha2_256, 1, input);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[0], output + 0 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[1], output + 1 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[2], output + 2 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[3], output + 3 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[4], output + 4 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[5], output + 5 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[6], output + 6 * 4);
-	mk_uint32_to_buff_be(&hash_base_detail_sha2_256->m_state[7], output + 7 * 4);
+	mk_hash_base_detail_sha2_256_append_blocks(self, input, 1);
+	mk_uint32_to_buff_be(&self->m_state[0], output + 0 * 4);
+	mk_uint32_to_buff_be(&self->m_state[1], output + 1 * 4);
+	mk_uint32_to_buff_be(&self->m_state[2], output + 2 * 4);
+	mk_uint32_to_buff_be(&self->m_state[3], output + 3 * 4);
+	mk_uint32_to_buff_be(&self->m_state[4], output + 4 * 4);
+	mk_uint32_to_buff_be(&self->m_state[5], output + 5 * 4);
+	mk_uint32_to_buff_be(&self->m_state[6], output + 6 * 4);
+	mk_uint32_to_buff_be(&self->m_state[7], output + 7 * 4);
 }

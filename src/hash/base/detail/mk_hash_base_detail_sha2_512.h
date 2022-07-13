@@ -15,9 +15,9 @@ struct mk_hash_base_detail_sha2_512_s
 };
 
 
-mk_jumbo void mk_hash_base_detail_sha2_512_init(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, struct mk_uint64_s const* iv);
-mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, int nblocks, void const* pblocks);
-mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, void* block, int idx, void* digest);
+mk_jumbo void mk_hash_base_detail_sha2_512_init(struct mk_hash_base_detail_sha2_512_s* self, struct mk_uint64_s const* iv);
+mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_detail_sha2_512_s* self, void const* pblocks, int nblocks);
+mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha2_512_s* self, void* block, int idx, void* digest);
 
 
 #endif

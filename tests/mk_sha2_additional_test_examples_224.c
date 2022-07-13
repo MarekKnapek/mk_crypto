@@ -2,7 +2,7 @@
 
 #include "mk_test_utils.h"
 
-#include "../src/hash/hash/mk_hash_hash_sha2_224.h"
+#include "../src/hash/hash/mk_hash_hash.h"
 
 #include "../src/utils/mk_assert.h"
 #include "../src/utils/mk_try.h"

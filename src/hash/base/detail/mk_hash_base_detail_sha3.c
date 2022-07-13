@@ -11,30 +11,30 @@
 
 static struct mk_uint64_s const mk_sha3_base_detail_rc_numbers[24] =
 {
-	mk_uint64_c(0x00000000, 0x00000001),
-	mk_uint64_c(0x00000000, 0x00008082),
-	mk_uint64_c(0x80000000, 0x0000808a),
-	mk_uint64_c(0x80000000, 0x80008000),
-	mk_uint64_c(0x00000000, 0x0000808b),
-	mk_uint64_c(0x00000000, 0x80000001),
-	mk_uint64_c(0x80000000, 0x80008081),
-	mk_uint64_c(0x80000000, 0x00008009),
-	mk_uint64_c(0x00000000, 0x0000008a),
-	mk_uint64_c(0x00000000, 0x00000088),
-	mk_uint64_c(0x00000000, 0x80008009),
-	mk_uint64_c(0x00000000, 0x8000000a),
-	mk_uint64_c(0x00000000, 0x8000808b),
-	mk_uint64_c(0x80000000, 0x0000008b),
-	mk_uint64_c(0x80000000, 0x00008089),
-	mk_uint64_c(0x80000000, 0x00008003),
-	mk_uint64_c(0x80000000, 0x00008002),
-	mk_uint64_c(0x80000000, 0x00000080),
-	mk_uint64_c(0x00000000, 0x0000800a),
-	mk_uint64_c(0x80000000, 0x8000000a),
-	mk_uint64_c(0x80000000, 0x80008081),
-	mk_uint64_c(0x80000000, 0x00008080),
-	mk_uint64_c(0x00000000, 0x80000001),
-	mk_uint64_c(0x80000000, 0x80008008)
+	mk_uint64_c(0x00000000ul, 0x00000001ul),
+	mk_uint64_c(0x00000000ul, 0x00008082ul),
+	mk_uint64_c(0x80000000ul, 0x0000808aul),
+	mk_uint64_c(0x80000000ul, 0x80008000ul),
+	mk_uint64_c(0x00000000ul, 0x0000808bul),
+	mk_uint64_c(0x00000000ul, 0x80000001ul),
+	mk_uint64_c(0x80000000ul, 0x80008081ul),
+	mk_uint64_c(0x80000000ul, 0x00008009ul),
+	mk_uint64_c(0x00000000ul, 0x0000008aul),
+	mk_uint64_c(0x00000000ul, 0x00000088ul),
+	mk_uint64_c(0x00000000ul, 0x80008009ul),
+	mk_uint64_c(0x00000000ul, 0x8000000aul),
+	mk_uint64_c(0x00000000ul, 0x8000808bul),
+	mk_uint64_c(0x80000000ul, 0x0000008bul),
+	mk_uint64_c(0x80000000ul, 0x00008089ul),
+	mk_uint64_c(0x80000000ul, 0x00008003ul),
+	mk_uint64_c(0x80000000ul, 0x00008002ul),
+	mk_uint64_c(0x80000000ul, 0x00000080ul),
+	mk_uint64_c(0x00000000ul, 0x0000800aul),
+	mk_uint64_c(0x80000000ul, 0x8000000aul),
+	mk_uint64_c(0x80000000ul, 0x80008081ul),
+	mk_uint64_c(0x80000000ul, 0x00008080ul),
+	mk_uint64_c(0x00000000ul, 0x80000001ul),
+	mk_uint64_c(0x80000000ul, 0x80008008ul)
 };
 
 
@@ -206,15 +206,15 @@ mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* m
 	}
 }
 
-mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, void const* pblocks, int nblocks)
 {
 	unsigned char const* input;
 	int iblock;
 
 	mk_assert(mk_hash_base_detail_sha3);
 	mk_assert(block_len == 168 || block_len == 144 || block_len == 136 || block_len == 104 || block_len == 72);
-	mk_assert(nblocks >= 0);
 	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	input = (unsigned char const*)pblocks;
 	for(iblock = 0; iblock != nblocks; ++iblock, input += block_len)
@@ -256,7 +256,7 @@ mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s*
 	capacity = block_len - idx - 1;
 	memset(input + idx + 1, 0, capacity);
 	input[block_len - 1] |= 0x80;
-	mk_hash_base_detail_sha3_append_blocks(mk_hash_base_detail_sha3, block_len, 1, input);
+	mk_hash_base_detail_sha3_append_blocks(mk_hash_base_detail_sha3, block_len, input, 1);
 	to_copy = block_len < remaining ? block_len : remaining;
 	for(i = 0; i != 25; ++i) mk_uint64_to_buff_le(&mk_hash_base_detail_sha3->m_state[i], tmp + i * 8);
 	memcpy(output, tmp, to_copy);
