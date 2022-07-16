@@ -194,24 +194,24 @@ static mk_inline void mk_hash_base_detail_sha3_mix_block(struct mk_uint64_s* sta
 }
 
 
-mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3)
+mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* self)
 {
 	int i;
 
-	mk_assert(mk_hash_base_detail_sha3);
+	mk_assert(self);
 
 	for(i = 0; i != 25; ++i)
 	{
-		mk_uint64_zero(&mk_hash_base_detail_sha3->m_state[i]);
+		mk_uint64_zero(&self->m_state[i]);
 	}
 }
 
-mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, void const* pblocks, int nblocks)
+mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* self, int block_len, void const* pblocks, int nblocks)
 {
 	unsigned char const* input;
 	int iblock;
 
-	mk_assert(mk_hash_base_detail_sha3);
+	mk_assert(self);
 	mk_assert(block_len == 168 || block_len == 144 || block_len == 136 || block_len == 104 || block_len == 72);
 	mk_assert(pblocks || nblocks == 0);
 	mk_assert(nblocks >= 0);
@@ -219,12 +219,12 @@ mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_
 	input = (unsigned char const*)pblocks;
 	for(iblock = 0; iblock != nblocks; ++iblock, input += block_len)
 	{
-		mk_hash_base_detail_sha3_mix_block(mk_hash_base_detail_sha3->m_state, block_len, input);
-		mk_hash_base_detail_sha3_keccak_f(mk_hash_base_detail_sha3->m_state);
+		mk_hash_base_detail_sha3_mix_block(self->m_state, block_len, input);
+		mk_hash_base_detail_sha3_keccak_f(self->m_state);
 	}
 }
 
-mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, void* block, int idx, enum mk_hash_base_detail_sha3_domain_e domain, int digest_len, void* digest)
+mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s* self, int block_len, void* block, int idx, enum mk_hash_base_detail_sha3_domain_e domain, int digest_len, void* digest)
 {
 	unsigned char* input;
 	unsigned char* output;
@@ -236,7 +236,7 @@ mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s*
 	int chunks;
 	int j;
 
-	mk_assert(mk_hash_base_detail_sha3);
+	mk_assert(self);
 	mk_assert(block_len == 168 || block_len == 144 || block_len == 136 || block_len == 104 || block_len == 72);
 	mk_assert(block);
 	mk_assert(idx >= 0 && idx < block_len);
@@ -256,24 +256,24 @@ mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s*
 	capacity = block_len - idx - 1;
 	memset(input + idx + 1, 0, capacity);
 	input[block_len - 1] |= 0x80;
-	mk_hash_base_detail_sha3_append_blocks(mk_hash_base_detail_sha3, block_len, input, 1);
+	mk_hash_base_detail_sha3_append_blocks(self, block_len, input, 1);
 	to_copy = block_len < remaining ? block_len : remaining;
-	for(i = 0; i != 25; ++i) mk_uint64_to_buff_le(&mk_hash_base_detail_sha3->m_state[i], tmp + i * 8);
+	for(i = 0; i != 25; ++i) mk_uint64_to_buff_le(&self->m_state[i], tmp + i * 8);
 	memcpy(output, tmp, to_copy);
 	remaining -= to_copy;
 	output += to_copy;
 	chunks = remaining / block_len;
 	for(i = 0; i != chunks; ++i, output += block_len)
 	{
-		mk_hash_base_detail_sha3_keccak_f(mk_hash_base_detail_sha3->m_state);
-		for(j = 0; j != 25; ++j) mk_uint64_to_buff_le(&mk_hash_base_detail_sha3->m_state[j], tmp + j * 8);
+		mk_hash_base_detail_sha3_keccak_f(self->m_state);
+		for(j = 0; j != 25; ++j) mk_uint64_to_buff_le(&self->m_state[j], tmp + j * 8);
 		memcpy(output, tmp, to_copy);
 	}
 	remaining -= chunks * block_len;
 	if(remaining != 0)
 	{
-		mk_hash_base_detail_sha3_keccak_f(mk_hash_base_detail_sha3->m_state);
-		for(j = 0; j != 25; ++j) mk_uint64_to_buff_le(&mk_hash_base_detail_sha3->m_state[j], tmp + j * 8);
+		mk_hash_base_detail_sha3_keccak_f(self->m_state);
+		for(j = 0; j != 25; ++j) mk_uint64_to_buff_le(&self->m_state[j], tmp + j * 8);
 		memcpy(output, tmp, remaining);
 	}
 }

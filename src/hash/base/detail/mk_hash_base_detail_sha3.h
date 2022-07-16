@@ -21,9 +21,9 @@ enum mk_hash_base_detail_sha3_domain_e
 };
 
 
-mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* hash_base_detail_sha3);
-mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* hash_base_detail_sha3, int block_len, void const* pblocks, int nblocks);
-mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s* hash_base_detail_sha3, int block_len, void* block, int idx, enum mk_hash_base_detail_sha3_domain_e domain, int digest_len, void* digest);
+mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* self);
+mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* self, int block_len, void const* pblocks, int nblocks);
+mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s* self, int block_len, void* block, int idx, enum mk_hash_base_detail_sha3_domain_e domain, int digest_len, void* digest);
 
 
 #endif

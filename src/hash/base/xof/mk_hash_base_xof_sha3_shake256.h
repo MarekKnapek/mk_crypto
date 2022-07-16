@@ -16,9 +16,9 @@ struct mk_hash_base_xof_sha3_shake256_s
 enum mk_hash_base_xof_sha3_shake256_block_len_e{ mk_hash_base_xof_sha3_shake256_block_len = 136 };
 
 
-mk_jumbo void mk_hash_base_xof_sha3_shake256_init(struct mk_hash_base_xof_sha3_shake256_s* hash_base_xof_sha3_shake256);
-mk_jumbo void mk_hash_base_xof_sha3_shake256_append_blocks(struct mk_hash_base_xof_sha3_shake256_s* hash_base_xof_sha3_shake256, void const* pblocks, int nblocks);
-mk_jumbo void mk_hash_base_xof_sha3_shake256_finish(struct mk_hash_base_xof_sha3_shake256_s* hash_base_xof_sha3_shake256, void* block, int idx, int digest_len, void* digest);
+mk_jumbo void mk_hash_base_xof_sha3_shake256_init(struct mk_hash_base_xof_sha3_shake256_s* self);
+mk_jumbo void mk_hash_base_xof_sha3_shake256_append_blocks(struct mk_hash_base_xof_sha3_shake256_s* self, void const* pblocks, int nblocks);
+mk_jumbo void mk_hash_base_xof_sha3_shake256_finish(struct mk_hash_base_xof_sha3_shake256_s* self, void* block, int idx, int digest_len, void* digest);
 
 
 #endif

@@ -146,23 +146,23 @@ static mk_inline void mk_hash_base_detail_sha2_512_sig1(struct mk_uint64_s* out,
 }
 
 
-mk_jumbo void mk_hash_base_detail_sha2_512_init(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, struct mk_uint64_s const* iv)
+mk_jumbo void mk_hash_base_detail_sha2_512_init(struct mk_hash_base_detail_sha2_512_s* self, struct mk_uint64_s const* iv)
 {
-	mk_assert(hash_base_detail_sha2_512);
+	mk_assert(self);
 	mk_assert(iv);
 
-	hash_base_detail_sha2_512->m_state[0] = iv[0];
-	hash_base_detail_sha2_512->m_state[1] = iv[1];
-	hash_base_detail_sha2_512->m_state[2] = iv[2];
-	hash_base_detail_sha2_512->m_state[3] = iv[3];
-	hash_base_detail_sha2_512->m_state[4] = iv[4];
-	hash_base_detail_sha2_512->m_state[5] = iv[5];
-	hash_base_detail_sha2_512->m_state[6] = iv[6];
-	hash_base_detail_sha2_512->m_state[7] = iv[7];
-	mk_uint128_zero(&hash_base_detail_sha2_512->m_len);
+	self->m_state[0] = iv[0];
+	self->m_state[1] = iv[1];
+	self->m_state[2] = iv[2];
+	self->m_state[3] = iv[3];
+	self->m_state[4] = iv[4];
+	self->m_state[5] = iv[5];
+	self->m_state[6] = iv[6];
+	self->m_state[7] = iv[7];
+	mk_uint128_zero(&self->m_len);
 }
 
-mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, void const* pblocks, int nblocks)
+mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_detail_sha2_512_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint128_s len_bytes;
 	unsigned char const* input;
@@ -183,7 +183,7 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 	struct mk_uint64_s tmp1;
 	struct mk_uint64_s tmp2;
 
-	mk_assert(hash_base_detail_sha2_512);
+	mk_assert(self);
 	mk_assert(pblocks || nblocks == 0);
 	mk_assert(nblocks >= 0);
 
@@ -193,7 +193,7 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 	}
 
 	mk_uint128_from_int(&len_bytes, 128 * nblocks);
-	mk_uint128_add(&hash_base_detail_sha2_512->m_len, &hash_base_detail_sha2_512->m_len, &len_bytes);
+	mk_uint128_add(&self->m_len, &self->m_len, &len_bytes);
 	input = (unsigned char const*)pblocks;
 	a = &hh[0];
 	b = &hh[1];
@@ -205,14 +205,14 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 	h = &hh[7];
 	for(iblock = 0; iblock != nblocks; ++iblock, input += 128)
 	{
-		hh[0] = hash_base_detail_sha2_512->m_state[0];
-		hh[1] = hash_base_detail_sha2_512->m_state[1];
-		hh[2] = hash_base_detail_sha2_512->m_state[2];
-		hh[3] = hash_base_detail_sha2_512->m_state[3];
-		hh[4] = hash_base_detail_sha2_512->m_state[4];
-		hh[5] = hash_base_detail_sha2_512->m_state[5];
-		hh[6] = hash_base_detail_sha2_512->m_state[6];
-		hh[7] = hash_base_detail_sha2_512->m_state[7];
+		hh[0] = self->m_state[0];
+		hh[1] = self->m_state[1];
+		hh[2] = self->m_state[2];
+		hh[3] = self->m_state[3];
+		hh[4] = self->m_state[4];
+		hh[5] = self->m_state[5];
+		hh[6] = self->m_state[6];
+		hh[7] = self->m_state[7];
 		for(i = 0; i != 16; ++i)
 		{
 			mk_uint64_from_buff_be(&w[i], input + i * 8);
@@ -248,18 +248,18 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 			*b = *a;
 			mk_uint64_add(a, &t1, &t2);
 		}
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[0], &hash_base_detail_sha2_512->m_state[0], &hh[0]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[1], &hash_base_detail_sha2_512->m_state[1], &hh[1]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[2], &hash_base_detail_sha2_512->m_state[2], &hh[2]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[3], &hash_base_detail_sha2_512->m_state[3], &hh[3]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[4], &hash_base_detail_sha2_512->m_state[4], &hh[4]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[5], &hash_base_detail_sha2_512->m_state[5], &hh[5]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[6], &hash_base_detail_sha2_512->m_state[6], &hh[6]);
-		mk_uint64_add(&hash_base_detail_sha2_512->m_state[7], &hash_base_detail_sha2_512->m_state[7], &hh[7]);
+		mk_uint64_add(&self->m_state[0], &self->m_state[0], &hh[0]);
+		mk_uint64_add(&self->m_state[1], &self->m_state[1], &hh[1]);
+		mk_uint64_add(&self->m_state[2], &self->m_state[2], &hh[2]);
+		mk_uint64_add(&self->m_state[3], &self->m_state[3], &hh[3]);
+		mk_uint64_add(&self->m_state[4], &self->m_state[4], &hh[4]);
+		mk_uint64_add(&self->m_state[5], &self->m_state[5], &hh[5]);
+		mk_uint64_add(&self->m_state[6], &self->m_state[6], &hh[6]);
+		mk_uint64_add(&self->m_state[7], &self->m_state[7], &hh[7]);
 	}
 }
 
-mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha2_512_s* hash_base_detail_sha2_512, void* block, int idx, void* digest)
+mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha2_512_s* self, void* block, int idx, void* digest)
 {
 	unsigned char* input;
 	unsigned char* output;
@@ -267,7 +267,7 @@ mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha
 	int capacity;
 	unsigned char buff[128];
 
-	mk_assert(hash_base_detail_sha2_512);
+	mk_assert(self);
 	mk_assert(block);
 	mk_assert(idx >= 0 && idx < 128);
 	mk_assert(digest);
@@ -275,7 +275,7 @@ mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha
 	input = (unsigned char*)block;
 	output = (unsigned char*)digest;
 	mk_uint128_from_int(&len, idx);
-	mk_uint128_add(&len, &len, &hash_base_detail_sha2_512->m_len);
+	mk_uint128_add(&len, &len, &self->m_len);
 	mk_uint128_shl(&len, &len, 3);
 	input[idx] = 0x80;
 	capacity = 128 - idx - 1;
@@ -283,22 +283,22 @@ mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha
 	{
 		memset(input + idx + 1, 0, capacity - 16);
 		mk_uint128_to_buff_be(&len, input + 128 - 16);
-		mk_hash_base_detail_sha2_512_append_blocks(hash_base_detail_sha2_512, input, 1);
+		mk_hash_base_detail_sha2_512_append_blocks(self, input, 1);
 	}
 	else
 	{
 		memset(input + idx + 1, 0, capacity);
-		mk_hash_base_detail_sha2_512_append_blocks(hash_base_detail_sha2_512, input, 1);
+		mk_hash_base_detail_sha2_512_append_blocks(self, input, 1);
 		memset(buff, 0, 128 - 16);
 		mk_uint128_to_buff_be(&len, buff + 128 - 16);
-		mk_hash_base_detail_sha2_512_append_blocks(hash_base_detail_sha2_512, buff, 1);
+		mk_hash_base_detail_sha2_512_append_blocks(self, buff, 1);
 	}
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[0], output + 0 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[1], output + 1 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[2], output + 2 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[3], output + 3 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[4], output + 4 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[5], output + 5 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[6], output + 6 * 8);
-	mk_uint64_to_buff_be(&hash_base_detail_sha2_512->m_state[7], output + 7 * 8);
+	mk_uint64_to_buff_be(&self->m_state[0], output + 0 * 8);
+	mk_uint64_to_buff_be(&self->m_state[1], output + 1 * 8);
+	mk_uint64_to_buff_be(&self->m_state[2], output + 2 * 8);
+	mk_uint64_to_buff_be(&self->m_state[3], output + 3 * 8);
+	mk_uint64_to_buff_be(&self->m_state[4], output + 4 * 8);
+	mk_uint64_to_buff_be(&self->m_state[5], output + 5 * 8);
+	mk_uint64_to_buff_be(&self->m_state[6], output + 6 * 8);
+	mk_uint64_to_buff_be(&self->m_state[7], output + 7 * 8);
 }
