@@ -1,7 +1,7 @@
 #include "mk_fuzz_mac_hmac.h"
 
-#include "../src/mac/mk_mac_hmac.h"
-#include "../src/mac/mk_mac_hmac_obj.h"
+#include "../src/mk_mac_hmac.h"
+#include "../src/mk_mac_hmac_obj.h"
 #include "../win/mk_win_mac_hmac.h"
 
 #include "../src/utils/mk_assert.h"
@@ -9,51 +9,6 @@
 
 #include <stddef.h> /* NULL */
 #include <string.h> /* memcmp */
-
-
-static enum mk_hash_e const s_algs1[] =
-{
-	mk_hash_e_md2,
-	mk_hash_e_md4,
-	mk_hash_e_md5,
-	mk_hash_e_sha1,
-	mk_hash_e_sha2_256,
-	mk_hash_e_sha2_384,
-	mk_hash_e_sha2_512,
-};
-
-static enum mk_hash_e const s_algs2[] =
-{
-	mk_hash_e_md2,
-	mk_hash_e_md4,
-	mk_hash_e_md5,
-	mk_hash_e_sha1,
-	mk_hash_e_sha2_256,
-	mk_hash_e_sha2_384,
-	mk_hash_e_sha2_512,
-};
-
-static enum mk_win_mac_hmac_e const s_algs3[] =
-{
-	mk_win_mac_hmac_e_md2,
-	mk_win_mac_hmac_e_md4,
-	mk_win_mac_hmac_e_md5,
-	mk_win_mac_hmac_e_sha1,
-	mk_win_mac_hmac_e_sha2_256,
-	mk_win_mac_hmac_e_sha2_384,
-	mk_win_mac_hmac_e_sha2_512,
-};
-
-static int const s_digest_lens[] =
-{
-	mk_hash_base_hash_md2_digest_len,
-	mk_hash_base_hash_md4_digest_len,
-	mk_hash_base_hash_md5_digest_len,
-	mk_hash_base_hash_sha1_digest_len,
-	mk_hash_base_hash_sha2_256_digest_len,
-	mk_hash_base_hash_sha2_384_digest_len,
-	mk_hash_base_hash_sha2_512_digest_len,
-};
 
 
 #define test(x) do{ if(!(x)){ int volatile* volatile ptr = NULL; *ptr = 0; } }while(0)
@@ -110,6 +65,50 @@ static mk_inline int mk_fuzz_mac_hmac_data_gud(unsigned char const* data, int si
 
 void mk_fuzz_mac_hmac(unsigned char const* data, int size)
 {
+	static enum mk_hash_e const s_algs1[] =
+	{
+		mk_hash_e_md2,
+		mk_hash_e_md4,
+		mk_hash_e_md5,
+		mk_hash_e_sha1,
+		mk_hash_e_sha2_256,
+		mk_hash_e_sha2_384,
+		mk_hash_e_sha2_512,
+	};
+
+	static enum mk_hash_e const s_algs2[] =
+	{
+		mk_hash_e_md2,
+		mk_hash_e_md4,
+		mk_hash_e_md5,
+		mk_hash_e_sha1,
+		mk_hash_e_sha2_256,
+		mk_hash_e_sha2_384,
+		mk_hash_e_sha2_512,
+	};
+
+	static enum mk_win_mac_hmac_e const s_algs3[] =
+	{
+		mk_win_mac_hmac_e_md2,
+		mk_win_mac_hmac_e_md4,
+		mk_win_mac_hmac_e_md5,
+		mk_win_mac_hmac_e_sha1,
+		mk_win_mac_hmac_e_sha2_256,
+		mk_win_mac_hmac_e_sha2_384,
+		mk_win_mac_hmac_e_sha2_512,
+	};
+
+	static int const s_digest_lens[] =
+	{
+		mk_hash_base_hash_md2_digest_len,
+		mk_hash_base_hash_md4_digest_len,
+		mk_hash_base_hash_md5_digest_len,
+		mk_hash_base_hash_sha1_digest_len,
+		mk_hash_base_hash_sha2_256_digest_len,
+		mk_hash_base_hash_sha2_384_digest_len,
+		mk_hash_base_hash_sha2_512_digest_len,
+	};
+
 	int len1;
 	int len2;
 	unsigned char const* data1;
@@ -124,15 +123,16 @@ void mk_fuzz_mac_hmac(unsigned char const* data, int size)
 	mk_win_mac_hmac_h hmac3;
 	unsigned char digest3[512 / 8];
 
+	mk_assert(sizeof(s_algs2) / sizeof(s_algs2[0]) == sizeof(s_algs1) / sizeof(s_algs1[0]));
+	mk_assert(sizeof(s_algs3) / sizeof(s_algs3[0]) == sizeof(s_algs1) / sizeof(s_algs1[0]));
+	mk_assert(sizeof(s_digest_lens) / sizeof(s_digest_lens[0]) == sizeof(s_algs1) / sizeof(s_algs1[0]));
+
 	if(!mk_fuzz_mac_hmac_data_gud(data, size, &len1, &len2, &data1, &data2))
 	{
 		return;
 	}
 	phmac1.m_u = &hmac1;
 	n = (int)(sizeof(s_algs1) / sizeof(s_algs1[0]));
-	mk_assert((int)(sizeof(s_algs2) / sizeof(s_algs2[0])) == n);
-	mk_assert((int)(sizeof(s_algs3) / sizeof(s_algs3[0])) == n);
-	mk_assert((int)(sizeof(s_digest_lens) / sizeof(s_digest_lens[0])) == n);
 	for(i = 0; i != n; ++i)
 	{
 		mk_mac_hmac_init(s_algs1[i], phmac1, data1, len1);

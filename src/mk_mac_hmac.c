@@ -1,10 +1,10 @@
 #include "mk_mac_hmac.h"
 
-#include "../hash/base/mk_hash_base_enum.h"
-#include "hmac/mk_mac_hmac_hash.h"
+#include "hash/base/mk_hash_base_enum.h"
+#include "mac/hmac/mk_mac_hmac_hash.h"
 
-#include "../utils/mk_assert.h"
-#include "../utils/mk_jumbo.h"
+#include "utils/mk_assert.h"
+#include "utils/mk_jumbo.h"
 
 
 mk_jumbo void mk_mac_hmac_init(enum mk_hash_e type, union mk_mac_hmac_pu hmac, void const* key, int key_len)
@@ -16,7 +16,7 @@ mk_jumbo void mk_mac_hmac_init(enum mk_hash_e type, union mk_mac_hmac_pu hmac, v
 
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xvarname(alg) concat(m_, alg)
 		#define xinit(alg) concat(concat(mk_mac_hmac_, alg), _init)
@@ -26,7 +26,7 @@ mk_jumbo void mk_mac_hmac_init(enum mk_hash_e type, union mk_mac_hmac_pu hmac, v
 		#undef xvarname
 		#undef xinit
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }
 
@@ -39,7 +39,7 @@ mk_jumbo void mk_mac_hmac_append(enum mk_hash_e type, union mk_mac_hmac_pu hmac,
 
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xvarname(alg) concat(m_, alg)
 		#define xappend(alg) concat(concat(mk_mac_hmac_, alg), _append)
@@ -49,7 +49,7 @@ mk_jumbo void mk_mac_hmac_append(enum mk_hash_e type, union mk_mac_hmac_pu hmac,
 		#undef xvarname
 		#undef xappend
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }
 
@@ -61,7 +61,7 @@ mk_jumbo void mk_mac_hmac_finish(enum mk_hash_e type, union mk_mac_hmac_pu hmac,
 
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xvarname(alg) concat(m_, alg)
 		#define xfinish(alg) concat(concat(mk_mac_hmac_, alg), _finish)
@@ -71,6 +71,6 @@ mk_jumbo void mk_mac_hmac_finish(enum mk_hash_e type, union mk_mac_hmac_pu hmac,
 		#undef xvarname
 		#undef xfinish
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }

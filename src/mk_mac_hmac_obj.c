@@ -1,11 +1,11 @@
 #include "mk_mac_hmac_obj.h"
 
-#include "../hash/base/mk_hash_base_enum.h"
-#include "hmac/mk_mac_hmac_hash.h"
+#include "hash/base/mk_hash_base_enum.h"
+#include "mac/hmac/mk_mac_hmac_hash.h"
 
-#include "../utils/mk_assert.h"
-#include "../utils/mk_clobber.h"
-#include "../utils/mk_jumbo.h"
+#include "utils/mk_assert.h"
+#include "utils/mk_clobber.h"
+#include "utils/mk_jumbo.h"
 
 #include <stddef.h> /* NULL */
 #include <stdlib.h> /* malloc free */
@@ -14,7 +14,7 @@
 #define mk_mac_hmac_obj_is_good_macro(hmac) ((!!((hmac).m_val)) && mk_hash_e_is_good(*((enum mk_hash_e*)((hmac).m_val))))
 
 
-#include "../hash/base/mk_hash_base_xmacro_def.h"
+#include "hash/base/mk_hash_base_xmacro_def.h"
 #define xtypebig(alg) concat(concat(struct mk_mac_hmac_obj_, alg), _s)
 #define xtypesmol(alg) concat(concat(struct mk_mac_hmac_, alg), _s)
 #define xcontent(alg) \
@@ -27,7 +27,7 @@ xmacro
 #undef xtypebig
 #undef xtypesmol
 #undef xcontent
-#include "../hash/base/mk_hash_base_xmacro_undef.h"
+#include "hash/base/mk_hash_base_xmacro_undef.h"
 
 
 mk_jumbo mk_mac_hmac_obj_h mk_mac_hmac_obj_create(enum mk_hash_e type, void const* key, int key_len)
@@ -41,7 +41,7 @@ mk_jumbo mk_mac_hmac_obj_h mk_mac_hmac_obj_create(enum mk_hash_e type, void cons
 	mk_clobber(&hmac);
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xtype(alg) concat(concat(struct mk_mac_hmac_obj_, alg), _s)
 		#define xinit(alg) concat(concat(mk_mac_hmac_, alg), _init)
@@ -61,7 +61,7 @@ mk_jumbo mk_mac_hmac_obj_h mk_mac_hmac_obj_create(enum mk_hash_e type, void cons
 		#undef xtype
 		#undef xinit
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 	mk_assert(mk_mac_hmac_obj_is_good_macro(hmac));
 	return hmac;
@@ -89,7 +89,7 @@ mk_jumbo void mk_mac_hmac_obj_reinit(mk_mac_hmac_obj_h hmac, void const* key, in
 	mk_assert(mk_hash_e_is_good(type));
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xtype(alg) concat(concat(struct mk_mac_hmac_obj_, alg), _s)
 		#define xinit(alg) concat(concat(mk_mac_hmac_, alg), _init)
@@ -99,7 +99,7 @@ mk_jumbo void mk_mac_hmac_obj_reinit(mk_mac_hmac_obj_h hmac, void const* key, in
 		#undef xtype
 		#undef xinit
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }
 
@@ -115,7 +115,7 @@ mk_jumbo void mk_mac_hmac_obj_append(mk_mac_hmac_obj_h hmac, void const* msg, in
 	mk_assert(mk_hash_e_is_good(type));
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xtype(alg) concat(concat(struct mk_mac_hmac_obj_, alg), _s)
 		#define xappend(alg) concat(concat(mk_mac_hmac_, alg), _append)
@@ -125,7 +125,7 @@ mk_jumbo void mk_mac_hmac_obj_append(mk_mac_hmac_obj_h hmac, void const* msg, in
 		#undef xtype
 		#undef xappend
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }
 
@@ -140,7 +140,7 @@ mk_jumbo void mk_mac_hmac_obj_finish(mk_mac_hmac_obj_h hmac, void* digest)
 	mk_assert(mk_hash_e_is_good(type));
 	switch(type)
 	{
-		#include "../hash/base/mk_hash_base_xmacro_def.h"
+		#include "hash/base/mk_hash_base_xmacro_def.h"
 		#define xenum(alg) concat(mk_hash_e_, alg)
 		#define xtype(alg) concat(concat(struct mk_mac_hmac_obj_, alg), _s)
 		#define xfinish(alg) concat(concat(mk_mac_hmac_, alg), _finish)
@@ -150,7 +150,7 @@ mk_jumbo void mk_mac_hmac_obj_finish(mk_mac_hmac_obj_h hmac, void* digest)
 		#undef xtype
 		#undef xinit
 		#undef xcontent
-		#include "../hash/base/mk_hash_base_xmacro_undef.h"
+		#include "hash/base/mk_hash_base_xmacro_undef.h"
 	}
 }
 

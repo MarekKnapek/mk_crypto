@@ -58,12 +58,12 @@
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof.c" />
     <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c" />
     <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c" />
-    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac.c" />
-    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac_obj.c" />
     <ClCompile Include="..\..\..\src\mk_hash.c" />
     <ClCompile Include="..\..\..\src\mk_hash_fn.c" />
     <ClCompile Include="..\..\..\src\mk_hash_function.c" />
     <ClCompile Include="..\..\..\src\mk_kdf_pbkdf2.c" />
+    <ClCompile Include="..\..\..\src\mk_mac_hmac.c" />
+    <ClCompile Include="..\..\..\src\mk_mac_hmac_obj.c" />
     <ClCompile Include="..\..\..\src\utils\mk_clobber.c" />
     <ClCompile Include="..\..\..\src\utils\mk_try.c" />
     <ClCompile Include="..\..\..\win\mk_win_hash.c" />
@@ -117,12 +117,12 @@
     <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof.h" />
     <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h" />
     <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h" />
-    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac.h" />
-    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac_obj.h" />
     <ClInclude Include="..\..\..\src\mk_hash.h" />
     <ClInclude Include="..\..\..\src\mk_hash_fn.h" />
     <ClInclude Include="..\..\..\src\mk_hash_function.h" />
     <ClInclude Include="..\..\..\src\mk_kdf_pbkdf2.h" />
+    <ClInclude Include="..\..\..\src\mk_mac_hmac.h" />
+    <ClInclude Include="..\..\..\src\mk_mac_hmac_obj.h" />
     <ClInclude Include="..\..\..\src\utils\mk_assert.h" />
     <ClInclude Include="..\..\..\src\utils\mk_clobber.h" />
     <ClInclude Include="..\..\..\src\utils\mk_concat_def.h" />
@@ -148,6 +148,9 @@
     <None Include="..\..\..\src\hash\xof\mk_hash_xof.h.inl" />
     <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c.inl" />
     <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h.inl" />
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v1.c.inl" />
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v2.c.inl" />
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v3.c.inl" />
     <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c.inl" />
     <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h.inl" />
   </ItemGroup>

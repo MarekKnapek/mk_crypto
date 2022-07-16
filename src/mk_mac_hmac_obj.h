@@ -2,9 +2,9 @@
 #define mk_include_guard_mac_hmac_obj
 
 
-#include "../hash/base/mk_hash_base_enum.h"
+#include "hash/base/mk_hash_base_enum.h"
 
-#include "../utils/mk_jumbo.h"
+#include "utils/mk_jumbo.h"
 
 
 typedef struct mk_mac_hmac_obj_s { void* m_val; } mk_mac_hmac_obj_h;

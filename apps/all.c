@@ -37,12 +37,5 @@
 #include "../src/mk_hash.c"
 #include "../src/mk_hash_fn.c"
 #include "../src/mk_hash_function.c"
-/*#include "../src/hash/hash/mk_hash_hash_win_md2.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_md4.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_md5.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_sha1.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_sha2_256.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_sha2_384.c"*/
-/*#include "../src/hash/hash/mk_hash_hash_win_sha2_512.c"*/
 #include "../src/utils/mk_clobber.c"
 #include "../src/utils/mk_try.c"

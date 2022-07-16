@@ -141,9 +141,6 @@
     <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.c">
       <Filter>src\hash\hash</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac.c">
-      <Filter>src\mac</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\mk_hash.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -183,9 +180,6 @@
     <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c">
       <Filter>src\mac\hmac</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\mac\mk_mac_hmac_obj.c">
-      <Filter>src\mac</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof.c">
       <Filter>src\hash\xof</Filter>
     </ClCompile>
@@ -202,6 +196,12 @@
       <Filter>src\kdf\pbkdf2</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\mk_kdf_pbkdf2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_mac_hmac.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\mk_mac_hmac_obj.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -311,12 +311,6 @@
     <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.h">
       <Filter>src\hash\hash</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac.h">
-      <Filter>src\mac</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mac\mk_mac_hmac_obj.h">
-      <Filter>src\mac</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mk_hash.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -395,6 +389,12 @@
     <ClInclude Include="..\..\..\src\mk_kdf_pbkdf2.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_mac_hmac.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mk_mac_hmac_obj.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\hash\hash\mk_hash_hash.c.inl">
@@ -437,6 +437,15 @@
       <Filter>src\kdf\pbkdf2</Filter>
     </None>
     <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h.inl">
+      <Filter>src\kdf\pbkdf2</Filter>
+    </None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v1.c.inl">
+      <Filter>src\kdf\pbkdf2</Filter>
+    </None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v2.c.inl">
+      <Filter>src\kdf\pbkdf2</Filter>
+    </None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v3.c.inl">
       <Filter>src\kdf\pbkdf2</Filter>
     </None>
   </ItemGroup>
