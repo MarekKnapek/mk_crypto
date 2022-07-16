@@ -111,6 +111,8 @@ mk_jumbo void mk_hash_base_hash_crc32_append_blocks(struct mk_hash_base_hash_crc
 	struct mk_uint32_s table_element;
 
 	mk_assert(self);
+	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	crc = self->m_state;
 	input = (unsigned char const*)pblocks;

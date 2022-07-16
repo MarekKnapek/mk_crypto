@@ -29,6 +29,8 @@ mk_jumbo void mk_hash_base_hash_sha2_256_init(struct mk_hash_base_hash_sha2_256_
 mk_jumbo void mk_hash_base_hash_sha2_256_append_blocks(struct mk_hash_base_hash_sha2_256_s* self, int nblocks, void const* pblocks)
 {
 	mk_assert(self);
+	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	mk_hash_base_detail_sha2_256_append_blocks(&self->m_256, nblocks, pblocks);
 }
@@ -36,6 +38,7 @@ mk_jumbo void mk_hash_base_hash_sha2_256_append_blocks(struct mk_hash_base_hash_
 mk_jumbo void mk_hash_base_hash_sha2_256_finish(struct mk_hash_base_hash_sha2_256_s* self, void* block, int idx, void* digest)
 {
 	mk_assert(self);
+	mk_assert(digest);
 
 	mk_hash_base_detail_sha2_256_finish(&self->m_256, block, idx, digest);
 }

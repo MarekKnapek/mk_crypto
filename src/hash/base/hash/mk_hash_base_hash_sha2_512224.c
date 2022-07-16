@@ -31,6 +31,8 @@ mk_jumbo void mk_hash_base_hash_sha2_512224_init(struct mk_hash_base_hash_sha2_5
 mk_jumbo void mk_hash_base_hash_sha2_512224_append_blocks(struct mk_hash_base_hash_sha2_512224_s* self, int nblocks, void const* pblocks)
 {
 	mk_assert(self);
+	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	mk_hash_base_detail_sha2_512_append_blocks(&self->m_512, nblocks, pblocks);
 }
@@ -40,6 +42,7 @@ mk_jumbo void mk_hash_base_hash_sha2_512224_finish(struct mk_hash_base_hash_sha2
 	unsigned char buff[64];
 
 	mk_assert(self);
+	mk_assert(digest);
 
 	mk_hash_base_detail_sha2_512_finish(&self->m_512, block, idx, &buff);
 	memcpy(digest, buff, mk_hash_base_hash_sha2_512224_digest_len);
