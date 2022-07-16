@@ -157,7 +157,7 @@ mk_jumbo void mk_hash_base_hash_md4_init(struct mk_hash_base_hash_md4_s* self)
 	mk_uint64_zero(&self->m_len);
 }
 
-mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s* self, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint64_s len_bytes;
 	unsigned char const* input;
@@ -169,8 +169,8 @@ mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s
 	int iblock;
 
 	mk_assert(self);
-	mk_assert(nblocks >= 0);
 	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	if(nblocks == 0)
 	{
@@ -275,11 +275,11 @@ mk_jumbo void mk_hash_base_hash_md4_finish(struct mk_hash_base_hash_md4_s* self,
 	else
 	{
 		memset(input + idx + 1, 0, capacity);
-		mk_hash_base_hash_md4_append_blocks(self, 1, input);
+		mk_hash_base_hash_md4_append_blocks(self, input, 1);
 		memset(input, 0, 64 - 8);
 	}
 	mk_uint64_to_buff_le(&len, input + 64 - 8);
-	mk_hash_base_hash_md4_append_blocks(self, 1, input);
+	mk_hash_base_hash_md4_append_blocks(self, input, 1);
 	mk_uint32_to_buff_le(&self->m_state[0], output + 0 * 4);
 	mk_uint32_to_buff_le(&self->m_state[1], output + 1 * 4);
 	mk_uint32_to_buff_le(&self->m_state[2], output + 2 * 4);

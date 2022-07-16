@@ -19,7 +19,7 @@ static int const mk_hash_base_hash_md2_name_len = (int)sizeof(mk_hash_base_hash_
 
 
 mk_jumbo void mk_hash_base_hash_md2_init(struct mk_hash_base_hash_md2_s* self);
-mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s* self, int nblocks, void const* pblocks);
+mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s* self, void const* pblocks, int nblocks);
 mk_jumbo void mk_hash_base_hash_md2_finish(struct mk_hash_base_hash_md2_s* self, void* block, int idx, void* digest);
 
 

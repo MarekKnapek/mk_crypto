@@ -28,13 +28,13 @@ mk_jumbo void mk_hash_base_hash_sha2_512256_init(struct mk_hash_base_hash_sha2_5
 	mk_hash_base_detail_sha2_512_init(&self->m_512, mk_sha2_512256_base_detail_init);
 }
 
-mk_jumbo void mk_hash_base_hash_sha2_512256_append_blocks(struct mk_hash_base_hash_sha2_512256_s* self, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_hash_sha2_512256_append_blocks(struct mk_hash_base_hash_sha2_512256_s* self, void const* pblocks, int nblocks)
 {
 	mk_assert(self);
 	mk_assert(pblocks || nblocks == 0);
 	mk_assert(nblocks >= 0);
 
-	mk_hash_base_detail_sha2_512_append_blocks(&self->m_512, nblocks, pblocks);
+	mk_hash_base_detail_sha2_512_append_blocks(&self->m_512, pblocks, nblocks);
 }
 
 mk_jumbo void mk_hash_base_hash_sha2_512256_finish(struct mk_hash_base_hash_sha2_512256_s* self, void* block, int idx, void* digest)

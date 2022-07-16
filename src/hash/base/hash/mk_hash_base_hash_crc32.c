@@ -102,7 +102,7 @@ mk_jumbo void mk_hash_base_hash_crc32_init(struct mk_hash_base_hash_crc32_s* sel
 	self->m_state = s_crc32_init;
 }
 
-mk_jumbo void mk_hash_base_hash_crc32_append_blocks(struct mk_hash_base_hash_crc32_s* self, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_hash_crc32_append_blocks(struct mk_hash_base_hash_crc32_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint32_s crc;
 	unsigned char const* input;

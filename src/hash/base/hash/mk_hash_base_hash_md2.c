@@ -35,7 +35,7 @@ mk_jumbo void mk_hash_base_hash_md2_init(struct mk_hash_base_hash_md2_s* self)
 	memset(self->m_checksum, 0, 16);
 }
 
-mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s* self, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s* self, void const* pblocks, int nblocks)
 {
 	unsigned char const* input;
 	unsigned char x[48];
@@ -46,8 +46,8 @@ mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s
 	unsigned l;
 
 	mk_assert(self);
-	mk_assert(nblocks >= 0);
 	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	input = (unsigned char const*)pblocks;
 	memcpy(x + 0 * 16, self->m_state, 16);
@@ -86,7 +86,7 @@ mk_jumbo void mk_hash_base_hash_md2_finish(struct mk_hash_base_hash_md2_s* self,
 	input = (unsigned char*)block;
 	capacity = 16 - idx;
 	memset(input + idx, capacity, capacity);
-	mk_hash_base_hash_md2_append_blocks(self, 1, input);
-	mk_hash_base_hash_md2_append_blocks(self, 1, self->m_checksum);
+	mk_hash_base_hash_md2_append_blocks(self, input, 1);
+	mk_hash_base_hash_md2_append_blocks(self, self->m_checksum, 1);
 	memcpy(digest, self->m_state, 16);
 }

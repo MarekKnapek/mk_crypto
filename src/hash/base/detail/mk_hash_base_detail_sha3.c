@@ -206,15 +206,15 @@ mk_jumbo void mk_hash_base_detail_sha3_init(struct mk_hash_base_detail_sha3_s* m
 	}
 }
 
-mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, int nblocks, void const* pblocks)
+mk_jumbo void mk_hash_base_detail_sha3_append_blocks(struct mk_hash_base_detail_sha3_s* mk_hash_base_detail_sha3, int block_len, void const* pblocks, int nblocks)
 {
 	unsigned char const* input;
 	int iblock;
 
 	mk_assert(mk_hash_base_detail_sha3);
 	mk_assert(block_len == 168 || block_len == 144 || block_len == 136 || block_len == 104 || block_len == 72);
-	mk_assert(nblocks >= 0);
 	mk_assert(pblocks || nblocks == 0);
+	mk_assert(nblocks >= 0);
 
 	input = (unsigned char const*)pblocks;
 	for(iblock = 0; iblock != nblocks; ++iblock, input += block_len)
@@ -256,7 +256,7 @@ mk_jumbo void mk_hash_base_detail_sha3_finish(struct mk_hash_base_detail_sha3_s*
 	capacity = block_len - idx - 1;
 	memset(input + idx + 1, 0, capacity);
 	input[block_len - 1] |= 0x80;
-	mk_hash_base_detail_sha3_append_blocks(mk_hash_base_detail_sha3, block_len, 1, input);
+	mk_hash_base_detail_sha3_append_blocks(mk_hash_base_detail_sha3, block_len, input, 1);
 	to_copy = block_len < remaining ? block_len : remaining;
 	for(i = 0; i != 25; ++i) mk_uint64_to_buff_le(&mk_hash_base_detail_sha3->m_state[i], tmp + i * 8);
 	memcpy(output, tmp, to_copy);

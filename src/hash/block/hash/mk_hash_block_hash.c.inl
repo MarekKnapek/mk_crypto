@@ -43,13 +43,13 @@ mk_jumbo void append(hash_s* base, void* block, int* pidx, void const* msg, int 
 		if(idx != 0)
 		{
 			memcpy(output + idx, input, capacity);
-			append_blocks(base, 1, output);
+			append_blocks(base, output, 1);
 			input += capacity;
 			remaining -= capacity;
 			idx = 0;
 		}
 		blocks = remaining / block_len;
-		append_blocks(base, blocks, input);
+		append_blocks(base, input, blocks);
 		input += blocks * block_len;
 		remaining -= blocks * block_len;
 	}

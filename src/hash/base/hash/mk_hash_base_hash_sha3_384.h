@@ -20,7 +20,7 @@ static int const mk_hash_base_hash_sha3_384_name_len = (int)sizeof(mk_hash_base_
 
 
 mk_jumbo void mk_hash_base_hash_sha3_384_init(struct mk_hash_base_hash_sha3_384_s* self);
-mk_jumbo void mk_hash_base_hash_sha3_384_append_blocks(struct mk_hash_base_hash_sha3_384_s* self, int nblocks, void const* pblocks);
+mk_jumbo void mk_hash_base_hash_sha3_384_append_blocks(struct mk_hash_base_hash_sha3_384_s* self, void const* pblocks, int nblocks);
 mk_jumbo void mk_hash_base_hash_sha3_384_finish(struct mk_hash_base_hash_sha3_384_s* self, void* block, int idx, void* digest);
 
 
