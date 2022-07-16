@@ -8,14 +8,14 @@
 
 static struct mk_uint64_s const mk_sha2_512_base_detail_init[8] =
 {
-	mk_uint64_c(0x6a09e667, 0xf3bcc908),
-	mk_uint64_c(0xbb67ae85, 0x84caa73b),
-	mk_uint64_c(0x3c6ef372, 0xfe94f82b),
-	mk_uint64_c(0xa54ff53a, 0x5f1d36f1),
-	mk_uint64_c(0x510e527f, 0xade682d1),
-	mk_uint64_c(0x9b05688c, 0x2b3e6c1f),
-	mk_uint64_c(0x1f83d9ab, 0xfb41bd6b),
-	mk_uint64_c(0x5be0cd19, 0x137e2179),
+	mk_uint64_c(0x6a09e667ul, 0xf3bcc908ul),
+	mk_uint64_c(0xbb67ae85ul, 0x84caa73bul),
+	mk_uint64_c(0x3c6ef372ul, 0xfe94f82bul),
+	mk_uint64_c(0xa54ff53aul, 0x5f1d36f1ul),
+	mk_uint64_c(0x510e527ful, 0xade682d1ul),
+	mk_uint64_c(0x9b05688cul, 0x2b3e6c1ful),
+	mk_uint64_c(0x1f83d9abul, 0xfb41bd6bul),
+	mk_uint64_c(0x5be0cd19ul, 0x137e2179ul),
 };
 
 

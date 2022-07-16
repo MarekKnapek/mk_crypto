@@ -8,14 +8,14 @@
 
 static struct mk_uint32_s const mk_sha2_256_base_detail_init[8] =
 {
-	mk_uint32_c(0x6a09e667),
-	mk_uint32_c(0xbb67ae85),
-	mk_uint32_c(0x3c6ef372),
-	mk_uint32_c(0xa54ff53a),
-	mk_uint32_c(0x510e527f),
-	mk_uint32_c(0x9b05688c),
-	mk_uint32_c(0x1f83d9ab),
-	mk_uint32_c(0x5be0cd19),
+	mk_uint32_c(0x6a09e667ul),
+	mk_uint32_c(0xbb67ae85ul),
+	mk_uint32_c(0x3c6ef372ul),
+	mk_uint32_c(0xa54ff53aul),
+	mk_uint32_c(0x510e527ful),
+	mk_uint32_c(0x9b05688cul),
+	mk_uint32_c(0x1f83d9abul),
+	mk_uint32_c(0x5be0cd19ul),
 };
 
 

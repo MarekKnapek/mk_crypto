@@ -12,22 +12,22 @@
 
 static struct mk_uint32_s const mk_hash_base_detail_sha2_256_table[64] =
 {
-	mk_uint32_c(0x428a2f98), mk_uint32_c(0x71374491), mk_uint32_c(0xb5c0fbcf), mk_uint32_c(0xe9b5dba5),
-	mk_uint32_c(0x3956c25b), mk_uint32_c(0x59f111f1), mk_uint32_c(0x923f82a4), mk_uint32_c(0xab1c5ed5),
-	mk_uint32_c(0xd807aa98), mk_uint32_c(0x12835b01), mk_uint32_c(0x243185be), mk_uint32_c(0x550c7dc3),
-	mk_uint32_c(0x72be5d74), mk_uint32_c(0x80deb1fe), mk_uint32_c(0x9bdc06a7), mk_uint32_c(0xc19bf174),
-	mk_uint32_c(0xe49b69c1), mk_uint32_c(0xefbe4786), mk_uint32_c(0x0fc19dc6), mk_uint32_c(0x240ca1cc),
-	mk_uint32_c(0x2de92c6f), mk_uint32_c(0x4a7484aa), mk_uint32_c(0x5cb0a9dc), mk_uint32_c(0x76f988da),
-	mk_uint32_c(0x983e5152), mk_uint32_c(0xa831c66d), mk_uint32_c(0xb00327c8), mk_uint32_c(0xbf597fc7),
-	mk_uint32_c(0xc6e00bf3), mk_uint32_c(0xd5a79147), mk_uint32_c(0x06ca6351), mk_uint32_c(0x14292967),
-	mk_uint32_c(0x27b70a85), mk_uint32_c(0x2e1b2138), mk_uint32_c(0x4d2c6dfc), mk_uint32_c(0x53380d13),
-	mk_uint32_c(0x650a7354), mk_uint32_c(0x766a0abb), mk_uint32_c(0x81c2c92e), mk_uint32_c(0x92722c85),
-	mk_uint32_c(0xa2bfe8a1), mk_uint32_c(0xa81a664b), mk_uint32_c(0xc24b8b70), mk_uint32_c(0xc76c51a3),
-	mk_uint32_c(0xd192e819), mk_uint32_c(0xd6990624), mk_uint32_c(0xf40e3585), mk_uint32_c(0x106aa070),
-	mk_uint32_c(0x19a4c116), mk_uint32_c(0x1e376c08), mk_uint32_c(0x2748774c), mk_uint32_c(0x34b0bcb5),
-	mk_uint32_c(0x391c0cb3), mk_uint32_c(0x4ed8aa4a), mk_uint32_c(0x5b9cca4f), mk_uint32_c(0x682e6ff3),
-	mk_uint32_c(0x748f82ee), mk_uint32_c(0x78a5636f), mk_uint32_c(0x84c87814), mk_uint32_c(0x8cc70208),
-	mk_uint32_c(0x90befffa), mk_uint32_c(0xa4506ceb), mk_uint32_c(0xbef9a3f7), mk_uint32_c(0xc67178f2),
+	mk_uint32_c(0x428a2f98ul), mk_uint32_c(0x71374491ul), mk_uint32_c(0xb5c0fbcful), mk_uint32_c(0xe9b5dba5ul),
+	mk_uint32_c(0x3956c25bul), mk_uint32_c(0x59f111f1ul), mk_uint32_c(0x923f82a4ul), mk_uint32_c(0xab1c5ed5ul),
+	mk_uint32_c(0xd807aa98ul), mk_uint32_c(0x12835b01ul), mk_uint32_c(0x243185beul), mk_uint32_c(0x550c7dc3ul),
+	mk_uint32_c(0x72be5d74ul), mk_uint32_c(0x80deb1feul), mk_uint32_c(0x9bdc06a7ul), mk_uint32_c(0xc19bf174ul),
+	mk_uint32_c(0xe49b69c1ul), mk_uint32_c(0xefbe4786ul), mk_uint32_c(0x0fc19dc6ul), mk_uint32_c(0x240ca1ccul),
+	mk_uint32_c(0x2de92c6ful), mk_uint32_c(0x4a7484aaul), mk_uint32_c(0x5cb0a9dcul), mk_uint32_c(0x76f988daul),
+	mk_uint32_c(0x983e5152ul), mk_uint32_c(0xa831c66dul), mk_uint32_c(0xb00327c8ul), mk_uint32_c(0xbf597fc7ul),
+	mk_uint32_c(0xc6e00bf3ul), mk_uint32_c(0xd5a79147ul), mk_uint32_c(0x06ca6351ul), mk_uint32_c(0x14292967ul),
+	mk_uint32_c(0x27b70a85ul), mk_uint32_c(0x2e1b2138ul), mk_uint32_c(0x4d2c6dfcul), mk_uint32_c(0x53380d13ul),
+	mk_uint32_c(0x650a7354ul), mk_uint32_c(0x766a0abbul), mk_uint32_c(0x81c2c92eul), mk_uint32_c(0x92722c85ul),
+	mk_uint32_c(0xa2bfe8a1ul), mk_uint32_c(0xa81a664bul), mk_uint32_c(0xc24b8b70ul), mk_uint32_c(0xc76c51a3ul),
+	mk_uint32_c(0xd192e819ul), mk_uint32_c(0xd6990624ul), mk_uint32_c(0xf40e3585ul), mk_uint32_c(0x106aa070ul),
+	mk_uint32_c(0x19a4c116ul), mk_uint32_c(0x1e376c08ul), mk_uint32_c(0x2748774cul), mk_uint32_c(0x34b0bcb5ul),
+	mk_uint32_c(0x391c0cb3ul), mk_uint32_c(0x4ed8aa4aul), mk_uint32_c(0x5b9cca4ful), mk_uint32_c(0x682e6ff3ul),
+	mk_uint32_c(0x748f82eeul), mk_uint32_c(0x78a5636ful), mk_uint32_c(0x84c87814ul), mk_uint32_c(0x8cc70208ul),
+	mk_uint32_c(0x90befffaul), mk_uint32_c(0xa4506cebul), mk_uint32_c(0xbef9a3f7ul), mk_uint32_c(0xc67178f2ul),
 };
 
 

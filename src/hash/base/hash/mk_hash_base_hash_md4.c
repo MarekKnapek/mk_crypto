@@ -12,13 +12,13 @@
 
 static struct mk_uint32_s const mk_md4_base_detail_init[4] =
 {
-	mk_uint32_c(0x67452301),
-	mk_uint32_c(0xefcdab89),
-	mk_uint32_c(0x98badcfe),
-	mk_uint32_c(0x10325476),
+	mk_uint32_c(0x67452301ul),
+	mk_uint32_c(0xefcdab89ul),
+	mk_uint32_c(0x98badcfeul),
+	mk_uint32_c(0x10325476ul),
 };
-static struct mk_uint32_s const mk_md4_base_detail_round_2_constant = mk_uint32_c(0x5a827999);
-static struct mk_uint32_s const mk_md4_base_detail_round_3_constant = mk_uint32_c(0x6ed9eba1);
+static struct mk_uint32_s const mk_md4_base_detail_round_2_constant = mk_uint32_c(0x5a827999ul);
+static struct mk_uint32_s const mk_md4_base_detail_round_3_constant = mk_uint32_c(0x6ed9eba1ul);
 
 
 static mk_inline void mk_md4_base_detail_f(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)

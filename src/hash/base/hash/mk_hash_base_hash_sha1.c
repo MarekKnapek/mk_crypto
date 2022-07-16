@@ -12,19 +12,19 @@
 
 static struct mk_uint32_s const mk_sha1_base_detail_init[5] =
 {
-	mk_uint32_c(0x67452301),
-	mk_uint32_c(0xefcdab89),
-	mk_uint32_c(0x98badcfe),
-	mk_uint32_c(0x10325476),
-	mk_uint32_c(0xc3d2e1f0),
+	mk_uint32_c(0x67452301ul),
+	mk_uint32_c(0xefcdab89ul),
+	mk_uint32_c(0x98badcfeul),
+	mk_uint32_c(0x10325476ul),
+	mk_uint32_c(0xc3d2e1f0ul),
 };
 
 static struct mk_uint32_s const mk_sha1_base_detail_table_k[4] =
 {
-	mk_uint32_c(0x5a827999),
-	mk_uint32_c(0x6ed9eba1),
-	mk_uint32_c(0x8f1bbcdc),
-	mk_uint32_c(0xca62c1d6),
+	mk_uint32_c(0x5a827999ul),
+	mk_uint32_c(0x6ed9eba1ul),
+	mk_uint32_c(0x8f1bbcdcul),
+	mk_uint32_c(0xca62c1d6ul),
 };
 
 
