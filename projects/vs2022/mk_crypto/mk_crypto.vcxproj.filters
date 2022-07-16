@@ -1,452 +1,158 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="fuzz">
-      <UniqueIdentifier>{d5f4bebb-9a17-4182-b5e1-7f146d6bf864}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs">
-      <UniqueIdentifier>{e74c4801-88bf-4a25-9b89-95b89f2ae4db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{4655af39-76df-4c46-99a4-39c2a9fa7000}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash">
-      <UniqueIdentifier>{d8f6397c-771f-4215-aa69-5e72ea45ee4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\base">
-      <UniqueIdentifier>{15b27e9c-2b4a-4365-9b6b-141c1c187a35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\base\detail">
-      <UniqueIdentifier>{795fde12-26b1-43ed-92a4-f63fd0c4c7b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\base\hash">
-      <UniqueIdentifier>{a195be0b-ad21-4db2-b6ff-d9a51118ea1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\base\xof">
-      <UniqueIdentifier>{27f67bc7-a646-4957-b60f-01d64ddf6867}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\block">
-      <UniqueIdentifier>{49068ef4-475e-4c97-97c4-5e3d8ac347ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\hash">
-      <UniqueIdentifier>{cbf60c28-d96d-4c05-9110-2c95470970d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\hash\xof">
-      <UniqueIdentifier>{83d599cc-4b82-4325-862a-c5f282334fe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\kdf">
-      <UniqueIdentifier>{3a4ad9aa-f456-402b-9197-20927c4f27db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\kdf\pbkdf2">
-      <UniqueIdentifier>{b8aae413-8ba5-4108-9d89-d8da4787eee3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\mac">
-      <UniqueIdentifier>{7daba50d-05f4-4a3b-ad5b-a417530bb89a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\mac\hmac">
-      <UniqueIdentifier>{eb5f40fd-599d-44ea-9ce9-06b64f0237ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\utils">
-      <UniqueIdentifier>{3dd7db1c-80a2-40dc-aa18-a9abde338ab3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="win">
-      <UniqueIdentifier>{75cf1d8a-0f5e-44d3-8ec9-6d56fa6d3920}</UniqueIdentifier>
-    </Filter>
+    <Filter Include="fuzz"><UniqueIdentifier>{d5f4bebb-9a17-4182-b5e1-7f146d6bf864}</UniqueIdentifier></Filter>
+    <Filter Include="libs"><UniqueIdentifier>{e74c4801-88bf-4a25-9b89-95b89f2ae4db}</UniqueIdentifier></Filter>
+    <Filter Include="src"><UniqueIdentifier>{4655af39-76df-4c46-99a4-39c2a9fa7000}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash"><UniqueIdentifier>{d8f6397c-771f-4215-aa69-5e72ea45ee4f}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\base"><UniqueIdentifier>{15b27e9c-2b4a-4365-9b6b-141c1c187a35}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\base\detail"><UniqueIdentifier>{795fde12-26b1-43ed-92a4-f63fd0c4c7b9}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\base\hash"><UniqueIdentifier>{a195be0b-ad21-4db2-b6ff-d9a51118ea1d}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\base\xof"><UniqueIdentifier>{27f67bc7-a646-4957-b60f-01d64ddf6867}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\block"><UniqueIdentifier>{49068ef4-475e-4c97-97c4-5e3d8ac347ac}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\hash"><UniqueIdentifier>{cbf60c28-d96d-4c05-9110-2c95470970d1}</UniqueIdentifier></Filter>
+    <Filter Include="src\hash\xof"><UniqueIdentifier>{83d599cc-4b82-4325-862a-c5f282334fe3}</UniqueIdentifier></Filter>
+    <Filter Include="src\kdf"><UniqueIdentifier>{3a4ad9aa-f456-402b-9197-20927c4f27db}</UniqueIdentifier></Filter>
+    <Filter Include="src\kdf\pbkdf2"><UniqueIdentifier>{b8aae413-8ba5-4108-9d89-d8da4787eee3}</UniqueIdentifier></Filter>
+    <Filter Include="src\mac"><UniqueIdentifier>{7daba50d-05f4-4a3b-ad5b-a417530bb89a}</UniqueIdentifier></Filter>
+    <Filter Include="src\mac\hmac"><UniqueIdentifier>{eb5f40fd-599d-44ea-9ce9-06b64f0237ca}</UniqueIdentifier></Filter>
+    <Filter Include="src\utils"><UniqueIdentifier>{3dd7db1c-80a2-40dc-aa18-a9abde338ab3}</UniqueIdentifier></Filter>
+    <Filter Include="win"><UniqueIdentifier>{75cf1d8a-0f5e-44d3-8ec9-6d56fa6d3920}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\libs\mk_int.c">
-      <Filter>libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_256.c">
-      <Filter>src\hash\base\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_512.c">
-      <Filter>src\hash\base\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha3.c">
-      <Filter>src\hash\base\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md2.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md4.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md5.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha1.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_224.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_256.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_384.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512224.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512256.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_224.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_256.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_384.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_512.c">
-      <Filter>src\hash\base\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake128.c">
-      <Filter>src\hash\base\xof</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake256.c">
-      <Filter>src\hash\base\xof</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake128.c">
-      <Filter>src\hash\base\xof</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake256.c">
-      <Filter>src\hash\base\xof</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md2.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md4.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md5.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha1.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_256.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_384.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_hash.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_hash_fn.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_hash_function.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\utils\mk_clobber.c">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\utils\mk_try.c">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\win\mk_win_kdf_pbkdf2.c">
-      <Filter>win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c">
-      <Filter>win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_fuzz_hash.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\win\mk_win_hash.c">
-      <Filter>win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\block\mk_hash_block_hash.c">
-      <Filter>src\hash\block</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\block\mk_hash_block_xof.c">
-      <Filter>src\hash\block</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash.c">
-      <Filter>src\hash\hash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c">
-      <Filter>src\mac\hmac</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof.c">
-      <Filter>src\hash\xof</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_fuzz_mac_hmac.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_fuzz_crypto.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\fuzz\mk_fuzz_kdf_pbkdf2.c">
-      <Filter>fuzz</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_kdf_pbkdf2.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_mac_hmac.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\mk_mac_hmac_obj.c">
-      <Filter>src</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_fuzz_crypto.c"><Filter>fuzz</Filter></ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_fuzz_hash.c"><Filter>fuzz</Filter></ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_fuzz_kdf_pbkdf2.c"><Filter>fuzz</Filter></ClCompile>
+    <ClCompile Include="..\..\..\fuzz\mk_fuzz_mac_hmac.c"><Filter>fuzz</Filter></ClCompile>
+    <ClCompile Include="..\..\..\libs\mk_int.c"><Filter>libs</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_256.c"><Filter>src\hash\base\detail</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_512.c"><Filter>src\hash\base\detail</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha3.c"><Filter>src\hash\base\detail</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md2.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md4.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md5.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha1.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_224.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_256.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_384.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512224.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512256.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_224.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_256.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_384.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_512.c"><Filter>src\hash\base\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake128.c"><Filter>src\hash\base\xof</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake256.c"><Filter>src\hash\base\xof</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake128.c"><Filter>src\hash\base\xof</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake256.c"><Filter>src\hash\base\xof</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\block\mk_hash_block_hash.c"><Filter>src\hash\block</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\block\mk_hash_block_xof.c"><Filter>src\hash\block</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md2.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md4.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_md5.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha1.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_256.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_384.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.c"><Filter>src\hash\hash</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\hash\xof\mk_hash_xof.c"><Filter>src\hash\xof</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c"><Filter>src\kdf\pbkdf2</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c"><Filter>src\mac\hmac</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash_fn.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_hash_function.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_kdf_pbkdf2.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_mac_hmac.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\mk_mac_hmac_obj.c"><Filter>src</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\utils\mk_clobber.c"><Filter>src\utils</Filter></ClCompile>
+    <ClCompile Include="..\..\..\src\utils\mk_try.c"><Filter>src\utils</Filter></ClCompile>
+    <ClCompile Include="..\..\..\win\mk_win_hash.c"><Filter>win</Filter></ClCompile>
+    <ClCompile Include="..\..\..\win\mk_win_kdf_pbkdf2.c"><Filter>win</Filter></ClCompile>
+    <ClCompile Include="..\..\..\win\mk_win_mac_hmac.c"><Filter>win</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_256.h">
-      <Filter>src\hash\base\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_512.h">
-      <Filter>src\hash\base\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha3.h">
-      <Filter>src\hash\base\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md2.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md4.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md5.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha1.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_224.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_256.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_384.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512224.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512256.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_224.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_256.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_384.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_512.h">
-      <Filter>src\hash\base\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_id.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_name_def.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_name_undef.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_hash.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xmacro_def.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xmacro_undef.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xof.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake128.h">
-      <Filter>src\hash\base\xof</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake256.h">
-      <Filter>src\hash\base\xof</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake128.h">
-      <Filter>src\hash\base\xof</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake256.h">
-      <Filter>src\hash\base\xof</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md2.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md4.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md5.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha1.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_256.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_384.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_hash.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_hash_fn.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_hash_function.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_assert.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_clobber.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_inline.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_jumbo.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_setup.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_try.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\win\mk_win_kdf_pbkdf2.h">
-      <Filter>win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\win\mk_win_mac_hmac.h">
-      <Filter>win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_hash_all.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_enum.h">
-      <Filter>src\hash\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_fuzz_hash.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_concat_def.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\utils\mk_concat_undef.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\win\mk_win_hash.h">
-      <Filter>win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\block\mk_hash_block_hash.h">
-      <Filter>src\hash\block</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\block\mk_hash_block_xof.h">
-      <Filter>src\hash\block</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash.h">
-      <Filter>src\hash\hash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h">
-      <Filter>src\mac\hmac</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof.h">
-      <Filter>src\hash\xof</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_fuzz_mac_hmac.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\fuzz\mk_fuzz_kdf_pbkdf2.h">
-      <Filter>fuzz</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_kdf_pbkdf2.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_mac_hmac.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mk_mac_hmac_obj.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_fuzz_hash.h"><Filter>fuzz</Filter></ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_fuzz_kdf_pbkdf2.h"><Filter>fuzz</Filter></ClInclude>
+    <ClInclude Include="..\..\..\fuzz\mk_fuzz_mac_hmac.h"><Filter>fuzz</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_256.h"><Filter>src\hash\base\detail</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha2_512.h"><Filter>src\hash\base\detail</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\detail\mk_hash_base_detail_sha3.h"><Filter>src\hash\base\detail</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md2.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md4.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_md5.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha1.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_224.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_256.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_384.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512224.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha2_512256.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_224.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_256.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_384.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\hash\mk_hash_base_hash_sha3_512.h"><Filter>src\hash\base\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_id.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_name_def.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_alg_name_undef.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_enum.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_hash.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_hash_all.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xmacro_def.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xmacro_undef.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\mk_hash_base_xof.h"><Filter>src\hash\base</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake128.h"><Filter>src\hash\base\xof</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_rawshake256.h"><Filter>src\hash\base\xof</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake128.h"><Filter>src\hash\base\xof</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\base\xof\mk_hash_base_xof_sha3_shake256.h"><Filter>src\hash\base\xof</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\block\mk_hash_block_hash.h"><Filter>src\hash\block</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\block\mk_hash_block_xof.h"><Filter>src\hash\block</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md2.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md4.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_md5.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha1.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_256.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_384.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\hash\mk_hash_hash_win_sha2_512.h"><Filter>src\hash\hash</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\hash\xof\mk_hash_xof.h"><Filter>src\hash\xof</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h"><Filter>src\kdf\pbkdf2</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h"><Filter>src\mac\hmac</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash_fn.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_hash_function.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_kdf_pbkdf2.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_mac_hmac.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\mk_mac_hmac_obj.h"><Filter>src</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_assert.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_clobber.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_concat_def.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_concat_undef.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_inline.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_jumbo.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_setup.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\src\utils\mk_try.h"><Filter>src\utils</Filter></ClInclude>
+    <ClInclude Include="..\..\..\win\mk_win_hash.h"><Filter>win</Filter></ClInclude>
+    <ClInclude Include="..\..\..\win\mk_win_kdf_pbkdf2.h"><Filter>win</Filter></ClInclude>
+    <ClInclude Include="..\..\..\win\mk_win_mac_hmac.h"><Filter>win</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\hash\hash\mk_hash_hash.c.inl">
-      <Filter>src\hash\hash</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\hash\mk_hash_hash.h.inl">
-      <Filter>src\hash\hash</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.c.inl">
-      <Filter>src\hash\hash</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.h.inl">
-      <Filter>src\hash\hash</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\xof\mk_hash_xof.c.inl">
-      <Filter>src\hash\xof</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\xof\mk_hash_xof.h.inl">
-      <Filter>src\hash\xof</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\block\mk_hash_block_hash.c.inl">
-      <Filter>src\hash\block</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\block\mk_hash_block_hash.h.inl">
-      <Filter>src\hash\block</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\block\mk_hash_block_xof.c.inl">
-      <Filter>src\hash\block</Filter>
-    </None>
-    <None Include="..\..\..\src\hash\block\mk_hash_block_xof.h.inl">
-      <Filter>src\hash\block</Filter>
-    </None>
-    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c.inl">
-      <Filter>src\mac\hmac</Filter>
-    </None>
-    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h.inl">
-      <Filter>src\mac\hmac</Filter>
-    </None>
-    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c.inl">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </None>
-    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h.inl">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </None>
-    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v1.c.inl">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </None>
-    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v2.c.inl">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </None>
-    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v3.c.inl">
-      <Filter>src\kdf\pbkdf2</Filter>
-    </None>
+    <None Include="..\..\..\src\hash\block\mk_hash_block_hash.c.inl"><Filter>src\hash\block</Filter></None>
+    <None Include="..\..\..\src\hash\block\mk_hash_block_hash.h.inl"><Filter>src\hash\block</Filter></None>
+    <None Include="..\..\..\src\hash\block\mk_hash_block_xof.c.inl"><Filter>src\hash\block</Filter></None>
+    <None Include="..\..\..\src\hash\block\mk_hash_block_xof.h.inl"><Filter>src\hash\block</Filter></None>
+    <None Include="..\..\..\src\hash\hash\mk_hash_hash.c.inl"><Filter>src\hash\hash</Filter></None>
+    <None Include="..\..\..\src\hash\hash\mk_hash_hash.h.inl"><Filter>src\hash\hash</Filter></None>
+    <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.c.inl"><Filter>src\hash\hash</Filter></None>
+    <None Include="..\..\..\src\hash\hash\mk_hash_hash_win.h.inl"><Filter>src\hash\hash</Filter></None>
+    <None Include="..\..\..\src\hash\xof\mk_hash_xof.c.inl"><Filter>src\hash\xof</Filter></None>
+    <None Include="..\..\..\src\hash\xof\mk_hash_xof.h.inl"><Filter>src\hash\xof</Filter></None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.c.inl"><Filter>src\kdf\pbkdf2</Filter></None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash.h.inl"><Filter>src\kdf\pbkdf2</Filter></None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v1.c.inl"><Filter>src\kdf\pbkdf2</Filter></None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v2.c.inl"><Filter>src\kdf\pbkdf2</Filter></None>
+    <None Include="..\..\..\src\kdf\pbkdf2\mk_kdf_pbkdf2_hash_v3.c.inl"><Filter>src\kdf\pbkdf2</Filter></None>
+    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.c.inl"><Filter>src\mac\hmac</Filter></None>
+    <None Include="..\..\..\src\mac\hmac\mk_mac_hmac_hash.h.inl"><Filter>src\mac\hmac</Filter></None>
   </ItemGroup>
 </Project>
