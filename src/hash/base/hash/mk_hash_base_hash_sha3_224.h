@@ -13,8 +13,8 @@ struct mk_hash_base_hash_sha3_224_s
 };
 
 
-enum mk_hash_base_hash_sha3_224_block_len_e { mk_hash_base_hash_sha3_224_block_len = 144 };
-enum mk_hash_base_hash_sha3_224_digest_len_e { mk_hash_base_hash_sha3_224_digest_len = 28 };
+#define mk_hash_base_hash_sha3_224_block_len 144
+#define mk_hash_base_hash_sha3_224_digest_len 28
 static char const mk_hash_base_hash_sha3_224_name[] = "SHA3-224";
 static int const mk_hash_base_hash_sha3_224_name_len = (int)sizeof(mk_hash_base_hash_sha3_224_name) - 1;
 

@@ -13,8 +13,8 @@ struct mk_hash_base_hash_crc32_s
 };
 
 
-enum mk_hash_base_hash_crc32_block_len_e { mk_hash_base_hash_crc32_block_len = 1 };
-enum mk_hash_base_hash_crc32_digest_len_e { mk_hash_base_hash_crc32_digest_len = 4 };
+#define mk_hash_base_hash_crc32_block_len 1
+#define mk_hash_base_hash_crc32_digest_len 4
 static char const mk_hash_base_hash_crc32_name[] = "CRC-32";
 static int const mk_hash_base_hash_crc32_name_len = (int)sizeof(mk_hash_base_hash_crc32_name) - 1;
 

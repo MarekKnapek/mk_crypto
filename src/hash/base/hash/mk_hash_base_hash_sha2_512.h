@@ -13,8 +13,8 @@ struct mk_hash_base_hash_sha2_512_s
 };
 
 
-enum mk_hash_base_hash_sha2_512_block_len_e { mk_hash_base_hash_sha2_512_block_len = 128 };
-enum mk_hash_base_hash_sha2_512_digest_len_e { mk_hash_base_hash_sha2_512_digest_len = 64 };
+#define mk_hash_base_hash_sha2_512_block_len 128
+#define mk_hash_base_hash_sha2_512_digest_len 64
 static char const mk_hash_base_hash_sha2_512_name[] = "SHA-512";
 static int const mk_hash_base_hash_sha2_512_name_len = (int)sizeof(mk_hash_base_hash_sha2_512_name) - 1;
 

@@ -15,8 +15,8 @@ struct mk_hash_base_hash_sha1_s
 };
 
 
-enum mk_hash_base_hash_sha1_block_len_e { mk_hash_base_hash_sha1_block_len = 64 };
-enum mk_hash_base_hash_sha1_digest_len_e { mk_hash_base_hash_sha1_digest_len = 20 };
+#define mk_hash_base_hash_sha1_block_len 64
+#define mk_hash_base_hash_sha1_digest_len 20
 static char const mk_hash_base_hash_sha1_name[] = "SHA-1";
 static int const mk_hash_base_hash_sha1_name_len = (int)sizeof(mk_hash_base_hash_sha1_name) - 1;
 

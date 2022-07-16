@@ -15,8 +15,8 @@ struct mk_hash_base_hash_md5_s
 };
 
 
-enum mk_hash_base_hash_md5_block_len_e { mk_hash_base_hash_md5_block_len = 64 };
-enum mk_hash_base_hash_md5_digest_len_e { mk_hash_base_hash_md5_digest_len = 16 };
+#define mk_hash_base_hash_md5_block_len 64
+#define mk_hash_base_hash_md5_digest_len 16
 static char const mk_hash_base_hash_md5_name[] = "MD5";
 static int const mk_hash_base_hash_md5_name_len = (int)sizeof(mk_hash_base_hash_md5_name) - 1;
 
