@@ -7,6 +7,7 @@
 #include "../../../../../mk_int/src/exact/mk_uint_32.h"
 #include "../../../../../mk_int/src/exact/mk_uint_64.h"
 
+#include <limits.h> /* LONG_MAX */
 #include <string.h> /* memset */
 
 
@@ -19,6 +20,7 @@ static struct mk_uint32_s const mk_md4_base_detail_init[4] =
 };
 static struct mk_uint32_s const mk_md4_base_detail_round_2_constant = mk_uint32_c(0x5a827999ul);
 static struct mk_uint32_s const mk_md4_base_detail_round_3_constant = mk_uint32_c(0x6ed9eba1ul);
+static struct mk_uint64_s const mk_md4_base_detail_max_bytes = mk_uint64_c(0x1ffffffful, 0xfffffffful);
 
 
 static mk_inline void mk_md4_base_detail_f(struct mk_uint32_s* out, struct mk_uint32_s const* x, struct mk_uint32_s const* y, struct mk_uint32_s const* z)
@@ -160,7 +162,9 @@ mk_jumbo void mk_hash_base_hash_md4_init(struct mk_hash_base_hash_md4_s* self)
 mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint64_s len_bytes;
+	struct mk_uint64_s new_len;
 	unsigned char const* input;
+	struct mk_uint32_s oldh[4];
 	struct mk_uint32_s h[4];
 	struct mk_uint32_s* a;
 	struct mk_uint32_s* b;
@@ -177,19 +181,26 @@ mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s
 		return;
 	}
 
-	mk_uint64_from_int(&len_bytes, 64 * nblocks);
-	mk_uint64_add(&self->m_len, &self->m_len, &len_bytes);
+	mk_assert(nblocks <= LONG_MAX / 64);
+	mk_uint64_from_long(&len_bytes, 64 * (long)nblocks);
+	mk_uint64_add(&new_len, &self->m_len, &len_bytes);
+	mk_assert(mk_uint64_le(&new_len, &mk_md4_base_detail_max_bytes));
+	mk_assert(mk_uint64_ge(&new_len, &self->m_len) && mk_uint64_ge(&new_len, &len_bytes));
 	input = (unsigned char const*)pblocks;
+	oldh[0] = self->m_state[0];
+	oldh[1] = self->m_state[1];
+	oldh[2] = self->m_state[2];
+	oldh[3] = self->m_state[3];
 	a = &h[0];
 	b = &h[1];
 	c = &h[2];
 	d = &h[3];
 	for(iblock = 0; iblock != nblocks; ++iblock, input += 64)
 	{
-		h[0] = self->m_state[0];
-		h[1] = self->m_state[1];
-		h[2] = self->m_state[2];
-		h[3] = self->m_state[3];
+		h[0] = oldh[0];
+		h[1] = oldh[1];
+		h[2] = oldh[2];
+		h[3] = oldh[3];
 
 		mk_md4_base_detail_round_1(a, b, c, d, input,  0,  3);
 		mk_md4_base_detail_round_1(d, a, b, c, input,  1,  7);
@@ -242,11 +253,16 @@ mk_jumbo void mk_hash_base_hash_md4_append_blocks(struct mk_hash_base_hash_md4_s
 		mk_md4_base_detail_round_3(c, d, a, b, input,  7, 11);
 		mk_md4_base_detail_round_3(b, c, d, a, input, 15, 15);
 
-		mk_uint32_add(&self->m_state[0], &self->m_state[0], &h[0]);
-		mk_uint32_add(&self->m_state[1], &self->m_state[1], &h[1]);
-		mk_uint32_add(&self->m_state[2], &self->m_state[2], &h[2]);
-		mk_uint32_add(&self->m_state[3], &self->m_state[3], &h[3]);
+		mk_uint32_add(&oldh[0], &oldh[0], &h[0]);
+		mk_uint32_add(&oldh[1], &oldh[1], &h[1]);
+		mk_uint32_add(&oldh[2], &oldh[2], &h[2]);
+		mk_uint32_add(&oldh[3], &oldh[3], &h[3]);
 	}
+	self->m_state[0] = oldh[0];
+	self->m_state[1] = oldh[1];
+	self->m_state[2] = oldh[2];
+	self->m_state[3] = oldh[3];
+	self->m_len = new_len;
 }
 
 mk_jumbo void mk_hash_base_hash_md4_finish(struct mk_hash_base_hash_md4_s* self, void* block, int idx, void* digest)

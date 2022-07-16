@@ -7,6 +7,7 @@
 #include "../../../../../mk_int/src/exact/mk_uint_64.h"
 #include "../../../../../mk_int/src/exact/mk_uint_128.h"
 
+#include <limits.h> /* LONG_MAX */
 #include <string.h> /* memset */
 
 
@@ -33,6 +34,7 @@ static struct mk_uint64_s const mk_hash_base_detail_sha2_512_table[80] =
 	mk_uint64_c(0x28db77f5ul, 0x23047d84ul), mk_uint64_c(0x32caab7bul, 0x40c72493ul), mk_uint64_c(0x3c9ebe0aul, 0x15c9bebcul), mk_uint64_c(0x431d67c4ul, 0x9c100d4cul),
 	mk_uint64_c(0x4cc5d4beul, 0xcb3e42b6ul), mk_uint64_c(0x597f299cul, 0xfc657e2aul), mk_uint64_c(0x5fcb6fabul, 0x3ad6faecul), mk_uint64_c(0x6c44198cul, 0x4a475817ul),
 };
+static struct mk_uint128_s const mk_hash_base_detail_sha2_512_max_bytes = mk_uint128_c(0x1ffffffful, 0xfffffffful, 0xfffffffful, 0xfffffffful);
 
 
 static mk_inline void mk_hash_base_detail_sha2_512_ch(struct mk_uint64_s* out, struct mk_uint64_s const* x, struct mk_uint64_s const* y, struct mk_uint64_s const* z)
@@ -165,7 +167,9 @@ mk_jumbo void mk_hash_base_detail_sha2_512_init(struct mk_hash_base_detail_sha2_
 mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_detail_sha2_512_s* self, void const* pblocks, int nblocks)
 {
 	struct mk_uint128_s len_bytes;
+	struct mk_uint128_s new_len;
 	unsigned char const* input;
+	struct mk_uint64_s oldh[8];
 	struct mk_uint64_s hh[8];
 	struct mk_uint64_s* a;
 	struct mk_uint64_s* b;
@@ -192,9 +196,20 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 		return;
 	}
 
-	mk_uint128_from_int(&len_bytes, 128 * nblocks);
-	mk_uint128_add(&self->m_len, &self->m_len, &len_bytes);
+	mk_assert(nblocks <= LONG_MAX / 128);
+	mk_uint128_from_long(&len_bytes, 128 * (long)nblocks);
+	mk_uint128_add(&new_len, &self->m_len, &len_bytes);
+	mk_assert(mk_uint128_le(&new_len, &mk_hash_base_detail_sha2_512_max_bytes));
+	mk_assert(mk_uint128_ge(&new_len, &self->m_len) && mk_uint128_ge(&new_len, &len_bytes));
 	input = (unsigned char const*)pblocks;
+	oldh[0] = self->m_state[0];
+	oldh[1] = self->m_state[1];
+	oldh[2] = self->m_state[2];
+	oldh[3] = self->m_state[3];
+	oldh[4] = self->m_state[4];
+	oldh[5] = self->m_state[5];
+	oldh[6] = self->m_state[6];
+	oldh[7] = self->m_state[7];
 	a = &hh[0];
 	b = &hh[1];
 	c = &hh[2];
@@ -203,19 +218,19 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 	f = &hh[5];
 	g = &hh[6];
 	h = &hh[7];
-	for(iblock = 0; iblock != nblocks; ++iblock, input += 128)
+	for(iblock = 0; iblock != nblocks; ++iblock)
 	{
-		hh[0] = self->m_state[0];
-		hh[1] = self->m_state[1];
-		hh[2] = self->m_state[2];
-		hh[3] = self->m_state[3];
-		hh[4] = self->m_state[4];
-		hh[5] = self->m_state[5];
-		hh[6] = self->m_state[6];
-		hh[7] = self->m_state[7];
-		for(i = 0; i != 16; ++i)
+		hh[0] = oldh[0];
+		hh[1] = oldh[1];
+		hh[2] = oldh[2];
+		hh[3] = oldh[3];
+		hh[4] = oldh[4];
+		hh[5] = oldh[5];
+		hh[6] = oldh[6];
+		hh[7] = oldh[7];
+		for(i = 0; i != 16; ++i, input += 8)
 		{
-			mk_uint64_from_buff_be(&w[i], input + i * 8);
+			mk_uint64_from_buff_be(&w[i], input);
 		}
 		for(i = 16; i != 80; ++i)
 		{
@@ -248,15 +263,24 @@ mk_jumbo void mk_hash_base_detail_sha2_512_append_blocks(struct mk_hash_base_det
 			*b = *a;
 			mk_uint64_add(a, &t1, &t2);
 		}
-		mk_uint64_add(&self->m_state[0], &self->m_state[0], &hh[0]);
-		mk_uint64_add(&self->m_state[1], &self->m_state[1], &hh[1]);
-		mk_uint64_add(&self->m_state[2], &self->m_state[2], &hh[2]);
-		mk_uint64_add(&self->m_state[3], &self->m_state[3], &hh[3]);
-		mk_uint64_add(&self->m_state[4], &self->m_state[4], &hh[4]);
-		mk_uint64_add(&self->m_state[5], &self->m_state[5], &hh[5]);
-		mk_uint64_add(&self->m_state[6], &self->m_state[6], &hh[6]);
-		mk_uint64_add(&self->m_state[7], &self->m_state[7], &hh[7]);
+		mk_uint64_add(&oldh[0], &oldh[0], &hh[0]);
+		mk_uint64_add(&oldh[1], &oldh[1], &hh[1]);
+		mk_uint64_add(&oldh[2], &oldh[2], &hh[2]);
+		mk_uint64_add(&oldh[3], &oldh[3], &hh[3]);
+		mk_uint64_add(&oldh[4], &oldh[4], &hh[4]);
+		mk_uint64_add(&oldh[5], &oldh[5], &hh[5]);
+		mk_uint64_add(&oldh[6], &oldh[6], &hh[6]);
+		mk_uint64_add(&oldh[7], &oldh[7], &hh[7]);
 	}
+	self->m_state[0] = oldh[0];
+	self->m_state[1] = oldh[1];
+	self->m_state[2] = oldh[2];
+	self->m_state[3] = oldh[3];
+	self->m_state[4] = oldh[4];
+	self->m_state[5] = oldh[5];
+	self->m_state[6] = oldh[6];
+	self->m_state[7] = oldh[7];
+	self->m_len = new_len;
 }
 
 mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha2_512_s* self, void* block, int idx, void* digest)
