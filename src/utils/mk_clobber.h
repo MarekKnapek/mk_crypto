@@ -5,7 +5,7 @@
 #include "mk_jumbo.h"
 
 
-mk_jumbo void mk_clobber(void* arg);
+mk_jumbo void mk_clobber(void const* arg);
 
 
 #endif
