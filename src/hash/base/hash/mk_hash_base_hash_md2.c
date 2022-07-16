@@ -41,9 +41,9 @@ mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s
 	unsigned char x[48];
 	int iblock;
 	int j;
-	unsigned t;
+	unsigned char t;
 	int k;
-	unsigned l;
+	unsigned char l;
 
 	mk_assert(self);
 	mk_assert(pblocks || nblocks == 0);
@@ -54,7 +54,7 @@ mk_jumbo void mk_hash_base_hash_md2_append_blocks(struct mk_hash_base_hash_md2_s
 	for(iblock = 0; iblock != nblocks; ++iblock, input += 16)
 	{
 		memcpy(x + 1 * 16, input, 16);
-		for(j = 0; j != 16; ++j) x[2 * 16 + j] = x[0 * 16 + j] ^ x[1 * 16 + j];
+		for(j = 0; j != 16; ++j){ x[2 * 16 + j] = x[0 * 16 + j] ^ x[1 * 16 + j]; }
 		t = 0;
 		for(j = 0; j != 18; ++j)
 		{
