@@ -289,6 +289,7 @@ mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha
 	unsigned char* output;
 	struct mk_uint128_s len;
 	int capacity;
+	int i;
 
 	mk_assert(self);
 	mk_assert(block);
@@ -314,12 +315,8 @@ mk_jumbo void mk_hash_base_detail_sha2_512_finish(struct mk_hash_base_detail_sha
 	}
 	mk_uint128_to_buff_be(&len, input + 128 - 16);
 	mk_hash_base_detail_sha2_512_append_blocks(self, input, 1);
-	mk_uint64_to_buff_be(&self->m_state[0], output + 0 * 8);
-	mk_uint64_to_buff_be(&self->m_state[1], output + 1 * 8);
-	mk_uint64_to_buff_be(&self->m_state[2], output + 2 * 8);
-	mk_uint64_to_buff_be(&self->m_state[3], output + 3 * 8);
-	mk_uint64_to_buff_be(&self->m_state[4], output + 4 * 8);
-	mk_uint64_to_buff_be(&self->m_state[5], output + 5 * 8);
-	mk_uint64_to_buff_be(&self->m_state[6], output + 6 * 8);
-	mk_uint64_to_buff_be(&self->m_state[7], output + 7 * 8);
+	for(i = 0; i != 8; ++i)
+	{
+		mk_uint64_to_buff_be(&self->m_state[i], output + i * 8);
+	}
 }
