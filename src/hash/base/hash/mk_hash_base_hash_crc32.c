@@ -40,7 +40,7 @@ static mk_inline void mk_hash_base_hash_crc32_detail_table_small(unsigned char i
 
 static mk_inline void mk_hash_base_hash_crc32_detail_table_fast(unsigned char idx, struct mk_uint32_s* out)
 {
-	static struct mk_uint32_s const s_crc32_table[] =
+	static struct mk_uint32_s const s_crc32_table[256] =
 	{
 		mk_uint32_c(0x00000000ul), mk_uint32_c(0x77073096ul), mk_uint32_c(0xee0e612cul), mk_uint32_c(0x990951baul), mk_uint32_c(0x076dc419ul), mk_uint32_c(0x706af48ful), mk_uint32_c(0xe963a535ul), mk_uint32_c(0x9e6495a3ul),
 		mk_uint32_c(0x0edb8832ul), mk_uint32_c(0x79dcb8a4ul), mk_uint32_c(0xe0d5e91eul), mk_uint32_c(0x97d2d988ul), mk_uint32_c(0x09b64c2bul), mk_uint32_c(0x7eb17cbdul), mk_uint32_c(0xe7b82d07ul), mk_uint32_c(0x90bf1d91ul),
